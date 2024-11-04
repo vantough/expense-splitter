@@ -1,6 +1,3 @@
-Here's a detailed and beautifully structured README file for the provided code:
-
----
 
 # Expense Splitter Application
 
