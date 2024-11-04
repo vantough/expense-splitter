@@ -2,18 +2,26 @@
 <html>
 <head>
     <title>Enhanced Expense Splitter</title>
-    <!-- Adding Bootstrap for better UI -->
+    <!-- Adding Bootstrap for better UI and responsiveness -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="icon" id="favicon" href="default-icon.png" type="image/png">
     <style>
         body { margin: 20px; }
         .container { max-width: 800px; }
         .table td, .table th { vertical-align: middle; }
         .remaining { text-align: right; font-weight: bold; }
+        @media (max-width: 576px) {
+            .form-row .form-group { margin-bottom: 15px; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1 class="text-center">Expense Splitter</h1>
+        <div class="form-group">
+            <label for="iconUrl">Set Browser Icon (URL):</label>
+            <input type="text" class="form-control" id="iconUrl" placeholder="Enter image URL for the icon" onblur="updateFavicon()">
+        </div>
         <div class="form-group">
             <label for="names">Names (comma-separated):</label>
             <input type="text" class="form-control" id="names" placeholder="e.g., Alice,Bob,Charlie" onblur="updatePayerOptions()">
@@ -21,21 +29,21 @@
         <hr>
         <h3>Add Expense</h3>
         <div class="form-row">
-            <div class="form-group col-md-3">
+            <div class="form-group col-md-3 col-sm-6">
                 <label for="description">Description:</label>
                 <input type="text" class="form-control" id="description" placeholder="e.g., Dinner">
             </div>
-            <div class="form-group col-md-3">
+            <div class="form-group col-md-3 col-sm-6">
                 <label for="payer">Payer:</label>
                 <select class="form-control" id="payer">
                     <option value="">Select Payer</option>
                 </select>
             </div>
-            <div class="form-group col-md-2">
+            <div class="form-group col-md-2 col-sm-6">
                 <label for="amount">Amount:</label>
                 <input type="number" class="form-control" id="amount" placeholder="e.g., 60" oninput="updateRemainingAmount(); updateRemainingPercentage();">
             </div>
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-4 col-sm-6">
                 <label for="splitType">Split Type:</label>
                 <select class="form-control" id="splitType" onchange="showSplitDetails()">
                     <option value="equal">Equally</option>
@@ -49,30 +57,34 @@
         <button class="btn btn-primary" onclick="addExpense()">Add Expense</button>
         <hr>
         <h3>Expenses</h3>
-        <table class="table table-bordered" id="expensesTable">
-            <thead class="thead-light">
-                <tr>
-                    <th>Description</th>
-                    <th>Payer</th>
-                    <th>Amount</th>
-                    <th>Split Details</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table table-bordered" id="expensesTable">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Description</th>
+                        <th>Payer</th>
+                        <th>Amount</th>
+                        <th>Split Details</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
         <button class="btn btn-success" onclick="calculateBalances()">Calculate Balances</button>
         <hr>
         <h3>Balances</h3>
-        <table class="table table-bordered" id="balancesTable">
-            <thead class="thead-light">
-                <tr>
-                    <th>Name</th>
-                    <th>Balance (₹)</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table table-bordered" id="balancesTable">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Name</th>
+                        <th>Balance (₹)</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
         <h3>Settlement Details</h3>
         <div id="settlementDetails"></div>
     </div>
@@ -80,6 +92,14 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script>
         let expenses = [];
+
+        function updateFavicon() {
+            const iconUrl = document.getElementById('iconUrl').value;
+            if (iconUrl) {
+                const favicon = document.getElementById('favicon');
+                favicon.href = iconUrl;
+            }
+        }
 
         function updatePayerOptions() {
             const namesInput = document.getElementById('names').value;
