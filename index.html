@@ -1,81 +1,220 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Expense Splitter</title>
+    <title>Enhanced Expense Splitter</title>
+    <!-- Adding Bootstrap for better UI -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        input, button { margin: 5px; }
-        table { border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #ccc; padding: 10px; }
+        body { margin: 20px; }
+        .container { max-width: 800px; }
+        .table td, .table th { vertical-align: middle; }
     </style>
 </head>
 <body>
-    <h1>Expense Splitter</h1>
-    <div>
-        <label>Names (comma-separated):</label><br>
-        <input type="text" id="names" placeholder="e.g., Alice,Bob,Charlie"><br>
-        <label>Expense Description:</label><br>
-        <input type="text" id="description" placeholder="e.g., Dinner"><br>
-        <label>Payer:</label><br>
-        <input type="text" id="payer" placeholder="e.g., Alice"><br>
-        <label>Amount:</label><br>
-        <input type="number" id="amount" placeholder="e.g., 60"><br>
-        <button onclick="addExpense()">Add Expense</button>
+    <div class="container">
+        <h1 class="text-center">Expense Splitter</h1>
+        <div class="form-group">
+            <label for="names">Names (comma-separated):</label>
+            <input type="text" class="form-control" id="names" placeholder="e.g., Alice,Bob,Charlie" onblur="updatePayerOptions()">
+        </div>
+        <hr>
+        <h3>Add Expense</h3>
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label for="description">Description:</label>
+                <input type="text" class="form-control" id="description" placeholder="e.g., Dinner">
+            </div>
+            <div class="form-group col-md-3">
+                <label for="payer">Payer:</label>
+                <select class="form-control" id="payer">
+                    <option value="">Select Payer</option>
+                </select>
+            </div>
+            <div class="form-group col-md-2">
+                <label for="amount">Amount:</label>
+                <input type="number" class="form-control" id="amount" placeholder="e.g., 60">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="splitType">Split Type:</label>
+                <select class="form-control" id="splitType" onchange="showSplitDetails()">
+                    <option value="equal">Equally</option>
+                    <option value="unequal">Unequally (by Amount)</option>
+                    <option value="shares">By Shares</option>
+                    <option value="percentages">By Percentages</option>
+                </select>
+            </div>
+        </div>
+        <div id="splitDetails" style="display: none;"></div>
+        <button class="btn btn-primary" onclick="addExpense()">Add Expense</button>
+        <hr>
+        <h3>Expenses</h3>
+        <table class="table table-bordered" id="expensesTable">
+            <thead class="thead-light">
+                <tr>
+                    <th>Description</th>
+                    <th>Payer</th>
+                    <th>Amount</th>
+                    <th>Split Details</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <button class="btn btn-success" onclick="calculateBalances()">Calculate Balances</button>
+        <hr>
+        <h3>Balances</h3>
+        <table class="table table-bordered" id="balancesTable">
+            <thead class="thead-light">
+                <tr>
+                    <th>Name</th>
+                    <th>Balance</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
     </div>
-    <h2>Expenses</h2>
-    <table id="expensesTable">
-        <tr>
-            <th>Description</th>
-            <th>Payer</th>
-            <th>Amount</th>
-        </tr>
-    </table>
-    <button onclick="calculateBalances()">Calculate Balances</button>
-    <h2>Balances</h2>
-    <table id="balancesTable">
-        <tr>
-            <th>Name</th>
-            <th>Balance</th>
-        </tr>
-    </table>
+    <!-- Adding jQuery and Bootstrap JS for better functionality -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script>
         let expenses = [];
+
+        function updatePayerOptions() {
+            const namesInput = document.getElementById('names').value;
+            const names = namesInput.split(',').map(name => name.trim()).filter(name => name !== "");
+            const payerSelect = document.getElementById('payer');
+            payerSelect.innerHTML = '<option value="">Select Payer</option>';
+            names.forEach(name => {
+                const option = document.createElement('option');
+                option.value = name;
+                option.text = name;
+                payerSelect.add(option);
+            });
+        }
+
+        function showSplitDetails() {
+            const splitType = document.getElementById('splitType').value;
+            const splitDetailsDiv = document.getElementById('splitDetails');
+            splitDetailsDiv.innerHTML = '';
+            if (splitType !== 'equal') {
+                const namesInput = document.getElementById('names').value;
+                const names = namesInput.split(',').map(name => name.trim()).filter(name => name !== "");
+                let html = '<div class="form-group"><label>Enter values for each person:</label>';
+                names.forEach(name => {
+                    html += `
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">${name}</div>
+                            </div>
+                            <input type="number" class="form-control split-value" data-name="${name}" placeholder="Value for ${name}">
+                        </div>
+                    `;
+                });
+                html += '</div>';
+                splitDetailsDiv.innerHTML = html;
+                splitDetailsDiv.style.display = 'block';
+            } else {
+                splitDetailsDiv.style.display = 'none';
+            }
+        }
+
         function addExpense() {
             const description = document.getElementById('description').value;
             const payer = document.getElementById('payer').value;
             const amount = parseFloat(document.getElementById('amount').value);
-            expenses.push({ description, payer, amount });
-            const table = document.getElementById('expensesTable');
-            const row = table.insertRow();
+            const splitType = document.getElementById('splitType').value;
+            const namesInput = document.getElementById('names').value;
+            const names = namesInput.split(',').map(name => name.trim()).filter(name => name !== "");
+
+            if (!description || !payer || !amount || !splitType) {
+                alert('Please fill in all fields.');
+                return;
+            }
+
+            let splitDetails = {};
+            if (splitType === 'equal') {
+                names.forEach(name => {
+                    splitDetails[name] = amount / names.length;
+                });
+            } else {
+                const inputs = document.querySelectorAll('.split-value');
+                let total = 0;
+                inputs.forEach(input => {
+                    const value = parseFloat(input.value);
+                    if (isNaN(value)) {
+                        alert('Please enter valid numbers for split values.');
+                        return;
+                    }
+                    total += (splitType === 'percentages') ? value : 0;
+                });
+
+                inputs.forEach(input => {
+                    const name = input.getAttribute('data-name');
+                    let value = parseFloat(input.value);
+                    if (splitType === 'percentages') {
+                        splitDetails[name] = (value / total) * amount;
+                    } else if (splitType === 'shares') {
+                        splitDetails[name] = (value / total) * amount;
+                    } else if (splitType === 'unequal') {
+                        splitDetails[name] = value;
+                    }
+                });
+            }
+
+            expenses.push({ description, payer, amount, splitDetails });
+
+            // Update expenses table
+            const tableBody = document.getElementById('expensesTable').getElementsByTagName('tbody')[0];
+            const row = tableBody.insertRow();
             row.insertCell(0).innerText = description;
             row.insertCell(1).innerText = payer;
             row.insertCell(2).innerText = amount.toFixed(2);
+            row.insertCell(3).innerText = JSON.stringify(splitDetails);
+            const actionCell = row.insertCell(4);
+            const deleteButton = document.createElement('button');
+            deleteButton.className = 'btn btn-danger btn-sm';
+            deleteButton.innerText = 'Delete';
+            deleteButton.onclick = function() {
+                const index = Array.from(tableBody.rows).indexOf(row);
+                expenses.splice(index, 1);
+                tableBody.deleteRow(index);
+            };
+            actionCell.appendChild(deleteButton);
+
+            // Reset form fields
             document.getElementById('description').value = '';
             document.getElementById('payer').value = '';
             document.getElementById('amount').value = '';
+            document.getElementById('splitType').value = 'equal';
+            document.getElementById('splitDetails').style.display = 'none';
+            document.getElementById('splitDetails').innerHTML = '';
         }
+
         function calculateBalances() {
             const namesInput = document.getElementById('names').value;
-            const names = namesInput.split(',').map(name => name.trim());
+            const names = namesInput.split(',').map(name => name.trim()).filter(name => name !== "");
             let balances = {};
             names.forEach(name => balances[name] = 0);
+
             expenses.forEach(expense => {
-                const share = expense.amount / names.length;
-                names.forEach(name => {
-                    if (name === expense.payer) {
-                        balances[name] += expense.amount - share;
+                const payer = expense.payer;
+                const amount = expense.amount;
+                const splitDetails = expense.splitDetails;
+
+                for (const [name, share] of Object.entries(splitDetails)) {
+                    if (name === payer) {
+                        balances[name] += amount - share;
                     } else {
                         balances[name] -= share;
                     }
-                });
+                }
             });
-            const table = document.getElementById('balancesTable');
+
+            // Update balances table
+            const tableBody = document.getElementById('balancesTable').getElementsByTagName('tbody')[0];
             // Clear previous results
-            while (table.rows.length > 1) {
-                table.deleteRow(1);
-            }
+            tableBody.innerHTML = '';
             for (const [name, balance] of Object.entries(balances)) {
-                const row = table.insertRow();
+                const row = tableBody.insertRow();
                 row.insertCell(0).innerText = name;
                 row.insertCell(1).innerText = balance.toFixed(2);
             }
