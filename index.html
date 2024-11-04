@@ -6,58 +6,59 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body { margin: 20px; }
-        .container { max-width: 1000px; }
+        .container { max-width: 800px; }
         .table td, .table th { vertical-align: middle; }
         .remaining { text-align: right; font-weight: bold; }
         .positive { color: blue; }
         .negative { color: red; }
         .zero { color: green; }
-        .form-column { display: flex; }
-        .form-column > div { flex: 1; padding: 10px; }
+        .form-section { margin-bottom: 20px; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1 class="text-center">Expense Splitter</h1>
-        <div class="form-column">
-            <div>
-                <h3>Input</h3>
-                <div class="form-group">
-                    <label for="names">Names (comma-separated):</label>
-                    <input type="text" class="form-control" id="names" placeholder="e.g., Alice,Bob,Charlie" onblur="updatePayerOptions()">
-                </div>
-                <h3>Add Expense</h3>
-                <div class="form-row">
-                    <div class="form-group col-md-3">
-                        <label for="description">Description:</label>
-                        <input type="text" class="form-control" id="description" placeholder="e.g., Dinner">
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label for="payer">Payer:</label>
-                        <select class="form-control" id="payer">
-                            <option value="">Select Payer</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-2">
-                        <label for="amount">Amount:</label>
-                        <input type="number" class="form-control" id="amount" placeholder="e.g., 60" oninput="updateRemainingAmount(); updateRemainingPercentage();">
-                    </div>
-                    <div class="form-group col-md-4">
-                        <label for="splitType">Split Type:</label>
-                        <select class="form-control" id="splitType" onchange="showSplitDetails()">
-                            <option value="equal">Equally</option>
-                            <option value="unequal">Unequally (by Amount)</option>
-                            <option value="shares">By Shares</option>
-                            <option value="percentages">By Percentages</option>
-                        </select>
-                    </div>
-                </div>
-                <div id="splitDetails" style="display: none;"></div>
-                <button class="btn btn-primary" onclick="addExpense()">Add Expense</button>
+
+        <div class="form-section">
+            <h3>Input</h3>
+            <div class="form-group">
+                <label for="names">Names (comma-separated):</label>
+                <input type="text" class="form-control" id="names" placeholder="e.g., Alice,Bob,Charlie" onblur="updatePayerOptions()">
             </div>
-            <div>
-                <h3>Output</h3>
-                <h4>Expenses</h4>
+        </div>
+
+        <div class="form-section">
+            <h3>Add Expense</h3>
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <input type="text" class="form-control" id="description" placeholder="e.g., Dinner">
+            </div>
+            <div class="form-group">
+                <label for="payer">Payer:</label>
+                <select class="form-control" id="payer">
+                    <option value="">Select Payer</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="amount">Amount (₹):</label>
+                <input type="number" class="form-control" id="amount" placeholder="e.g., 60" oninput="updateRemainingAmount(); updateRemainingPercentage();">
+            </div>
+            <div class="form-group">
+                <label for="splitType">Split Type:</label>
+                <select class="form-control" id="splitType" onchange="showSplitDetails()">
+                    <option value="equal">Equally</option>
+                    <option value="unequal">Unequally (by Amount)</option>
+                    <option value="shares">By Shares</option>
+                    <option value="percentages">By Percentages</option>
+                </select>
+            </div>
+            <div id="splitDetails" style="display: none;"></div>
+            <button class="btn btn-primary btn-block mt-3" onclick="addExpense()">Add Expense</button>
+        </div>
+
+        <div class="form-section">
+            <h3>Expenses</h3>
+            <div class="table-responsive">
                 <table class="table table-bordered" id="expensesTable">
                     <thead class="thead-light">
                         <tr>
@@ -70,9 +71,13 @@
                     </thead>
                     <tbody></tbody>
                 </table>
-                <button class="btn btn-success" onclick="calculateBalances()">Calculate Balances</button>
-                <hr>
-                <h4>Balances</h4>
+            </div>
+            <button class="btn btn-success btn-block" onclick="calculateBalances()">Calculate Balances</button>
+        </div>
+
+        <div class="form-section">
+            <h3>Balances</h3>
+            <div class="table-responsive">
                 <table class="table table-bordered" id="balancesTable">
                     <thead class="thead-light">
                         <tr>
@@ -82,11 +87,15 @@
                     </thead>
                     <tbody></tbody>
                 </table>
-                <h4>Settlement Details</h4>
-                <div id="settlementDetails"></div>
             </div>
         </div>
+
+        <div class="form-section">
+            <h3>Settlement Details</h3>
+            <div id="settlementDetails"></div>
+        </div>
     </div>
+
     <!-- Adding jQuery and Bootstrap JS for better functionality -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script>
@@ -257,6 +266,7 @@
                     return;
                 }
 
+                const split
                 const splitRemaining = document.getElementById('splitRemaining').checked;
 
                 if (splitRemaining && nullNames.length > 0) {
@@ -342,8 +352,7 @@
             row.insertCell(1).innerText = payer;
             row.insertCell(2).innerText = `₹${amount.toFixed(2)}`;
             row.insertCell(3).innerText = JSON.stringify(splitDetails);
-            const actionCell = row
-            .insertCell(4);
+            const actionCell = row.insertCell(4);
             const deleteButton = document.createElement('button');
             deleteButton.className = 'btn btn-danger btn-sm';
             deleteButton.innerText = 'Delete';
@@ -393,7 +402,7 @@
                 row.insertCell(1).innerText = `₹${balance.toFixed(2)}`;
             }
 
-            // Calculate settlement details
+            // Calculate and display settlement details
             displaySettlementDetails(balances);
         }
 
