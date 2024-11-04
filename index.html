@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Expense Splitter</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        input, button { margin: 5px; }
+        table { border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Expense Splitter</h1>
+    <div>
+        <label>Names (comma-separated):</label><br>
+        <input type="text" id="names" placeholder="e.g., Alice,Bob,Charlie"><br>
+        <label>Expense Description:</label><br>
+        <input type="text" id="description" placeholder="e.g., Dinner"><br>
+        <label>Payer:</label><br>
+        <input type="text" id="payer" placeholder="e.g., Alice"><br>
+        <label>Amount:</label><br>
+        <input type="number" id="amount" placeholder="e.g., 60"><br>
+        <button onclick="addExpense()">Add Expense</button>
+    </div>
+    <h2>Expenses</h2>
+    <table id="expensesTable">
+        <tr>
+            <th>Description</th>
+            <th>Payer</th>
+            <th>Amount</th>
+        </tr>
+    </table>
+    <button onclick="calculateBalances()">Calculate Balances</button>
+    <h2>Balances</h2>
+    <table id="balancesTable">
+        <tr>
+            <th>Name</th>
+            <th>Balance</th>
+        </tr>
+    </table>
+    <script>
+        let expenses = [];
+        function addExpense() {
+            const description = document.getElementById('description').value;
+            const payer = document.getElementById('payer').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+            expenses.push({ description, payer, amount });
+            const table = document.getElementById('expensesTable');
+            const row = table.insertRow();
+            row.insertCell(0).innerText = description;
+            row.insertCell(1).innerText = payer;
+            row.insertCell(2).innerText = amount.toFixed(2);
+            document.getElementById('description').value = '';
+            document.getElementById('payer').value = '';
+            document.getElementById('amount').value = '';
+        }
+        function calculateBalances() {
+            const namesInput = document.getElementById('names').value;
+            const names = namesInput.split(',').map(name => name.trim());
+            let balances = {};
+            names.forEach(name => balances[name] = 0);
+            expenses.forEach(expense => {
+                const share = expense.amount / names.length;
+                names.forEach(name => {
+                    if (name === expense.payer) {
+                        balances[name] += expense.amount - share;
+                    } else {
+                        balances[name] -= share;
+                    }
+                });
+            });
+            const table = document.getElementById('balancesTable');
+            // Clear previous results
+            while (table.rows.length > 1) {
+                table.deleteRow(1);
+            }
+            for (const [name, balance] of Object.entries(balances)) {
+                const row = table.insertRow();
+                row.insertCell(0).innerText = name;
+                row.insertCell(1).innerText = balance.toFixed(2);
+            }
+        }
+    </script>
+</body>
+</html>
