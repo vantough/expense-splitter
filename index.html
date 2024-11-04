@@ -6,73 +6,86 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body { margin: 20px; }
-        .container { max-width: 800px; }
+        .container { max-width: 1000px; }
         .table td, .table th { vertical-align: middle; }
         .remaining { text-align: right; font-weight: bold; }
+        .positive { color: blue; }
+        .negative { color: red; }
+        .zero { color: green; }
+        .form-column { display: flex; }
+        .form-column > div { flex: 1; padding: 10px; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1 class="text-center">Expense Splitter</h1>
-        <div class="form-group">
-            <label for="names">Names (comma-separated):</label>
-            <input type="text" class="form-control" id="names" placeholder="e.g., Alice,Bob,Charlie" onblur="updatePayerOptions()">
+        <div class="form-column">
+            <div>
+                <h3>Input</h3>
+                <div class="form-group">
+                    <label for="names">Names (comma-separated):</label>
+                    <input type="text" class="form-control" id="names" placeholder="e.g., Alice,Bob,Charlie" onblur="updatePayerOptions()">
+                </div>
+                <h3>Add Expense</h3>
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label for="description">Description:</label>
+                        <input type="text" class="form-control" id="description" placeholder="e.g., Dinner">
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="payer">Payer:</label>
+                        <select class="form-control" id="payer">
+                            <option value="">Select Payer</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="amount">Amount:</label>
+                        <input type="number" class="form-control" id="amount" placeholder="e.g., 60" oninput="updateRemainingAmount(); updateRemainingPercentage();">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="splitType">Split Type:</label>
+                        <select class="form-control" id="splitType" onchange="showSplitDetails()">
+                            <option value="equal">Equally</option>
+                            <option value="unequal">Unequally (by Amount)</option>
+                            <option value="shares">By Shares</option>
+                            <option value="percentages">By Percentages</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="splitDetails" style="display: none;"></div>
+                <button class="btn btn-primary" onclick="addExpense()">Add Expense</button>
+            </div>
+            <div>
+                <h3>Output</h3>
+                <h4>Expenses</h4>
+                <table class="table table-bordered" id="expensesTable">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Description</th>
+                            <th>Payer</th>
+                            <th>Amount (₹)</th>
+                            <th>Split Details</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <button class="btn btn-success" onclick="calculateBalances()">Calculate Balances</button>
+                <hr>
+                <h4>Balances</h4>
+                <table class="table table-bordered" id="balancesTable">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Name</th>
+                            <th>Balance (₹)</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <h4>Settlement Details</h4>
+                <div id="settlementDetails"></div>
+            </div>
         </div>
-        <hr>
-        <h3>Add Expense</h3>
-        <div class="form-row">
-            <div class="form-group col-md-3">
-                <label for="description">Description:</label>
-                <input type="text" class="form-control" id="description" placeholder="e.g., Dinner">
-            </div>
-            <div class="form-group col-md-3">
-                <label for="payer">Payer:</label>
-                <select class="form-control" id="payer">
-                    <option value="">Select Payer</option>
-                </select>
-            </div>
-            <div class="form-group col-md-2">
-                <label for="amount">Amount:</label>
-                <input type="number" class="form-control" id="amount" placeholder="e.g., 60" oninput="updateRemainingAmount(); updateRemainingPercentage();">
-            </div>
-            <div class="form-group col-md-4">
-                <label for="splitType">Split Type:</label>
-                <select class="form-control" id="splitType" onchange="showSplitDetails()">
-                    <option value="equal">Equally</option>
-                    <option value="unequal">Unequally (by Amount)</option>
-                    <option value="shares">By Shares</option>
-                    <option value="percentages">By Percentages</option>
-                </select>
-            </div>
-        </div>
-        <div id="splitDetails" style="display: none;"></div>
-        <button class="btn btn-primary" onclick="addExpense()">Add Expense</button>
-        <hr>
-        <h3>Expenses</h3>
-        <table class="table table-bordered" id="expensesTable">
-            <thead class="thead-light">
-                <tr>
-                    <th>Description</th>
-                    <th>Payer</th>
-                    <th>Amount</th>
-                    <th>Split Details</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-        <button class="btn btn-success" onclick="calculateBalances()">Calculate Balances</button>
-        <hr>
-        <h3>Balances</h3>
-        <table class="table table-bordered" id="balancesTable">
-            <thead class="thead-light">
-                <tr>
-                    <th>Name</th>
-                    <th>Balance</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
     </div>
     <!-- Adding jQuery and Bootstrap JS for better functionality -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -112,13 +125,11 @@
                             </div>
                         `;
                     });
-                    html += `
-                        <div id="remainingAmount" class="remaining">Remaining: $0.00</div>
+                    html += `<div id="remainingAmount" class="remaining positive">Remaining: ₹0.00</div>
                         <div class="form-check">
                             <input type="checkbox" class="form-check-input" id="splitRemaining">
                             <label class="form-check-label" for="splitRemaining">Split remaining balance equally among the rest</label>
-                        </div>
-                    `;
+                        </div>`;
                     html += '</div>';
                 } else if (splitType === 'percentages') {
                     html += '<div class="form-group"><label>Enter percentages for each person:</label>';
@@ -132,9 +143,7 @@
                             </div>
                         `;
                     });
-                    html += `
-                        <div id="remainingPercentage" class="remaining">Remaining: 100%</div>
-                    `;
+                    html += `<div id="remainingPercentage" class="remaining positive">Remaining: 100%</div>`;
                     html += '</div>';
                 } else if (splitType === 'shares') {
                     html += '<div class="form-group"><label>Enter shares for each person:</label>';
@@ -168,7 +177,15 @@
                 }
             });
             const remaining = amount - sum;
-            document.getElementById('remainingAmount').innerText = `Remaining: $${remaining.toFixed(2)}`;
+            const remainingDiv = document.getElementById('remainingAmount');
+            remainingDiv.innerText = `Remaining: ₹${remaining.toFixed(2)}`;
+            if (remaining > 0) {
+                remainingDiv.className = 'remaining positive';
+            } else if (remaining < 0) {
+                remainingDiv.className = 'remaining negative';
+            } else {
+                remainingDiv.className = 'remaining zero';
+            }
         }
 
         function updateRemainingPercentage() {
@@ -181,7 +198,15 @@
                 }
             });
             const remaining = 100 - sum;
-            document.getElementById('remainingPercentage').innerText = `Remaining: ${remaining.toFixed(2)}%`;
+            const remainingDiv = document.getElementById('remainingPercentage');
+            remainingDiv.innerText = `Remaining: ${remaining.toFixed(2)}%`;
+            if (remaining > 0) {
+                remainingDiv.className = 'remaining positive';
+            } else if (remaining < 0) {
+                remainingDiv.className = 'remaining negative';
+            } else {
+                remainingDiv.className = 'remaining zero';
+            }
         }
 
         function addExpense() {
@@ -240,7 +265,6 @@
                         splitValues[name] = perPerson;
                     });
                 } else {
-                    // If checkbox is unchecked, treat null inputs as 0
                     nullNames.forEach(name => {
                         splitValues[name] = 0;
                     });
@@ -316,9 +340,10 @@
             const row = tableBody.insertRow();
             row.insertCell(0).innerText = description;
             row.insertCell(1).innerText = payer;
-            row.insertCell(2).innerText = amount.toFixed(2);
+            row.insertCell(2).innerText = `₹${amount.toFixed(2)}`;
             row.insertCell(3).innerText = JSON.stringify(splitDetails);
-            const actionCell = row.insertCell(4);
+            const actionCell = row
+            .insertCell(4);
             const deleteButton = document.createElement('button');
             deleteButton.className = 'btn btn-danger btn-sm';
             deleteButton.innerText = 'Delete';
@@ -360,13 +385,62 @@
 
             // Update balances table
             const tableBody = document.getElementById('balancesTable').getElementsByTagName('tbody')[0];
-            // Clear previous results
-            tableBody.innerHTML = '';
+            tableBody.innerHTML = ''; // Clear previous results
+
             for (const [name, balance] of Object.entries(balances)) {
                 const row = tableBody.insertRow();
                 row.insertCell(0).innerText = name;
-                row.insertCell(1).innerText = balance.toFixed(2);
+                row.insertCell(1).innerText = `₹${balance.toFixed(2)}`;
             }
+
+            // Calculate settlement details
+            displaySettlementDetails(balances);
+        }
+
+        function displaySettlementDetails(balances) {
+            let positiveBalances = [];
+            let negativeBalances = [];
+
+            for (const [name, balance] of Object.entries(balances)) {
+                if (balance > 0) {
+                    positiveBalances.push({ name, balance });
+                } else if (balance < 0) {
+                    negativeBalances.push({ name, balance: -balance });
+                }
+            }
+
+            positiveBalances.sort((a, b) => b.balance - a.balance);
+            negativeBalances.sort((a, b) => b.balance - a.balance);
+
+            const settlementDiv = document.getElementById('settlementDetails');
+            settlementDiv.innerHTML = '';
+
+            let settlements = [];
+
+            while (positiveBalances.length > 0 && negativeBalances.length > 0) {
+                let creditor = positiveBalances[0];
+                let debtor = negativeBalances[0];
+
+                let amountToSettle = Math.min(creditor.balance, debtor.balance);
+
+                settlements.push(`${debtor.name} owes ₹${amountToSettle.toFixed(2)} to ${creditor.name}`);
+
+                creditor.balance -= amountToSettle;
+                debtor.balance -= amountToSettle;
+
+                if (creditor.balance === 0) {
+                    positiveBalances.shift();
+                }
+                if (debtor.balance === 0) {
+                    negativeBalances.shift();
+                }
+            }
+
+            settlements.forEach(settlement => {
+                const paragraph = document.createElement('p');
+                paragraph.innerText = settlement;
+                settlementDiv.appendChild(paragraph);
+            });
         }
     </script>
 </body>
