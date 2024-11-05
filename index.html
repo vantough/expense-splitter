@@ -61,7 +61,7 @@
                         <th>Description</th>
                         <th>Payer</th>
                         <th>Amount</th>
-                        <th>Split Details</th>
+                        <th id="splitHeaders"></th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -104,6 +104,15 @@
                 option.value = name;
                 option.text = name;
                 payerSelect.add(option);
+            });
+
+            // Update table headers for split columns
+            const splitHeaders = document.getElementById('splitHeaders');
+            splitHeaders.innerHTML = '';
+            names.forEach(name => {
+                const th = document.createElement('th');
+                th.textContent = name;
+                splitHeaders.appendChild(th);
             });
         }
 
@@ -331,8 +340,13 @@
             row.insertCell(0).innerText = description;
             row.insertCell(1).innerText = payer;
             row.insertCell(2).innerText = amount.toFixed(2);
-            row.insertCell(3).innerText = JSON.stringify(splitDetails);
-            const actionCell = row.insertCell(4);
+
+            names.forEach(name => {
+                const cell = row.insertCell();
+                cell.innerText = splitDetails[name] ? splitDetails[name].toFixed(2) : '0.00';
+            });
+
+            const actionCell = row.insertCell();
             const deleteButton = document.createElement('button');
             deleteButton.className = 'btn btn-danger btn-sm';
             deleteButton.innerText = 'Delete';
@@ -418,12 +432,17 @@
         }
 
         function exportToCSV() {
+            const namesInput = document.getElementById('names').value;
+            const names = namesInput.split(',').map(name => name.trim()).filter(name => name !== "");
             let csvContent = "data:text/csv;charset=utf-8,";
-            csvContent += "Description,Payer,Amount,Split Details\n";
+            csvContent += "Description,Payer,Amount," + names.join(',') + "\n";
 
             expenses.forEach(expense => {
-                const splitDetails = JSON.stringify(expense.splitDetails).replace(/"/g, '""');
-                csvContent += `${expense.description},${expense.payer},${expense.amount.toFixed(2)},"${splitDetails}"\n`;
+                let row = `${expense.description},${expense.payer},${expense.amount.toFixed(2)}`;
+                names.forEach(name => {
+                    row += `,${expense.splitDetails[name] ? expense.splitDetails[name].toFixed(2) : '0.00'}`;
+                });
+                csvContent += row + "\n";
             });
 
             const encodedUri = encodeURI(csvContent);
@@ -438,15 +457,21 @@
         function exportToPDF() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-
             doc.setFontSize(14);
             doc.text("Expense Report", 20, 20);
 
-            expenses.forEach((expense, index) => {
-                const yPosition = 30 + (index * 10);
-                const splitDetails = JSON.stringify(expense.splitDetails).replace(/"/g, '');
-                doc.text(`${expense.description} - ${expense.payer} - ₹${expense.amount.toFixed(2)}`, 20, yPosition);
-                doc.text(`Split: ${splitDetails}`, 20, yPosition + 5);
+            let yPosition = 30;
+            expenses.forEach(expense => {
+                doc.text(`Description: ${expense.description}`, 20, yPosition);
+                doc.text(`Payer: ${expense.payer} | Amount: ₹${expense.amount.toFixed(2)}`, 20, yPosition + 10);
+                doc.text("Split Details:", 20, yPosition + 20);
+
+                let splitText = '';
+                for (const [name, amount] of Object.entries(expense.splitDetails)) {
+                    splitText += `${name}: ₹${amount.toFixed(2)}  `;
+                }
+                doc.text(splitText, 20, yPosition + 30);
+                yPosition += 40;
             });
 
             doc.save('expenses.pdf');
