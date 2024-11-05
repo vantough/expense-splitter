@@ -69,6 +69,8 @@
             </table>
         </div>
         <button class="btn btn-success" onclick="calculateBalances()">Calculate Balances</button>
+        <button class="btn btn-secondary" onclick="exportToCSV()">Export as CSV</button>
+        <button class="btn btn-secondary" onclick="exportToPDF()">Export as PDF</button>
         <hr>
         <h3>Balances</h3>
         <div class="table-responsive">
@@ -87,6 +89,8 @@
     </div>
     <!-- Adding jQuery and Bootstrap JS for better functionality -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!-- Adding jsPDF library for PDF export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <script>
         let expenses = [];
 
@@ -411,6 +415,41 @@
             }
 
             document.getElementById('settlementDetails').innerHTML = settlementDetails || '<p>No settlements needed.</p>';
+        }
+
+        function exportToCSV() {
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "Description,Payer,Amount,Split Details\n";
+
+            expenses.forEach(expense => {
+                const splitDetails = JSON.stringify(expense.splitDetails).replace(/"/g, '""');
+                csvContent += `${expense.description},${expense.payer},${expense.amount.toFixed(2)},"${splitDetails}"\n`;
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement('a');
+            link.setAttribute('href', encodedUri);
+            link.setAttribute('download', 'expenses.csv');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function exportToPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            doc.setFontSize(14);
+            doc.text("Expense Report", 20, 20);
+
+            expenses.forEach((expense, index) => {
+                const yPosition = 30 + (index * 10);
+                const splitDetails = JSON.stringify(expense.splitDetails).replace(/"/g, '');
+                doc.text(`${expense.description} - ${expense.payer} - ₹${expense.amount.toFixed(2)}`, 20, yPosition);
+                doc.text(`Split: ${splitDetails}`, 20, yPosition + 5);
+            });
+
+            doc.save('expenses.pdf');
         }
     </script>
 </body>
