@@ -37,8 +37,20 @@ The **Expense Splitter** is a web-based application designed to help users easil
 
 ## File Structure
 ```plaintext
-|-- index.html
-|-- README.md (this file)
+expense-splitter/
+│
+├── index.html
+├── css/
+│   └── styles.css
+├── js/
+│   ├── app.js
+│   ├── export.js
+│   └── ui.js
+└── libs/
+    ├── jquery.min.js
+    ├── jspdf.umd.min.js
+    └── bootstrap.min.css
+
 ```
 
 ## Code Highlights
