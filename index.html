@@ -7,18 +7,33 @@
     <!-- Setting the browser icon at code level -->
     <link rel="icon" href="https://cdn.jsdelivr.net/gh/vantough/expense-splitter/icon.png" type="image/png">
     <style>
-        body { margin: 20px; }
+        body { margin: 20px; transition: background-color 0.3s, color 0.3s; }
         .container { max-width: 1200px; }
         .table td, .table th { vertical-align: middle; }
         .remaining { text-align: right; font-weight: bold; }
         @media (max-width: 576px) {
             .form-row .form-group { margin-bottom: 15px; }
         }
+        .sticky-action {
+            position: sticky;
+            right: 0;
+            background: inherit;
+            z-index: 2;
+        }
+        .dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+        .dark-mode .table {
+            background-color: #1e1e1e;
+            color: #ffffff;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1 class="text-center">Expense Splitter</h1>
+        <button class="btn btn-dark mb-3" onclick="toggleDarkMode()">Toggle Dark Mode</button>
         <div class="form-group">
             <label for="names">Names (comma-separated):</label>
             <input type="text" class="form-control" id="names" placeholder="e.g., Alice,Bob,Charlie" onblur="updatePayerOptions()">
@@ -62,7 +77,7 @@
                         <th>Payer</th>
                         <th>Amount</th>
                         <th>Split Details</th>
-                        <th>Action</th>
+                        <th class="sticky-action">Action</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -89,6 +104,10 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script>
         let expenses = [];
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
 
         function updatePayerOptions() {
             const namesInput = document.getElementById('names').value;
@@ -329,14 +348,27 @@
             row.insertCell(2).innerText = amount.toFixed(2);
             row.insertCell(3).innerText = JSON.stringify(splitDetails);
             const actionCell = row.insertCell(4);
+            actionCell.className = 'sticky-action';
+
+            // Edit Button
+            const editButton = document.createElement('button');
+            editButton.className = 'btn btn-warning btn-sm mr-2';
+            editButton.innerHTML = '<i class="fas fa-edit"></i>';
+            editButton.onclick = function() {
+                alert('Edit functionality is not implemented yet.');
+            };
+
+            // Delete Button
             const deleteButton = document.createElement('button');
             deleteButton.className = 'btn btn-danger btn-sm';
-            deleteButton.innerText = 'Delete';
+            deleteButton.innerHTML = '<i class="fas fa-trash"></i>';
             deleteButton.onclick = function() {
                 const index = Array.from(tableBody.rows).indexOf(row);
                 expenses.splice(index, 1);
                 tableBody.deleteRow(index);
             };
+
+            actionCell.appendChild(editButton);
             actionCell.appendChild(deleteButton);
 
             // Reset form fields
@@ -413,5 +445,7 @@
             document.getElementById('settlementDetails').innerHTML = settlementDetails || '<p>No settlements needed.</p>';
         }
     </script>
+    <!-- Adding Font Awesome for icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 </body>
 </html>
