@@ -71,7 +71,114 @@ function addExpense() {
     }
 
     let splitDetails = {};
-    // ... existing logic for calculating splitDetails ...
+            if (splitType === 'equal') {
+                names.forEach(name => {
+                    splitDetails[name] = amount / names.length;
+                });
+            } else if (splitType === 'unequal') {
+                const inputs = document.querySelectorAll('.split-value');
+                let sum = 0;
+                let splitValues = {};
+                let nullNames = [];
+                inputs.forEach(input => {
+                    const name = input.getAttribute('data-name');
+                    const value = input.value;
+                    if (value === '') {
+                        splitValues[name] = null;
+                        nullNames.push(name);
+                    } else {
+                        const amountValue = parseFloat(value);
+                        if (isNaN(amountValue)) {
+                            alert('Please enter valid numbers for split amounts.');
+                            return;
+                        }
+                        splitValues[name] = amountValue;
+                        sum += amountValue;
+                    }
+                });
+
+                const remaining = amount - sum;
+
+                if (remaining < 0) {
+                    alert('The sum of split amounts exceeds the total amount.');
+                    return;
+                }
+
+                const splitRemaining = document.getElementById('splitRemaining').checked;
+
+                if (splitRemaining && nullNames.length > 0) {
+                    const perPerson = remaining / nullNames.length;
+                    nullNames.forEach(name => {
+                        splitValues[name] = perPerson;
+                    });
+                } else {
+                    nullNames.forEach(name => {
+                        splitValues[name] = 0;
+                    });
+                    if (remaining !== 0) {
+                        alert('Remaining amount is not zero. Please adjust the split amounts or select "Split remaining balance equally among the rest".');
+                        return;
+                    }
+                }
+
+                splitDetails = splitValues;
+            } else if (splitType === 'percentages') {
+                const inputs = document.querySelectorAll('.split-value');
+                let totalPercentage = 0;
+                let splitValues = {};
+                inputs.forEach(input => {
+                    const name = input.getAttribute('data-name');
+                    const value = input.value;
+                    if (value === '') {
+                        splitValues[name] = 0;
+                    } else {
+                        const percentageValue = parseFloat(value);
+                        if (isNaN(percentageValue)) {
+                            alert('Please enter valid numbers for percentages.');
+                            return;
+                        }
+                        splitValues[name] = percentageValue;
+                        totalPercentage += percentageValue;
+                    }
+                });
+
+                if (Math.abs(totalPercentage - 100) > 0.01) {
+                    alert('Total percentage must be 100%. Please adjust the percentages.');
+                    return;
+                }
+
+                for (const [name, percentage] of Object.entries(splitValues)) {
+                    splitDetails[name] = (percentage / 100) * amount;
+                }
+            } else if (splitType === 'shares') {
+                const inputs = document.querySelectorAll('.split-value');
+                let totalShares = 0;
+                let splitValues = {};
+                inputs.forEach(input => {
+                    const name = input.getAttribute('data-name');
+                    const value = input.value;
+                    if (value === '') {
+                        splitValues[name] = 0;
+                    } else {
+                        const shareValue = parseFloat(value);
+                        if (isNaN(shareValue)) {
+                            alert('Please enter valid numbers for shares.');
+                            return;
+                        }
+                        splitValues[name] = shareValue;
+                        totalShares += shareValue;
+                    }
+                });
+
+                if (totalShares === 0) {
+                    alert('Total shares cannot be zero.');
+                    return;
+                }
+
+                for (const [name, share] of Object.entries(splitValues)) {
+                    splitDetails[name] = (share / totalShares) * amount;
+                }
+            }
 
     expenses.push({ description, payer, amount, splitDetails });
 
