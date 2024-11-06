@@ -4,12 +4,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const chipContainer = document.getElementById("chipContainer");
     const names = [];
 
-    chipInput.addEventListener("input", function (event) {
-        if (event.inputType === "insertText" && (event.data === "," || event.data === "\n")) {
-            addChip(this.value.trim());
+    chipInput.addEventListener("keydown", function (event) {
+        if (event.key === "Enter" || event.key === ",") {
+            event.preventDefault();
+            addChip(this.value.trim().replace(/,$/, "")); // Remove trailing commas
             this.value = "";
-        } else if (event.inputType === "deleteContentBackward" && this.value === "") {
+            updatePayerOptions();
+        } else if ((event.key === "Backspace" || event.key === "Delete") && this.value === "") {
             removeLastChip();
+            updatePayerOptions();
         }
     });
 
@@ -24,7 +27,10 @@ document.addEventListener("DOMContentLoaded", () => {
             const closeButton = document.createElement("button");
             closeButton.classList.add("close-btn");
             closeButton.innerHTML = "&times;";
-            closeButton.onclick = () => removeChip(name, chip);
+            closeButton.onclick = () => {
+                removeChip(name, chip);
+                updatePayerOptions();
+            };
 
             chip.appendChild(closeButton);
             chipContainer.insertBefore(chip, chipInput);
@@ -45,32 +51,22 @@ document.addEventListener("DOMContentLoaded", () => {
     function removeLastChip() {
         const lastChip = chipContainer.querySelector(".chip:last-child");
         if (lastChip) {
-            const name = lastChip.innerText.trim();
+            const name = lastChip.innerText.trim().replace("×", "");
             removeChip(name, lastChip);
         }
     }
+
+    function updatePayerOptions() {
+        const payerSelect = document.getElementById("payer");
+        payerSelect.innerHTML = '<option value="">Select Payer</option>';
+        names.forEach(name => {
+            const option = document.createElement("option");
+            option.value = name;
+            option.text = name;
+            payerSelect.add(option);
+        });
+    }
 });
-
-/* Payer dropdown */
-function updatePayerOptions() {
-    const chipContainer = document.getElementById('chipContainer');
-    const payerSelect = document.getElementById('payer');
-
-    // Clear existing options in the payer dropdown
-    payerSelect.innerHTML = '<option value="">Select Payer</option>';
-
-    // Get all chips (names) in the chip container
-    const chips = chipContainer.querySelectorAll('.chip');
-    chips.forEach(chip => {
-        const name = chip.textContent.replace('×', '').trim(); // Remove the "×" close button from the text
-
-        // Add each name as an option in the dropdown
-        const option = document.createElement('option');
-        option.value = name;
-        option.text = name;
-        payerSelect.add(option);
-    });
-}
 
 
 /* Split details */
