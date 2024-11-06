@@ -31,6 +31,14 @@ body {
     background-color: #1e1e1e;
     color: #ffffff;
 }
+.input-group-text {
+    font-size: 1.2em; /* Adjust size to match input */
+    color: #000; /* Default color */
+}
+
+.dark-mode .input-group-text {
+    color: #ffffff; /* Adjust color in dark mode */
+}
 .icon-btn {
     border: none;
     background: transparent;
