@@ -31,23 +31,6 @@ body {
     background-color: #1e1e1e;
     color: #ffffff;
 }
-.input-group-text {
-    font-size: 1.2em; /* Adjust size to match input */
-    color: #000; /* Default color */
-    height: 100%; /* Match input field height */
-    padding-top: 0;
-    padding-bottom: 0;
-    display: flex;
-    align-items: center; /* Center the icon vertically */
-    border: 1px solid #ced4da; /* Ensure the border matches the input field */
-    border-radius: 0.25rem; /* Match the border radius of the input */
-    background-color: #ffffff; /* Ensure background matches input in light mode */
-}
-
-.dark-mode .input-group-text {
-    color: #ffffff; /* Adjust color in dark mode */
-    background-color: #1e1e1e; /* Match background color to dark mode input */
-}
 .icon-btn {
     border: none;
     background: transparent;
@@ -79,3 +62,20 @@ body {
     fill: #ffffff;
 }
 
+.input-group-text {
+    font-size: 1.2em; /* Adjust size to match input */
+    color: #000; /* Default color */
+    height: 100%; /* Match input field height */
+    padding-top: 0;
+    padding-bottom: 0;
+    display: flex;
+    align-items: center; /* Center the icon vertically */
+    border: 1px solid #ced4da; /* Ensure the border matches the input field */
+    border-radius: 0.25rem; /* Match the border radius of the input */
+    background-color: #ffffff; /* Ensure background matches input in light mode */
+}
+
+.dark-mode .input-group-text {
+    color: #ffffff; /* Adjust color in dark mode */
+    background-color: #1e1e1e; /* Match background color to dark mode input */
+}
