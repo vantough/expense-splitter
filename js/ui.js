@@ -30,6 +30,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             chip.appendChild(closeButton);
             chipContainer.insertBefore(chip, chipInput);
+
+            updatePayerOptions(); // Update the payer dropdown whenever a chip is added
         }
     }
 
@@ -40,6 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
             chipElement.style.animation = "fadeOut 0.3s ease";
             chipElement.addEventListener("animationend", () => {
                 chipElement.remove();
+                updatePayerOptions(); // Update the payer dropdown whenever a chip is removed
             });
         }
     }
@@ -75,18 +78,19 @@ function updatePayerOptions() {
 }
 
 
-/*Split details */
+/* Split details */
 function showSplitDetails() {
     const splitType = document.getElementById('splitType').value;
     const splitDetailsDiv = document.getElementById('splitDetails');
     splitDetailsDiv.innerHTML = ''; // Clear previous details
     if (splitType !== 'equal') {
-        const namesInput = document.getElementById('names').value;
-        const names = namesInput.split(',').map(name => name.trim()).filter(name => name !== "");
+        const chipContainer = document.getElementById('chipContainer');
+        const chips = chipContainer.querySelectorAll('.chip');
         let html = '';
         if (splitType === 'unequal') {
             html += '<div class="form-group"><label>Enter amounts for each person:</label>';
-            names.forEach(name => {
+            chips.forEach(chip => {
+                const name = chip.textContent.replace('×', '').trim();
                 html += `
                     <div class="input-group mb-2">
                         <div class="input-group-prepend">
@@ -105,7 +109,8 @@ function showSplitDetails() {
             `;
         } else if (splitType === 'percentages') {
             html += '<div class="form-group"><label>Enter percentages for each person:</label>';
-            names.forEach(name => {
+            chips.forEach(chip => {
+                const name = chip.textContent.replace('×', '').trim();
                 html += `
                     <div class="input-group mb-2">
                         <div class="input-group-prepend">
@@ -118,7 +123,8 @@ function showSplitDetails() {
             html += `<div id="remainingPercentage" class="remaining">Remaining: 100%</div>`;
         } else if (splitType === 'shares') {
             html += '<div class="form-group"><label>Enter shares for each person:</label>';
-            names.forEach(name => {
+            chips.forEach(chip => {
+                const name = chip.textContent.replace('×', '').trim();
                 html += `
                     <div class="input-group mb-2">
                         <div class="input-group-prepend">
@@ -213,18 +219,20 @@ function editExpense(index) {
     document.getElementById('splitType').value = 'equal'; // Set this as per your application logic
     showSplitDetails();
 
-    const namesInput = document.getElementById('names').value;
-    const names = namesInput.split(',').map(name => name.trim()).filter(name => name !== "");
+    const chipContainer = document.getElementById('chipContainer');
+    const chips = Array.from(chipContainer.querySelectorAll('.chip')).map(chip =>
+        chip.textContent.replace('×', '').trim()
+    );
 
     // Fill split details based on the split type
     const splitDetailsDiv = document.getElementById('splitDetails');
     const splitDetails = expense.splitDetails;
-    for (const name of names) {
+    chips.forEach(name => {
         const inputField = splitDetailsDiv.querySelector(`[data-name="${name}"]`);
         if (inputField) {
             inputField.value = splitDetails[name] || 0;
         }
-    }
+    });
 
     // Remove the expense from the list and table
     expenses.splice(index, 1);
