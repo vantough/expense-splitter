@@ -17,7 +17,22 @@ body {
 /* Responsive Adjustments */
 @media (max-width: 576px) {
     .form-row .form-group {
-        margin-bottom: 15px;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    .actions-container {
+        flex-direction: column;
+        gap: 10px;
+        align-items: stretch;
+    }
+    .total-expense-summary {
+        text-align: left;
+        font-size: 1em;
+        margin-top: 10px;
+    }
+    .table td, .table th {
+        font-size: 0.9em;
+        padding: 0.4rem;
     }
 }
 
