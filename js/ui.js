@@ -55,17 +55,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
 /* Payer dropdown */
 function updatePayerOptions() {
-    const namesInput = document.getElementById('names').value;
-    const names = namesInput.split(',').map(name => name.trim()).filter(name => name !== "");
+    const chipContainer = document.getElementById('chipContainer');
     const payerSelect = document.getElementById('payer');
+
+    // Clear existing options in the payer dropdown
     payerSelect.innerHTML = '<option value="">Select Payer</option>';
-    names.forEach(name => {
+
+    // Get all chips (names) in the chip container
+    const chips = chipContainer.querySelectorAll('.chip');
+    chips.forEach(chip => {
+        const name = chip.textContent.replace('×', '').trim(); // Remove the "×" close button from the text
+
+        // Add each name as an option in the dropdown
         const option = document.createElement('option');
         option.value = name;
         option.text = name;
         payerSelect.add(option);
     });
 }
+
 
 /*Split details */
 function showSplitDetails() {
