@@ -1,4 +1,3 @@
-/* Name chips component */
 document.addEventListener("DOMContentLoaded", () => {
     const chipInput = document.getElementById("chipInput");
     const chipContainer = document.getElementById("chipContainer");
@@ -10,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
             addChip(this.value.trim());
             this.value = "";
         } else if ((event.key === "Backspace" || event.key === "Delete") && this.value === "") {
-            // Remove last chip on Backspace (Windows) or Delete (Mac) if input is empty
+            // Remove last chip on Backspace or Delete if input is empty
             removeLastChip();
         }
     });
@@ -56,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-/* Payer dropdown */
+/* Payer dropdown update */
 function updatePayerOptions() {
     const chipContainer = document.getElementById('chipContainer');
     const payerSelect = document.getElementById('payer');
@@ -76,7 +75,6 @@ function updatePayerOptions() {
         payerSelect.add(option);
     });
 }
-
 
 /* Split details */
 function showSplitDetails() {
