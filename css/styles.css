@@ -139,22 +139,34 @@ body {
     to { opacity: 0; transform: scale(0.9); }
 }
 
-.input-group-prepend .input-group-text {
-    font-size: 1.2em; /* Slightly larger font size for clarity */
-    background-color: #f0f0f0; /* Gray background to indicate non-editable */
-    color: #555555; /* Darker text color */
+/* Styling for the rupee icon in the Amount field */
+.input-group-prepend .amount-icon {
+    font-size: 1.2em; /* Adjust size for readability */
+    background-color: #f0f0f0; /* Gray background for non-editable field */
+    color: #555555; /* Darker gray color */
     border-radius: 4px 0 0 4px; /* Rounded edges on the left side */
-    min-width: 50px; /* Set a minimum width to avoid squeezing the icon */
-    max-width: 60px; /* Limit the width to prevent too much space */
-    font-weight: bold;
+    min-width: 40px; /* Set a width suitable for the icon */
     display: flex;
-    align-items: center; /* Vertically center the icon */
-    justify-content: center; /* Horizontally center the icon */
-    padding: 0; /* Remove padding to prevent stretching */
+    align-items: center;
+    justify-content: center;
+    padding: 0;
 }
 
-.split-value {
-    border-radius: 0 4px 4px 0; /* Rounded edges on the right side */
-    padding-left: 8px; /* Add padding for better alignment */
+/* Styling for the name labels in the split details section */
+.input-group-prepend .name-label {
+    font-size: 0.9em; /* Slightly smaller font for names */
+    background-color: #e0e0e0; /* Light gray to indicate non-editable */
+    color: #333333; /* Darker text color */
+    border-radius: 4px 0 0 4px; /* Rounded edges on the left */
+    min-width: 100px; /* Adjust this width as needed for longer names */
+    max-width: 150px; /* Prevent overflow for longer names */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 8px; /* Padding for better alignment */
+    font-weight: bold;
+    white-space: nowrap; /* Prevent text wrap */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Ellipsis for overflow */
 }
 
