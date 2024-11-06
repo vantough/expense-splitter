@@ -21,6 +21,32 @@ body {
     }
 }
 
+/* Dark mode toggle styling for mobile */
+@media (max-width: 768px) { /* Applies to screens 768px and below */
+    .toggle-icon {
+        position: fixed;
+        bottom: 20px;
+        right: 20px; /* Position at the bottom-right of the screen */
+        width: 40px;
+        height: 40px;
+        background-color: rgba(0, 0, 0, 0.6); /* Dark semi-transparent background */
+        color: #fff; /* White icon for visibility */
+        border-radius: 50%; /* Circular shape */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10; /* Ensures it stays on top */
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+    }
+    
+    .toggle-icon svg {
+        width: 24px;
+        height: 24px;
+        fill: #ffffff; /* Ensures the icon itself is visible */
+    }
+}
+
+
 /* Sticky Action Column */
 .sticky-action {
     position: sticky;
