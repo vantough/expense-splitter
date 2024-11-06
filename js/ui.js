@@ -9,7 +9,8 @@ document.addEventListener("DOMContentLoaded", () => {
             event.preventDefault();
             addChip(this.value.trim());
             this.value = "";
-        } else if (event.key === "Backspace" && this.value === "") {
+        } else if ((event.key === "Backspace" || event.key === "Delete") && this.value === "") {
+            // Remove last chip on Backspace (Windows) or Delete (Mac) if input is empty
             removeLastChip();
         }
     });
