@@ -20,13 +20,11 @@ function addExpense() {
     let splitDetails = {};
 
     if (splitType === 'equal') {
-        // Split equally
         const perPerson = amount / names.length;
         names.forEach(name => {
             splitDetails[name] = perPerson;
         });
     } else if (splitType === 'unequal') {
-        // Unequal split by specific amounts
         const inputs = document.querySelectorAll('.split-value');
         let sum = 0;
         let splitValues = {};
@@ -74,7 +72,6 @@ function addExpense() {
 
         splitDetails = splitValues;
     } else if (splitType === 'percentages') {
-        // Split by percentages
         const inputs = document.querySelectorAll('.split-value');
         let totalPercentage = 0;
         let splitValues = {};
@@ -100,7 +97,6 @@ function addExpense() {
             splitDetails[name] = (percentage / 100) * amount;
         }
     } else if (splitType === 'shares') {
-        // Split by shares
         const inputs = document.querySelectorAll('.split-value');
         let totalShares = 0;
         let splitValues = {};
@@ -128,10 +124,15 @@ function addExpense() {
 
     expenses.push({ description, payer, amount, splitDetails });
     addExpenseToTable(description, payer, amount, splitDetails);
+    updateTotalExpense(); // Update total expense dynamically
+}
+
+function updateTotalExpense() {
+    const totalExpense = expenses.reduce((total, expense) => total + expense.amount, 0);
+    document.getElementById('totalExpense').innerText = `₹${totalExpense.toFixed(2)}`;
 }
 
 function calculateBalances() {
-    // Retrieve names from chips
     const chipContainer = document.getElementById('chipContainer');
     const names = Array.from(chipContainer.querySelectorAll('.chip')).map(chip => 
         chip.textContent.replace('×', '').trim()
@@ -157,16 +158,26 @@ function calculateBalances() {
         }
     });
 
-    // Update balances table
+    // Update balances table with visual indicators
     const tableBody = document.getElementById('balancesTable').getElementsByTagName('tbody')[0];
     tableBody.innerHTML = '';
     for (const [name, balance] of Object.entries(balances)) {
         const row = tableBody.insertRow();
         row.insertCell(0).innerText = name;
-        row.insertCell(1).innerText = `₹${balance.toFixed(2)}`;
+
+        const balanceCell = row.insertCell(1);
+        balanceCell.innerText = `₹${balance.toFixed(2)}`;
+        
+        // Apply color based on balance value
+        if (balance > 0) {
+            balanceCell.classList.add('balance-positive');
+        } else if (balance < 0) {
+            balanceCell.classList.add('balance-negative');
+        } else {
+            balanceCell.classList.add('balance-zero');
+        }
     }
 
-    // Calculate settlement details
     manageSettlement(balances);
 }
 
@@ -206,7 +217,14 @@ function manageSettlement(balances) {
     document.getElementById('settlementDetails').innerHTML = settlementDetails || '<p>No settlements needed.</p>';
 }
 
-// Expose functions to the global scope if needed
+function deleteExpense(index, row) {
+    expenses.splice(index, 1);
+    row.remove();
+    clearBalancesAndSettlement();
+    updateTotalExpense(); // Update total expense dynamically after deletion
+}
+
 window.addExpense = addExpense;
 window.calculateBalances = calculateBalances;
 window.manageSettlement = manageSettlement;
+window.updateTotalExpense = updateTotalExpense;
