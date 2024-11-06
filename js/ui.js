@@ -1,3 +1,58 @@
+/* Name chips component */
+document.addEventListener("DOMContentLoaded", () => {
+    const chipInput = document.getElementById("chipInput");
+    const chipContainer = document.getElementById("chipContainer");
+    const names = [];
+
+    chipInput.addEventListener("keydown", function (event) {
+        if (event.key === "Enter" || event.key === ",") {
+            event.preventDefault();
+            addChip(this.value.trim());
+            this.value = "";
+        } else if (event.key === "Backspace" && this.value === "") {
+            removeLastChip();
+        }
+    });
+
+    function addChip(name) {
+        if (name && !names.includes(name)) {
+            names.push(name);
+
+            const chip = document.createElement("div");
+            chip.classList.add("chip");
+            chip.innerText = name;
+
+            const closeButton = document.createElement("button");
+            closeButton.classList.add("close-btn");
+            closeButton.innerHTML = "&times;";
+            closeButton.onclick = () => removeChip(name, chip);
+
+            chip.appendChild(closeButton);
+            chipContainer.insertBefore(chip, chipInput);
+        }
+    }
+
+    function removeChip(name, chipElement) {
+        const index = names.indexOf(name);
+        if (index > -1) {
+            names.splice(index, 1);
+            chipElement.style.animation = "fadeOut 0.3s ease";
+            chipElement.addEventListener("animationend", () => {
+                chipElement.remove();
+            });
+        }
+    }
+
+    function removeLastChip() {
+        const lastChip = chipContainer.querySelector(".chip:last-child");
+        if (lastChip) {
+            const name = lastChip.innerText.trim();
+            removeChip(name, lastChip);
+        }
+    }
+});
+
+/* Payer dropdown */
 function updatePayerOptions() {
     const namesInput = document.getElementById('names').value;
     const names = namesInput.split(',').map(name => name.trim()).filter(name => name !== "");
@@ -11,6 +66,7 @@ function updatePayerOptions() {
     });
 }
 
+/*Split details */
 function showSplitDetails() {
     const splitType = document.getElementById('splitType').value;
     const splitDetailsDiv = document.getElementById('splitDetails');
@@ -71,6 +127,7 @@ function showSplitDetails() {
     }
 }
 
+/* remaining amount */
 function updateRemainingAmount() {
     const amount = parseFloat(document.getElementById('amount').value) || 0;
     const inputs = document.querySelectorAll('.split-value');
@@ -98,6 +155,7 @@ function updateRemainingPercentage() {
     document.getElementById('remainingPercentage').innerText = `Remaining: ${remaining.toFixed(2)}%`;
 }
 
+/* calculate balances */
 function addExpenseToTable(description, payer, amount, splitDetails) {
     const tableBody = document.getElementById('expensesTable').getElementsByTagName('tbody')[0];
     const row = tableBody.insertRow();
