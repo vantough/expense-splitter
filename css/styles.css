@@ -140,18 +140,21 @@ body {
 }
 
 .input-group-prepend .input-group-text {
-    font-size: 1em; /* Consistent font size */
-    background-color: #f0f0f0; /* Light gray background to indicate non-editable */
-    color: #555555; /* Darker gray text color */
+    font-size: 1.2em; /* Slightly larger font size for clarity */
+    background-color: #f0f0f0; /* Gray background to indicate non-editable */
+    color: #555555; /* Darker text color */
     border-radius: 4px 0 0 4px; /* Rounded edges on the left side */
-    width: 120px; /* Set a fixed width for consistency */
+    min-width: 50px; /* Set a minimum width to avoid squeezing the icon */
+    max-width: 60px; /* Limit the width to prevent too much space */
     font-weight: bold;
     display: flex;
-    align-items: center; /* Vertically center the text */
-    justify-content: center; /* Center text horizontally */
+    align-items: center; /* Vertically center the icon */
+    justify-content: center; /* Horizontally center the icon */
+    padding: 0; /* Remove padding to prevent stretching */
 }
 
 .split-value {
-    border-radius: 0 4px 4px 0; /* Rounded edges on the right side to match */
+    border-radius: 0 4px 4px 0; /* Rounded edges on the right side */
+    padding-left: 8px; /* Add padding for better alignment */
 }
 
