@@ -88,8 +88,7 @@ body {
     border: 1px solid #ced4da;
     border-radius: 4px;
     padding: 8px;
-    background-color: #ffffff;
-    transition: background-color 0.6s;
+    background-color: #ffffff; /* Keep background white */
 }
 
 .chip {
@@ -101,8 +100,8 @@ body {
     padding: 4px 8px;
     margin: 4px;
     font-size: 0.9em;
-    animation: fadeIn 0.6s ease;
-    transition: background-color 0.6s, color 0.6s;
+    animation: fadeIn 0.3s ease;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .chip .close-btn {
@@ -121,6 +120,13 @@ body {
     flex: 1;
     padding: 4px;
     min-width: 100px;
+    background-color: #ffffff; /* Keep input background white */
+}
+
+/* Dark mode adjustments */
+.dark-mode .chip {
+    background-color: #555555;
+    color: #ffffff;
 }
 
 @keyframes fadeIn {
@@ -131,15 +137,4 @@ body {
 @keyframes fadeOut {
     from { opacity: 1; transform: scale(1); }
     to { opacity: 0; transform: scale(0.9); }
-}
-
-/* Dark mode adjustments */
-.dark-mode .chip-container {
-    background-color: #333333;
-    border-color: #555555;
-}
-
-.dark-mode .chip {
-    background-color: #555555;
-    color: #ffffff;
 }
