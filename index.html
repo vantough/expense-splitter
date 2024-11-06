@@ -66,7 +66,12 @@
                 <tbody></tbody>
             </table>
         </div>
-        <button class="btn btn-success" onclick="calculateBalances()">Calculate Balances & Split Details</button>
+        <div class="actions-container">
+            <button class="btn btn-success" onclick="calculateBalances()">Calculate Balances & Split Details</button>
+            <div class="total-expense-summary">
+                <h4>Total Expense: <span id="totalExpense">₹0.00</span></h4>
+            </div>
+        </div>
         <hr>
         <h3>Balances</h3>
         <div class="table-responsive">
