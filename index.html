@@ -11,7 +11,7 @@
     <div class="container" id="app">
         <h1 class="text-center">Expense Splitter</h1>
         <div class="form-group">
-            <label for="names">Names (comma-separated):</label>
+            <label for="names">Names:</label>
             <input type="text" class="form-control" id="names" placeholder="e.g., Alice, Bob, Charlie" onblur="updatePayerOptions()">
         </div>
         <hr>
@@ -59,7 +59,7 @@
                 <tbody></tbody>
             </table>
         </div>
-        <button class="btn btn-success" onclick="calculateBalances()">Calculate Balances</button>
+        <button class="btn btn-success" onclick="calculateBalances()">Calculate Balances & Split Details</button>
         <hr>
         <h3>Balances</h3>
         <div class="table-responsive">
