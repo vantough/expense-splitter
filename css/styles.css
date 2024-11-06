@@ -159,7 +159,7 @@ body {
     color: #333333; /* Darker text color */
     border-radius: 4px 0 0 4px; /* Rounded edges on the left */
     min-width: 100px; /* Adjust this width as needed for longer names */
-    max-width: 150px; /* Prevent overflow for longer names */
+    max-width: 250px; /* Prevent overflow for longer names */
     display: flex;
     align-items: center;
     justify-content: center;
