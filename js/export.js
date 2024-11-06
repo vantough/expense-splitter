@@ -48,29 +48,37 @@ function exportToCSV() {
 }
 
 async function exportToPDF() {
+    // Check for jsPDF in case it wasn't loaded
+    if (!window.jspdf || !window.jspdf.jsPDF) {
+        console.error("jsPDF library is not loaded.");
+        return;
+    }
+
+    // Create a container for the PDF content
     const pdfContent = document.createElement('div');
     pdfContent.classList.add('pdf-content');
 
-    // Load the specific PDF styling
+    // Load PDF-specific styling if needed
     const styleLink = document.createElement('link');
     styleLink.rel = 'stylesheet';
     styleLink.href = 'css/pdfStyles.css';
     pdfContent.appendChild(styleLink);
 
-    // Add Balances Table to PDF content
+    // Clone Balances Table and Settlement Details
     const balancesTable = document.getElementById('balancesTable').cloneNode(true);
     const tableContainer = document.createElement('div');
     tableContainer.classList.add('table-container');
     tableContainer.appendChild(balancesTable);
     pdfContent.appendChild(tableContainer);
 
-    // Add Settlement Details to PDF content
     const settlementDetails = document.getElementById('settlementDetails').cloneNode(true);
     settlementDetails.classList.add('settlement-details');
     pdfContent.appendChild(settlementDetails);
 
-    // Use jsPDF to generate PDF
+    // Access jsPDF using the UMD format
+    const { jsPDF } = window.jspdf;
     const pdf = new jsPDF();
+
     pdf.html(pdfContent, {
         callback: function (pdf) {
             pdf.save('balances_and_settlement.pdf');
@@ -80,7 +88,6 @@ async function exportToPDF() {
         margin: [10, 10, 10, 10]
     });
 }
-
 // Expose the function to be accessible globally
 window.exportToCSV = exportToCSV;
 window.exportToPDF = exportToPDF;
