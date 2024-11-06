@@ -1,3 +1,4 @@
+/* General Layout */
 body {
     margin: 20px;
     transition: background-color 0.6s, color 0.6s;
@@ -12,17 +13,23 @@ body {
     text-align: right;
     font-weight: bold;
 }
+
+/* Responsive Adjustments */
 @media (max-width: 576px) {
     .form-row .form-group {
         margin-bottom: 15px;
     }
 }
+
+/* Sticky Table Column */
 .sticky-action {
     position: sticky;
     left: 0;
     background: inherit;
     z-index: 2;
 }
+
+/* Dark Mode Adjustments */
 .dark-mode {
     background-color: #121212;
     color: #ffffff;
@@ -31,11 +38,35 @@ body {
     background-color: #1e1e1e;
     color: #ffffff;
 }
+.dark-mode .input-group-text {
+    color: #ffffff;
+    background-color: #1e1e1e;
+}
+.dark-mode .chip {
+    background-color: #555555;
+    color: #ffffff;
+}
+.dark-mode .download-icon {
+    fill: #ffffff;
+}
+.dark-mode .balance-zero {
+    color: #ffffff;
+}
+.dark-mode .balance-positive {
+    color: #85e085;
+}
+.dark-mode .balance-negative {
+    color: #ff6666;
+}
+
+/* Icon Buttons */
 .icon-btn {
     border: none;
     background: transparent;
     padding: 0;
 }
+
+/* Toggle Icon */
 .toggle-icon {
     position: fixed;
     bottom: 40px;
@@ -44,53 +75,74 @@ body {
     width: 30px;
     height: 30px;
     transition: transform 0.6s;
-    background-color: transparent; /* Remove or set to transparent */
-    border-radius: 0; /* Remove rounded edges */
-    padding: 0; /* Remove padding if desired */
+    background-color: transparent;
+    border-radius: 0;
 }
 
+/* Download Icon */
 .download-icon {
     cursor: pointer;
     margin-left: 10px;
     vertical-align: middle;
     width: 30px;
     height: 30px;
-    fill: #000000; /* Default color for light mode */
+    fill: #000000;
     transition: fill 0.6s;
 }
-.dark-mode .download-icon {
-    fill: #ffffff;
-}
 
+/* Input Group Styling */
 .input-group-text {
-    font-size: 1.2em; /* Adjust size to match input */
-    color: #000; /* Default color */
-    height: 100%; /* Match input field height */
-    padding-top: 0;
-    padding-bottom: 0;
+    font-size: 1.2em;
+    color: #000;
+    height: 100%;
     display: flex;
-    align-items: center; /* Center the icon vertically */
-    border: 1px solid #ced4da; /* Ensure the border matches the input field */
-    border-radius: 0.25rem; /* Match the border radius of the input */
-    background-color: #ffffff; /* Ensure background matches input in light mode */
+    align-items: center;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    background-color: #ffffff;
     transition: fill 0.6s;
 }
 
-.dark-mode .input-group-text {
-    color: #ffffff; /* Adjust color in dark mode */
-    background-color: #1e1e1e; /* Match background color to dark mode input */
+/* Amount Icon Styling */
+.input-group-prepend .amount-icon {
+    font-size: 1.2em;
+    background-color: #f0f0f0;
+    color: #555555;
+    border-radius: 4px 0 0 4px;
+    min-width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
 }
 
-/* Name chips component*/
+/* Name Labels in Split Details */
+.input-group-prepend .name-label {
+    font-size: 0.9em;
+    background-color: #e0e0e0;
+    color: #333333;
+    border-radius: 4px 0 0 4px;
+    min-width: 100px;
+    max-width: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 8px;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Chip Component */
 .chip-container {
     display: flex;
     flex-wrap: wrap;
     border: 1px solid #ced4da;
     border-radius: 4px;
     padding: 8px;
-    background-color: #ffffff; /* Keep background white */
+    background-color: #ffffff;
 }
-
 .chip {
     display: flex;
     align-items: center;
@@ -103,7 +155,6 @@ body {
     animation: fadeIn 0.3s ease;
     transition: background-color 0.3s, color 0.3s;
 }
-
 .chip .close-btn {
     background: none;
     border: none;
@@ -113,108 +164,55 @@ body {
     line-height: 0;
     color: inherit;
 }
-
 .chip-input {
     border: none;
     outline: none;
     flex: 1;
     padding: 4px;
     min-width: 100px;
-    background-color: #ffffff; /* Keep input background white */
+    background-color: #ffffff;
 }
 
-/* Dark mode adjustments */
-.dark-mode .chip {
-    background-color: #555555;
-    color: #ffffff;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.9); }
-    to { opacity: 1; transform: scale(1); }
-}
-
-@keyframes fadeOut {
-    from { opacity: 1; transform: scale(1); }
-    to { opacity: 0; transform: scale(0.9); }
-}
-
-/* Styling for the rupee icon in the Amount field */
-.input-group-prepend .amount-icon {
-    font-size: 1.2em; /* Adjust size for readability */
-    background-color: #f0f0f0; /* Gray background for non-editable field */
-    color: #555555; /* Darker gray color */
-    border-radius: 4px 0 0 4px; /* Rounded edges on the left side */
-    min-width: 40px; /* Set a width suitable for the icon */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-}
-
-/* Styling for the name labels in the split details section */
-.input-group-prepend .name-label {
-    font-size: 0.9em; /* Slightly smaller font for names */
-    background-color: #e0e0e0; /* Light gray to indicate non-editable */
-    color: #333333; /* Darker text color */
-    border-radius: 4px 0 0 4px; /* Rounded edges on the left */
-    min-width: 100px; /* Adjust this width as needed for longer names */
-    max-width: 250px; /* Prevent overflow for longer names */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 8px; /* Padding for better alignment */
-    font-weight: bold;
-    white-space: nowrap; /* Prevent text wrap */
-    overflow: hidden;
-    text-overflow: ellipsis; /* Ellipsis for overflow */
-}
-
-.balance-positive {
-    color: #28a745; /* Green for positive balance */
-    font-weight: bold;
-}
-
-.balance-negative {
-    color: #dc3545; /* Red for negative balance */
-    font-weight: bold;
-}
-
-.balance-zero {
-    color: #000000; /* Black for zero balance */
-    font-weight: bold;
-}
-
-.dark-mode .balance-zero {
-    color: #ffffff; /* White for zero balance in dark mode */
-}
-
-.dark-mode .balance-positive {
-    color: #85e085; /* Lighter green in dark mode */
-}
-
-.dark-mode .balance-negative {
-    color: #ff6666; /* Lighter red in dark mode */
-}
+/* Expense Actions and Total Summary */
 .actions-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-top: 15px;
 }
-
 .total-expense-summary {
     text-align: right;
-    font-size: 1em; /* Normal font size */
+    font-size: 1em;
     margin-left: auto;
 }
-
 .total-expense-label {
-    font-weight: bold; /* Bold for the label */
-    margin-right: 5px; /* Space between label and value */
+    font-weight: bold;
+    margin-right: 5px;
 }
-
 #totalExpense {
-    font-weight: normal; /* Ensure the value is not bold */
+    font-weight: normal;
 }
 
+/* Balance Indicators */
+.balance-positive {
+    color: #28a745;
+    font-weight: bold;
+}
+.balance-negative {
+    color: #dc3545;
+    font-weight: bold;
+}
+.balance-zero {
+    color: #000000;
+    font-weight: bold;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+@keyframes fadeOut {
+    from { opacity: 1; transform: scale(1); }
+    to { opacity: 0; transform: scale(0.9); }
+}
