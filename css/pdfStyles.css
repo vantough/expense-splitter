@@ -1,0 +1,42 @@
+/* pdfStyles.css */
+body {
+    font-family: Arial, sans-serif;
+    color: #000;
+}
+
+h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.table-container {
+    margin: 20px 0;
+    width: 100%;
+}
+
+.table-container table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-container th, .table-container td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+    font-size: 14px;
+}
+
+.table-container th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.settlement-details {
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.settlement-details p {
+    margin: 5px 0;
+}
