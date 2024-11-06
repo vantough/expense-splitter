@@ -12,7 +12,9 @@
         <h1 class="text-center">Expense Splitter</h1>
         <div class="form-group">
             <label for="names">Names:</label>
-            <input type="text" class="form-control" id="names" placeholder="e.g., Alice, Bob, Charlie" onblur="updatePayerOptions()">
+            <div class="chip-container" id="chipContainer">
+            <input type="text" class="chip-input" id="chipInput" placeholder="Add names and press Enter or ','">
+            </div>
         </div>
         <hr>
         <h3>Add Expense</h3>
