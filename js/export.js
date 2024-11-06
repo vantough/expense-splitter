@@ -47,7 +47,7 @@ function exportToCSV() {
     document.body.removeChild(link);
 }
 
-function exportToPDF() {
+async function exportToPDF() {
     const pdfContent = document.createElement('div');
     pdfContent.classList.add('pdf-content');
 
@@ -83,3 +83,4 @@ function exportToPDF() {
 
 // Expose the function to be accessible globally
 window.exportToCSV = exportToCSV;
+window.exportToPDF = exportToPDF;
