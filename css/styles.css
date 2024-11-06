@@ -25,24 +25,32 @@ body {
 @media (max-width: 768px) { /* Applies to screens 768px and below */
     .toggle-icon {
         position: fixed;
-        bottom: 20px;
-        left: 20px;
-        width: 40px;
-        height: 40px;
+        bottom: 25px;
+        left: 25px;
+        width: 48px;
+        height: 48px;
         z-index: 1000;
-        background-color: rgba(0, 0, 0, 0.7); /* Slight background for better visibility */
+        background-color: rgba(200, 200, 200, 0.95); /* Light gray with 95% opacity */
+        color: #333; /* Dark icon color for better contrast */
         border-radius: 50%;
-        padding: 8px;
-        transition: transform 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for depth */
         cursor: pointer;
+        transition: transform 0.3s ease, background-color 0.3s ease; /* Smooth transition */
     }
+    
+    .toggle-icon:hover {
+        transform: scale(1.1); /* Slight zoom effect on hover */
+    }
+    
     .toggle-icon svg {
         width: 24px;
         height: 24px;
         fill: #333333; /* Dark gray color for the moon icon */
     }
 }
-
 
 /* Sticky Action Column */
 .sticky-action {
