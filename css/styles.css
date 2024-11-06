@@ -73,6 +73,7 @@ body {
     border: 1px solid #ced4da; /* Ensure the border matches the input field */
     border-radius: 0.25rem; /* Match the border radius of the input */
     background-color: #ffffff; /* Ensure background matches input in light mode */
+    transition: fill 0.6s;
 }
 
 .dark-mode .input-group-text {
