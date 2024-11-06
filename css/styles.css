@@ -21,12 +21,13 @@ body {
     }
 }
 
-/* Sticky Table Column */
+/* Sticky Action Column */
 .sticky-action {
     position: sticky;
     left: 0;
-    background: inherit;
+    background-color: #f8f9fa; /* Adjust this color to match your header row background */
     z-index: 2;
+    border-right: 1px solid #dee2e6; /* Optional: Adds a border for separation */
 }
 
 /* Dark Mode Adjustments */
