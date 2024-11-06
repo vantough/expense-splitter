@@ -70,12 +70,9 @@ Imagine a trip where three friends, Alice, Bob, and Charlie, share various expen
 - View the balance summary and determine who owes whom.
 
 ## Screenshots
-*Add screenshots here to visually demonstrate the application's interface.*
+<img width="1680" alt="image" src="https://github.com/user-attachments/assets/ca617c59-7968-4f5d-a9c4-97f3671b3fb6">
+<img width="1677" alt="image" src="https://github.com/user-attachments/assets/006a5cce-5756-404a-924b-c54d0d083893">
 
-## Future Enhancements
-- **User Authentication**: Enable user login to save and track expenses across sessions.
-- **Export Functionality**: Allow users to export expense data and settlement details as a PDF or CSV.
-- **Graphical Reports**: Include pie charts or bar graphs for better visualization of expenses and balances.
 
 ## Technologies Used
 - **HTML5** and **CSS3** for structure and styling.
