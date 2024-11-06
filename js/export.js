@@ -1,6 +1,11 @@
 function exportToCSV() {
     let csvContent = 'Description,Payer,Amount';
-    const names = document.getElementById('names').value.split(',').map(name => name.trim()).filter(name => name !== "");
+
+    // Retrieve names from chips
+    const chipContainer = document.getElementById('chipContainer');
+    const names = Array.from(chipContainer.querySelectorAll('.chip')).map(chip => 
+        chip.textContent.replace('×', '').trim()
+    );
 
     // Add headers for each person
     names.forEach(name => {
