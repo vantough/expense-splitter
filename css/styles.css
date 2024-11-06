@@ -1,0 +1,47 @@
+body {
+    margin: 20px;
+    transition: background-color 0.6s, color 0.6s;
+}
+.container {
+    max-width: 1200px;
+}
+.table td, .table th {
+    vertical-align: middle;
+}
+.remaining {
+    text-align: right;
+    font-weight: bold;
+}
+@media (max-width: 576px) {
+    .form-row .form-group {
+        margin-bottom: 15px;
+    }
+}
+.sticky-action {
+    position: sticky;
+    left: 0;
+    background: inherit;
+    z-index: 2;
+}
+.dark-mode {
+    background-color: #121212;
+    color: #ffffff;
+}
+.dark-mode .table {
+    background-color: #1e1e1e;
+    color: #ffffff;
+}
+.icon-btn {
+    border: none;
+    background: transparent;
+    padding: 0;
+}
+.toggle-icon {
+    position: fixed;
+    bottom: 40px;
+    left: 40px;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    transition: transform 0.6s;
+}
