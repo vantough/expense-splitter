@@ -46,8 +46,11 @@ body {
     background-color: #555555;
     color: #ffffff;
 }
-.dark-mode .download-icon {
+.dark-mode .download-icon,
+.dark-mode .pdf-icon {
     fill: #ffffff;
+}
+
 }
 .dark-mode .balance-zero {
     color: #ffffff;
@@ -79,16 +82,23 @@ body {
     border-radius: 0;
 }
 
-/* Download Icon */
-.download-icon {
+/* Export Icons */
+.export-icons {
+    display: flex;
+    gap: 10px;
+}
+
+.download-icon,
+.pdf-icon {
     cursor: pointer;
     margin-left: 10px;
     vertical-align: middle;
     width: 30px;
     height: 30px;
-    fill: #000000;
+    fill: #000000; /* Default color for light mode */
     transition: fill 0.6s;
 }
+
 
 /* Input Group Styling */
 .input-group-text {
