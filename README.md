@@ -71,7 +71,7 @@ Imagine a trip where three friends, Alice, Bob, and Charlie, share various expen
 
 ## Screenshots
 <img width="1680" alt="image" src="https://github.com/user-attachments/assets/ca617c59-7968-4f5d-a9c4-97f3671b3fb6">
-<img width="1677" alt="image" src="https://github.com/user-attachments/assets/006a5cce-5756-404a-924b-c54d0d083893">
+<img width="1680" alt="image" src="https://github.com/user-attachments/assets/cc79ddca-77b6-470d-bd0d-6806e74cff62">
 
 
 ## Technologies Used
