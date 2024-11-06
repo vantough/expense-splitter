@@ -45,6 +45,7 @@ expense-splitter/
 ├── js/
 │   ├── ui.js
 │   ├── logic.js
+│   ├── export.js
 │   └── darkMode.js
 └── assets/
     └── icons/
