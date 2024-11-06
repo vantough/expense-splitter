@@ -94,7 +94,7 @@ function showSplitDetails() {
                 html += `
                     <div class="input-group mb-2">
                         <div class="input-group-prepend">
-                            <div class="input-group-text">${name}</div>
+                            <div class="input-group-text name-label">${name}</div>
                         </div>
                         <input type="number" class="form-control split-value" data-name="${name}" placeholder="Amount for ${name}" oninput="updateRemainingAmount()">
                     </div>
@@ -113,8 +113,8 @@ function showSplitDetails() {
                 const name = chip.textContent.replace('×', '').trim();
                 html += `
                     <div class="input-group mb-2">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">${name}</div>
+                        <div class="prepend">
+                            <div class="input-group-text name-label">${name}</div>
                         </div>
                         <input type="number" class="form-control split-value" data-name="${name}" placeholder="Percentage for ${name}" oninput="updateRemainingPercentage()">
                     </div>
@@ -128,7 +128,7 @@ function showSplitDetails() {
                 html += `
                     <div class="input-group mb-2">
                         <div class="input-group-prepend">
-                            <div class="input-group-text">${name}</div>
+                            <div class="input-group-text name-label">${name}</div>
                         </div>
                         <input type="number" class="form-control split-value" data-name="${name}" placeholder="Shares for ${name}">
                     </div>
