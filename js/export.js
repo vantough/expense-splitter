@@ -47,36 +47,39 @@ function exportToCSV() {
     document.body.removeChild(link);
 }
 
-async function exportToPDF() {
-    const { jsPDF } = window.jspdf;
+function exportToPDF() {
+    const pdfContent = document.createElement('div');
+    pdfContent.classList.add('pdf-content');
+
+    // Load the specific PDF styling
+    const styleLink = document.createElement('link');
+    styleLink.rel = 'stylesheet';
+    styleLink.href = 'css/pdfStyles.css';
+    pdfContent.appendChild(styleLink);
+
+    // Add Balances Table to PDF content
+    const balancesTable = document.getElementById('balancesTable').cloneNode(true);
+    const tableContainer = document.createElement('div');
+    tableContainer.classList.add('table-container');
+    tableContainer.appendChild(balancesTable);
+    pdfContent.appendChild(tableContainer);
+
+    // Add Settlement Details to PDF content
+    const settlementDetails = document.getElementById('settlementDetails').cloneNode(true);
+    settlementDetails.classList.add('settlement-details');
+    pdfContent.appendChild(settlementDetails);
+
+    // Use jsPDF to generate PDF
     const pdf = new jsPDF();
-
-    // Add Balance Table
-    pdf.setFontSize(16);
-    pdf.text("Balances", 10, 10);
-
-    const balanceTable = document.getElementById("balancesTable");
-    let yPosition = 20;
-
-    Array.from(balanceTable.rows).forEach((row, rowIndex) => {
-        let rowData = "";
-        Array.from(row.cells).forEach((cell) => {
-            rowData += `${cell.innerText}    `;
-        });
-        pdf.text(rowData, 10, yPosition);
-        yPosition += 10;
+    pdf.html(pdfContent, {
+        callback: function (pdf) {
+            pdf.save('balances_and_settlement.pdf');
+        },
+        x: 10,
+        y: 10,
+        margin: [10, 10, 10, 10]
     });
-
-    // Add Settlement Details
-    pdf.setFontSize(16);
-    pdf.text("Settlement Details", 10, yPosition + 10);
-    const settlementDetails = document.getElementById("settlementDetails").innerText;
-    const lines = pdf.splitTextToSize(settlementDetails, 180); // Wrap text to fit within the page width
-    pdf.text(lines, 10, yPosition + 20);
-
-    pdf.save("balances_and_settlement.pdf");
 }
-
 
 // Expose the function to be accessible globally
 window.exportToCSV = exportToCSV;
