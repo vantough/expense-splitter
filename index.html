@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Enhanced Expense Splitter</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="icon" href="https://cdn.jsdelivr.net/gh/vantough/expense-splitter/icon.png" type="image/png">
@@ -10,7 +11,7 @@
 <body>
     <div class="container" id="app">
         <h1 class="text-center">Expense Splitter</h1>
-        
+
         <div class="form-group">
             <label for="names">Names:</label>
             <div class="chip-container" id="chipContainer">
@@ -18,7 +19,7 @@
             </div>
         </div>
         <hr>
-        
+
         <h3>Add Expense</h3>
         <div class="form-row">
             <div class="form-group col-12 col-md-3">
@@ -51,7 +52,7 @@
             </div>
         </div>
 
-        <button class="btn btn-primary" onclick="addExpense()">Add Expense</button>
+        <button class="btn btn-primary btn-block" onclick="addExpense()">Add Expense</button>
         <hr>
 
         <h3>Expenses</h3>
@@ -71,15 +72,15 @@
         </div>
 
         <div class="actions-container">
-            <button class="btn btn-success" onclick="calculateBalances()">Calculate Balances & Split Details</button>
+            <button class="btn btn-success btn-block" onclick="calculateBalances()">Calculate Balances & Split Details</button>
             <div class="total-expense-summary">
                 <span class="total-expense-label">Total Expense:</span>
                 <span id="totalExpense">₹0.00</span>
             </div>
         </div>
-        
+
         <hr>
-        
+
         <h3>Balances</h3>
         <div class="table-responsive">
             <table class="table table-bordered" id="balancesTable">
