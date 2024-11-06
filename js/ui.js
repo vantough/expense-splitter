@@ -101,6 +101,7 @@ function updateRemainingPercentage() {
 function addExpenseToTable(description, payer, amount, splitDetails) {
     const tableBody = document.getElementById('expensesTable').getElementsByTagName('tbody')[0];
     const row = tableBody.insertRow();
+    const rowIndex = expenses.length - 1; // Index of the current expense
 
     // Action cell with Edit and Delete buttons
     const actionCell = row.insertCell(0);
@@ -111,7 +112,7 @@ function addExpenseToTable(description, payer, amount, splitDetails) {
     editButton.className = 'icon-btn';
     editButton.innerHTML = '<img src="assets/icons/edit.png" alt="Edit" width="20">';
     editButton.onclick = function () {
-        alert('Edit functionality is not implemented yet.');
+        editExpense(rowIndex);
     };
 
     // Delete Button
@@ -119,9 +120,7 @@ function addExpenseToTable(description, payer, amount, splitDetails) {
     deleteButton.className = 'icon-btn';
     deleteButton.innerHTML = '<img src="assets/icons/delete.png" alt="Delete" width="20">';
     deleteButton.onclick = function () {
-        const index = Array.from(tableBody.rows).indexOf(row);
-        expenses.splice(index, 1);
-        tableBody.deleteRow(index);
+        deleteExpense(rowIndex, row);
     };
 
     actionCell.appendChild(editButton);
@@ -134,6 +133,47 @@ function addExpenseToTable(description, payer, amount, splitDetails) {
     row.insertCell(4).innerText = JSON.stringify(splitDetails);
 
     // Reset form fields after adding the expense
+    clearExpenseForm();
+}
+
+function editExpense(index) {
+    const expense = expenses[index];
+
+    // Fill form fields with expense data
+    document.getElementById('description').value = expense.description;
+    document.getElementById('payer').value = expense.payer;
+    document.getElementById('amount').value = expense.amount;
+    document.getElementById('splitType').value = 'equal'; // Set this as per your application logic
+    showSplitDetails();
+
+    const namesInput = document.getElementById('names').value;
+    const names = namesInput.split(',').map(name => name.trim()).filter(name => name !== "");
+
+    // Fill split details based on the split type
+    const splitDetailsDiv = document.getElementById('splitDetails');
+    const splitDetails = expense.splitDetails;
+    for (const name of names) {
+        const inputField = splitDetailsDiv.querySelector(`[data-name="${name}"]`);
+        if (inputField) {
+            inputField.value = splitDetails[name] || 0;
+        }
+    }
+
+    // Remove the expense from the list and table
+    expenses.splice(index, 1);
+    document.getElementById('expensesTable').deleteRow(index + 1); // Adjust index due to header row
+
+    // Clear balances and settlement details
+    clearBalancesAndSettlement();
+}
+
+function deleteExpense(index, row) {
+    expenses.splice(index, 1);
+    row.remove();
+    clearBalancesAndSettlement();
+}
+
+function clearExpenseForm() {
     document.getElementById('description').value = '';
     document.getElementById('payer').value = '';
     document.getElementById('amount').value = '';
@@ -142,3 +182,11 @@ function addExpenseToTable(description, payer, amount, splitDetails) {
     document.getElementById('splitDetails').innerHTML = '';
 }
 
+function clearBalancesAndSettlement() {
+    // Clear the balances and settlement details table
+    const balancesTableBody = document.getElementById('balancesTable').getElementsByTagName('tbody')[0];
+    balancesTableBody.innerHTML = '';
+
+    // Clear the settlement details section
+    document.getElementById('settlementDetails').innerHTML = '';
+}
