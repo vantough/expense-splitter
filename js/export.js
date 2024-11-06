@@ -47,5 +47,36 @@ function exportToCSV() {
     document.body.removeChild(link);
 }
 
+async function exportToPDF() {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF();
+
+    // Add Balance Table
+    pdf.setFontSize(16);
+    pdf.text("Balances", 10, 10);
+
+    const balanceTable = document.getElementById("balancesTable");
+    let yPosition = 20;
+
+    Array.from(balanceTable.rows).forEach((row, rowIndex) => {
+        let rowData = "";
+        Array.from(row.cells).forEach((cell) => {
+            rowData += `${cell.innerText}    `;
+        });
+        pdf.text(rowData, 10, yPosition);
+        yPosition += 10;
+    });
+
+    // Add Settlement Details
+    pdf.setFontSize(16);
+    pdf.text("Settlement Details", 10, yPosition + 10);
+    const settlementDetails = document.getElementById("settlementDetails").innerText;
+    const lines = pdf.splitTextToSize(settlementDetails, 180); // Wrap text to fit within the page width
+    pdf.text(lines, 10, yPosition + 20);
+
+    pdf.save("balances_and_settlement.pdf");
+}
+
+
 // Expose the function to be accessible globally
 window.exportToCSV = exportToCSV;
