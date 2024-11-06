@@ -170,3 +170,29 @@ body {
     text-overflow: ellipsis; /* Ellipsis for overflow */
 }
 
+.balance-positive {
+    color: #28a745; /* Green for positive balance */
+    font-weight: bold;
+}
+
+.balance-negative {
+    color: #dc3545; /* Red for negative balance */
+    font-weight: bold;
+}
+
+.balance-zero {
+    color: #000000; /* Black for zero balance */
+    font-weight: bold;
+}
+
+.dark-mode .balance-zero {
+    color: #ffffff; /* White for zero balance in dark mode */
+}
+
+.dark-mode .balance-positive {
+    color: #85e085; /* Lighter green in dark mode */
+}
+
+.dark-mode .balance-negative {
+    color: #ff6666; /* Lighter red in dark mode */
+}
