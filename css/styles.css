@@ -83,6 +83,14 @@ body {
 }
 
 /* Export Icons */
+/* Flex container for header and icons */
+.settlement-details-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
 .export-icons {
     display: flex;
     gap: 10px;
@@ -91,10 +99,8 @@ body {
 .download-icon,
 .pdf-icon {
     cursor: pointer;
-    margin-left: 10px;
-    vertical-align: middle;
-    width: 30px;
-    height: 30px;
+    width: 24px;
+    height: 24px;
     fill: #000000; /* Default color for light mode */
     transition: fill 0.6s;
 }
