@@ -138,3 +138,20 @@ body {
     from { opacity: 1; transform: scale(1); }
     to { opacity: 0; transform: scale(0.9); }
 }
+
+.input-group-prepend .input-group-text {
+    font-size: 1em; /* Consistent font size */
+    background-color: #f0f0f0; /* Light gray background to indicate non-editable */
+    color: #555555; /* Darker gray text color */
+    border-radius: 4px 0 0 4px; /* Rounded edges on the left side */
+    width: 120px; /* Set a fixed width for consistency */
+    font-weight: bold;
+    display: flex;
+    align-items: center; /* Vertically center the text */
+    justify-content: center; /* Center text horizontally */
+}
+
+.split-value {
+    border-radius: 0 4px 4px 0; /* Rounded edges on the right side to match */
+}
+
