@@ -196,3 +196,16 @@ body {
 .dark-mode .balance-negative {
     color: #ff6666; /* Lighter red in dark mode */
 }
+.actions-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.total-expense-summary {
+    text-align: right;
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-left: auto; /* Push the total expense to the far right */
+}
