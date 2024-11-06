@@ -5,10 +5,14 @@ function addExpense() {
     const payer = document.getElementById('payer').value;
     const amount = parseFloat(document.getElementById('amount').value);
     const splitType = document.getElementById('splitType').value;
-    const namesInput = document.getElementById('names').value;
-    const names = namesInput.split(',').map(name => name.trim()).filter(name => name !== "");
 
-    if (!description || !payer || isNaN(amount) || !splitType) {
+    // Retrieve names from chips
+    const chipContainer = document.getElementById('chipContainer');
+    const names = Array.from(chipContainer.querySelectorAll('.chip')).map(chip => 
+        chip.textContent.replace('×', '').trim()
+    );
+
+    if (!description || !payer || isNaN(amount) || !splitType || names.length === 0) {
         alert('Please fill in all fields.');
         return;
     }
@@ -127,8 +131,12 @@ function addExpense() {
 }
 
 function calculateBalances() {
-    const namesInput = document.getElementById('names').value;
-    const names = namesInput.split(',').map(name => name.trim()).filter(name => name !== "");
+    // Retrieve names from chips
+    const chipContainer = document.getElementById('chipContainer');
+    const names = Array.from(chipContainer.querySelectorAll('.chip')).map(chip => 
+        chip.textContent.replace('×', '').trim()
+    );
+
     let balances = {};
 
     // Initialize balances for each person
