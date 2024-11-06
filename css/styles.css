@@ -3,12 +3,15 @@ body {
     margin: 20px;
     transition: background-color 0.6s, color 0.6s;
 }
+
 .container {
     max-width: 1200px;
 }
+
 .table td, .table th {
     vertical-align: middle;
 }
+
 .remaining {
     text-align: right;
     font-weight: bold;
@@ -20,19 +23,30 @@ body {
         width: 100%;
         margin-bottom: 10px;
     }
+
     .actions-container {
         flex-direction: column;
         gap: 10px;
         align-items: stretch;
     }
+
     .total-expense-summary {
         text-align: left;
         font-size: 1em;
         margin-top: 10px;
     }
+
     .table td, .table th {
         font-size: 0.9em;
         padding: 0.4rem;
+    }
+
+    .chip-input {
+        min-width: 80px;
+    }
+
+    .btn-block {
+        width: 100%;
     }
 }
 
@@ -49,27 +63,34 @@ body {
     background-color: #121212;
     color: #ffffff;
 }
+
 .dark-mode .table {
     background-color: #1e1e1e;
     color: #ffffff;
 }
+
 .dark-mode .input-group-text {
     color: #ffffff;
     background-color: #1e1e1e;
 }
+
 .dark-mode .chip {
     background-color: #555555;
     color: #ffffff;
 }
+
 .dark-mode .download-icon {
     fill: #ffffff;
 }
+
 .dark-mode .balance-zero {
     color: #ffffff;
 }
+
 .dark-mode .balance-positive {
     color: #85e085;
 }
+
 .dark-mode .balance-negative {
     color: #ff6666;
 }
@@ -158,6 +179,7 @@ body {
     padding: 8px;
     background-color: #ffffff;
 }
+
 .chip {
     display: flex;
     align-items: center;
@@ -170,6 +192,7 @@ body {
     animation: fadeIn 0.3s ease;
     transition: background-color 0.3s, color 0.3s;
 }
+
 .chip .close-btn {
     background: none;
     border: none;
@@ -179,6 +202,7 @@ body {
     line-height: 0;
     color: inherit;
 }
+
 .chip-input {
     border: none;
     outline: none;
@@ -195,15 +219,18 @@ body {
     align-items: center;
     margin-top: 15px;
 }
+
 .total-expense-summary {
     text-align: right;
     font-size: 1em;
     margin-left: auto;
 }
+
 .total-expense-label {
     font-weight: bold;
     margin-right: 5px;
 }
+
 #totalExpense {
     font-weight: normal;
 }
@@ -213,10 +240,12 @@ body {
     color: #28a745;
     font-weight: bold;
 }
+
 .balance-negative {
     color: #dc3545;
     font-weight: bold;
 }
+
 .balance-zero {
     color: #000000;
     font-weight: bold;
@@ -227,6 +256,7 @@ body {
     from { opacity: 0; transform: scale(0.9); }
     to { opacity: 1; transform: scale(1); }
 }
+
 @keyframes fadeOut {
     from { opacity: 1; transform: scale(1); }
     to { opacity: 0; transform: scale(0.9); }
