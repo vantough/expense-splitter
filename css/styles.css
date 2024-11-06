@@ -48,3 +48,18 @@ body {
     border-radius: 0; /* Remove rounded edges */
     padding: 0; /* Remove padding if desired */
 }
+.download-icon {
+    cursor: pointer;
+    margin-left: 10px;
+    vertical-align: middle;
+    width: 20px;
+    height: 20px;
+    fill: #000000; /* Default color for light mode */
+    transition: fill 0.3s;
+}
+
+/* Change color for dark mode */
+.dark-mode .download-icon {
+    fill: #ffffff;
+}
+
