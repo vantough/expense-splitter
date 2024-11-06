@@ -206,6 +206,6 @@ body {
 .total-expense-summary {
     text-align: right;
     font-weight: bold;
-    font-size: 1.2em;
+    font-size: 0.75em;
     margin-left: auto; /* Push the total expense to the far right */
 }
