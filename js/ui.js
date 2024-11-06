@@ -4,13 +4,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const chipContainer = document.getElementById("chipContainer");
     const names = [];
 
-    chipInput.addEventListener("keydown", function (event) {
-        if (event.key === "Enter" || event.key === ",") {
-            event.preventDefault();
+    chipInput.addEventListener("input", function (event) {
+        if (event.inputType === "insertText" && (event.data === "," || event.data === "\n")) {
             addChip(this.value.trim());
             this.value = "";
-        } else if ((event.key === "Backspace" || event.key === "Delete") && this.value === "") {
-            // Remove last chip on Backspace (Windows) or Delete (Mac) if input is empty
+        } else if (event.inputType === "deleteContentBackward" && this.value === "") {
             removeLastChip();
         }
     });
@@ -30,8 +28,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             chip.appendChild(closeButton);
             chipContainer.insertBefore(chip, chipInput);
-
-            updatePayerOptions(); // Update the payer dropdown whenever a chip is added
         }
     }
 
@@ -42,7 +38,6 @@ document.addEventListener("DOMContentLoaded", () => {
             chipElement.style.animation = "fadeOut 0.3s ease";
             chipElement.addEventListener("animationend", () => {
                 chipElement.remove();
-                updatePayerOptions(); // Update the payer dropdown whenever a chip is removed
             });
         }
     }
