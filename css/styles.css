@@ -21,7 +21,6 @@ body {
     }
 }
 
-
 /* Dark mode toggle styling for mobile */
 @media (max-width: 768px) { /* Applies to screens 768px and below */
     body {
@@ -59,9 +58,9 @@ body {
 /* Improved Button Styling */
 button {
     transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
-/*     padding: 10px 20px; */
     border-radius: 4px;
     font-weight: bold;
+    cursor: pointer; /* Ensures pointer cursor on all buttons */
 }
 button:hover {
     background-color: #0056b3; /* Adjusted for a slightly darker shade on hover */
@@ -72,9 +71,6 @@ button:active {
 }
 
 /* Table Styling */
-/* .table tr:nth-child(odd) {
-    background-color: #f9f9f9; //Alternating row color for better readability
-} */
 .table th {
     position: sticky;
     top: 0;
@@ -83,7 +79,6 @@ button:active {
     padding: 10px;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Add slight shadow for separation */
 }
-
 
 /* Sticky Action Column */
 .sticky-action {
@@ -140,8 +135,6 @@ button:active {
     width: 30px;
     height: 30px;
     transition: transform 0.6s;
-/*     background-color: transparent;
-    border-radius: 0; */
 }
 
 /* Align export icon next to the header */
@@ -159,7 +152,6 @@ button:active {
     fill: #000000;
     transition: fill 0.6s;
 }
-
 
 /* Input Group Styling */
 .input-group-text {
@@ -288,7 +280,7 @@ button:active {
     to { opacity: 0; transform: scale(0.9); }
 }
 
-/* toast message */
+/* Toast Message */
 /* General Message Container Styling */
 .message-container {
     position: fixed;
