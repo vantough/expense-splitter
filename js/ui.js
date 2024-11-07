@@ -85,6 +85,20 @@ function updatePayerOptions() {
     });
 }
 
+function showMessage(message, type) {
+    const messageContainer = document.getElementById('messageContainer');
+    
+    // Set the message and apply the appropriate style (success or error)
+    messageContainer.textContent = message;
+    messageContainer.className = `message-container show ${type}`;
+    
+    // Hide the message after 3 seconds
+    setTimeout(() => {
+        messageContainer.classList.remove('show');
+    }, 3000);
+}
+
+
 /* Show split details input fields based on the selected split type */
 function showSplitDetails() {
     const splitType = document.getElementById("splitType").value;
