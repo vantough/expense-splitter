@@ -59,7 +59,7 @@ body {
 /* Improved Button Styling */
 button {
     transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
-    padding: 10px 20px;
+/*     padding: 10px 20px; */
     border-radius: 4px;
     font-weight: bold;
 }
