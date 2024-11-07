@@ -23,6 +23,9 @@ body {
 
 /* Dark mode toggle styling for mobile */
 @media (max-width: 768px) { /* Applies to screens 768px and below */
+    body {
+        padding-bottom: 80px; /* to avoid overlap of toggle*/
+    }
     .toggle-icon {
         position: fixed;
         bottom: 25px;
