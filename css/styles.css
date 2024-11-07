@@ -72,9 +72,9 @@ button:active {
 }
 
 /* Table Styling */
-.table tr:nth-child(odd) {
-    background-color: #f9f9f9; /* Alternating row color for better readability */
-}
+/* .table tr:nth-child(odd) {
+    background-color: #f9f9f9; //Alternating row color for better readability
+} */
 .table th {
     position: sticky;
     top: 0;
