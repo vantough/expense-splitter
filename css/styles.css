@@ -287,3 +287,53 @@ button:active {
     from { opacity: 1; transform: scale(1); }
     to { opacity: 0; transform: scale(0.9); }
 }
+
+/* toast message */
+/* General Message Container Styling */
+.message-container {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    max-width: 90%;
+    padding: 15px 20px;
+    border-radius: 5px;
+    font-size: 1em;
+    font-weight: bold;
+    color: #ffffff;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+    z-index: 2000;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3); /* Slight shadow for readability */
+}
+
+.message-container.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Success Message Styling */
+.message-container.success {
+    background-color: #28a745; /* Green for success */
+}
+
+/* Error Message Styling */
+.message-container.error {
+    background-color: #dc3545; /* Red for error */
+}
+
+/* Dark Mode Adjustments */
+.dark-mode .message-container {
+    color: #f0f0f0; /* Light text for better readability */
+    box-shadow: 0px 4px 12px rgba(255, 255, 255, 0.2); /* Adjust shadow for dark backgrounds */
+}
+
+.dark-mode .message-container.success {
+    background-color: #1c7c3b; /* Darker green for dark mode */
+}
+
+.dark-mode .message-container.error {
+    background-color: #b02a37; /* Darker red for dark mode */
+}
