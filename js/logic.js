@@ -12,8 +12,9 @@ function addExpense() {
         chip.textContent.replace('×', '').trim()
     );
 
+    // Validation: Check if all required fields are filled
     if (!description || !payer || isNaN(amount) || !splitType || names.length === 0) {
-        alert('Please fill in all fields.');
+        showMessage('Please fill in all fields.', 'error');
         return;
     }
 
@@ -36,7 +37,7 @@ function addExpense() {
             const amountValue = value === '' ? 0 : parseFloat(value);
             
             if (isNaN(amountValue)) {
-                alert('Please enter valid numbers for split amounts.');
+                showMessage('Please enter valid numbers for split amounts.', 'error');
                 return;
             }
             splitValues[name] = amountValue;
@@ -50,7 +51,7 @@ function addExpense() {
         const splitRemaining = document.getElementById('splitRemaining').checked;
 
         if (remaining < 0) {
-            alert('The sum of split amounts exceeds the total amount.');
+            showMessage('The sum of split amounts exceeds the total amount.', 'error');
             return;
         }
 
@@ -64,7 +65,7 @@ function addExpense() {
                 splitValues[name] = 0;
             });
             if (remaining !== 0) {
-                alert('Remaining amount is not zero. Please adjust the split amounts or select "Split remaining balance equally among the rest".');
+                showMessage('Remaining amount is not zero. Please adjust the split amounts or select "Split remaining balance equally among the rest".', 'error');
                 return;
             }
         }
@@ -84,7 +85,7 @@ function addExpense() {
         });
 
         if (Math.abs(totalPercentage - 100) > 0.01) {
-            alert('Total percentage must be 100%. Please adjust the percentages.');
+            showMessage('Total percentage must be 100%. Please adjust the percentages.', 'error');
             return;
         }
 
@@ -105,7 +106,7 @@ function addExpense() {
         });
 
         if (totalShares === 0) {
-            alert('Total shares cannot be zero.');
+            showMessage('Total shares cannot be zero.', 'error');
             return;
         }
 
@@ -114,10 +115,15 @@ function addExpense() {
         }
     }
 
+    // Add the expense to the list and update the UI
     expenses.push({ description, payer, amount, splitDetails });
     addExpenseToTable(description, payer, amount, splitDetails);
     updateTotalExpense(); // Update total expense dynamically
+
+    // Show success message
+    showMessage('Expense added successfully!', 'success');
 }
+
 
 function updateTotalExpense() {
     const totalExpense = expenses.reduce((total, expense) => total + expense.amount, 0);
