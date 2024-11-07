@@ -293,6 +293,7 @@ button:active {
     border-radius: 5px;
     font-size: 1em;
     font-weight: bold;
+    text-align: center;
     color: #ffffff;
     opacity: 0;
     visibility: hidden;
