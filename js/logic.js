@@ -33,18 +33,17 @@ function addExpense() {
         inputs.forEach(input => {
             const name = input.getAttribute('data-name');
             const value = input.value;
-            if (value === '') {
-                splitValues[name] = null;
-                nullNames.push(name);
-            } else {
-                const amountValue = parseFloat(value);
-                if (isNaN(amountValue)) {
-                    alert('Please enter valid numbers for split amounts.');
-                    return;
-                }
-                splitValues[name] = amountValue;
-                sum += amountValue;
+            const amountValue = value === '' ? 0 : parseFloat(value);
+            
+            if (isNaN(amountValue)) {
+                alert('Please enter valid numbers for split amounts.');
+                return;
             }
+            splitValues[name] = amountValue;
+            if (amountValue === 0) {
+                nullNames.push(name);
+            }
+            sum += amountValue;
         });
 
         const remaining = amount - sum;
@@ -78,12 +77,8 @@ function addExpense() {
 
         inputs.forEach(input => {
             const name = input.getAttribute('data-name');
-            const value = input.value;
-            const percentageValue = parseFloat(value);
-            if (isNaN(percentageValue)) {
-                alert('Please enter valid numbers for percentages.');
-                return;
-            }
+            const value = input.value === '' ? 0 : parseFloat(input.value);
+            const percentageValue = isNaN(value) ? 0 : value;
             splitValues[name] = percentageValue;
             totalPercentage += percentageValue;
         });
@@ -103,13 +98,10 @@ function addExpense() {
 
         inputs.forEach(input => {
             const name = input.getAttribute('data-name');
-            const value = parseFloat(input.value);
-            if (isNaN(value) || value <= 0) {
-                alert('Please enter valid numbers for shares.');
-                return;
-            }
-            splitValues[name] = value;
-            totalShares += value;
+            const value = input.value === '' ? 0 : parseFloat(input.value);
+            const shareValue = isNaN(value) ? 0 : value;
+            splitValues[name] = shareValue;
+            totalShares += shareValue;
         });
 
         if (totalShares === 0) {
