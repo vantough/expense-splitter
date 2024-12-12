@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const chipInput = document.getElementById("chipInput");
     const chipContainer = document.getElementById("chipContainer");
     const names = [];
-
+    
     // Use both `input` and `keydown` events to handle chip creation on both mobile and desktop
     chipInput.addEventListener("input", function () {
         if (this.value.includes(",")) {
@@ -40,6 +40,8 @@ document.addEventListener("DOMContentLoaded", () => {
             chipContainer.insertBefore(chip, chipInput);
 
             updatePayerOptions(); // Refresh the "payer" dropdown when a chip is added
+            updatePayerAndPayeeOptions(); // Refresh the "payer" and "payee" dropdowns when a chip is added
+
         }
     }
 
@@ -51,6 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
             chipElement.addEventListener("animationend", () => {
                 chipElement.remove();
                 updatePayerOptions(); // Refresh the "payer" dropdown when a chip is removed
+                updatePayerAndPayeeOptions(); // Refresh the "payer" and "payee" dropdowns when a chip is added
             });
         }
     }
@@ -82,8 +85,70 @@ function updatePayerOptions() {
         option.value = name;
         option.text = name;
         payerSelect.add(option);
+        
     });
 }
+
+function updatePayerAndPayeeOptions() {
+    const chipContainer = document.getElementById("chipContainer");
+    const payerSelect = document.getElementById("paymentPayer");
+    const payeeSelect = document.getElementById("paymentPayee");
+
+    // Clear existing options in the "payer" and "payee" dropdowns
+    payerSelect.innerHTML = '<option value="">Select Payer</option>';
+    payeeSelect.innerHTML = '<option value="">Select Payee</option>';
+
+    // Populate dropdown with names from chips
+    const chips = chipContainer.querySelectorAll(".chip");
+    chips.forEach(chip => {
+        const name = chip.textContent.replace("×", "").trim();
+
+        // Add each name as an option in the dropdown
+        const payerOption = document.createElement("option");
+        payerOption.value = name;
+        payerOption.text = name;
+        payerSelect.add(payerOption);
+
+        const payeeOption = document.createElement("option");
+        payeeOption.value = name;
+        payeeOption.text = name;
+        payeeSelect.add(payeeOption);
+    });
+}
+
+
+function updateBalances(payer, payee, amount) {
+    let balances = {};
+
+    // Update balances based on the payer and payee
+    expenses.forEach(expense => {
+        const splitDetails = expense.splitDetails;
+
+        // If payer is making a payment, adjust their balance
+        if (splitDetails[payer]) {
+            balances[payer] = (balances[payer] || 0) - amount;
+        }
+
+        // If payee is receiving the payment, adjust their balance
+        if (splitDetails[payee]) {
+            balances[payee] = (balances[payee] || 0) + amount;
+        }
+    });
+
+    // After payment, update the balance for each user (either reduce or increase)
+    const tableBody = document.getElementById('balancesTable').getElementsByTagName('tbody')[0];
+    tableBody.innerHTML = '';
+
+    // Recalculate balances and display them
+    for (const [name, balance] of Object.entries(balances)) {
+        const row = tableBody.insertRow();
+        row.insertCell(0).innerText = name;
+        const balanceCell = row.insertCell(1);
+        balanceCell.innerText = `₹${balance.toFixed(2)}`;
+        balanceCell.classList.add(balance > 0 ? 'balance-positive' : (balance < 0 ? 'balance-negative' : 'balance-zero'));
+    }
+}
+
 
 /* Show split details input fields based on the selected split type */
 function showSplitDetails() {
@@ -101,7 +166,7 @@ function showSplitDetails() {
             chips.forEach(chip => {
                 const name = chip.textContent.replace("×", "").trim();
                 html += `
-                    <div class="input-group mb-2">
+                    <div class="input-group mb-2" id="not-equal-fields">
                         <div class="input-group-prepend">
                             <div class="input-group-text name-label">${name}</div>
                         </div>
@@ -110,18 +175,21 @@ function showSplitDetails() {
                 `;
             });
             html += `
-                <div id="remainingAmount" class="remaining">Remaining: ₹0.00</div>
+                <div class="remaining-container">
                 <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="splitRemaining">
-                    <label class="form-check-label" for="splitRemaining">Split remaining balance equally among the rest</label>
+                        <input type="checkbox" class="form-check-input" id="splitRemaining">
+                        <label class="form-check-label" for="splitRemaining">Split remaining balance equally among the rest</label>
+                </div>
+                <div id="remainingAmount" class="remaining">Remaining: ₹0.00</div>
                 </div>
             `;
+
         } else if (splitType === "percentages") {
             html += '<div class="form-group"><label>Enter percentages for each person:</label>';
             chips.forEach(chip => {
                 const name = chip.textContent.replace("×", "").trim();
                 html += `
-                    <div class="input-group mb-2">
+                    <div class="input-group mb-2" id="not-equal-fields">
                         <div class="input-group-prepend">
                             <div class="input-group-text name-label">${name}</div>
                         </div>
@@ -135,7 +203,7 @@ function showSplitDetails() {
             chips.forEach(chip => {
                 const name = chip.textContent.replace("×", "").trim();
                 html += `
-                    <div class="input-group mb-2">
+                    <div class="input-group" id="not-equal-fields">
                         <div class="input-group-prepend">
                             <div class="input-group-text name-label">${name}</div>
                         </div>

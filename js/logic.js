@@ -1,4 +1,6 @@
 let expenses = [];
+let payments = [];  // Store payment records
+
 
 function addExpense() {
     const description = document.getElementById('description').value;
@@ -117,6 +119,12 @@ function addExpense() {
     expenses.push({ description, payer, amount, splitDetails });
     addExpenseToTable(description, payer, amount, splitDetails);
     updateTotalExpense(); // Update total expense dynamically
+    
+    const elementIds = ["expenseTable", "calculateButton", "total-expense-summary", "table-header"];
+    elementIds.forEach(id => {
+        document.getElementById(id).style.display = "block";
+    });
+
 }
 
 function updateTotalExpense() {
@@ -150,6 +158,12 @@ function calculateBalances() {
         }
     });
 
+    // Include payments in balance calculation
+    payments.forEach(payment => {
+        balances[payment.payer] += payment.amount;  // Payer's balance goes down
+        balances[payment.payee] -= payment.amount;  // Payee's balance goes up
+    });
+
     // Update balances table with visual indicators
     const tableBody = document.getElementById('balancesTable').getElementsByTagName('tbody')[0];
     tableBody.innerHTML = '';
@@ -171,7 +185,107 @@ function calculateBalances() {
     }
 
     manageSettlement(balances);
+
+    document.getElementById("balanceandsplit").style.display = "block";
 }
+
+function togglePaymentForm() {
+    const paymentFormContent = document.getElementById("paymentFormContent");
+    const toggleIcon = document.getElementById("togglePaymentForm");
+    const iconPath = toggleIcon.querySelector('path');
+
+    if (paymentFormContent.style.display === "none" || paymentFormContent.style.display === "") {
+        paymentFormContent.style.display = "flex";
+        paymentFormContent.classList.add("slide-in");
+        iconPath.setAttribute('d', 'M480-530.26 287.33-337.59 224.93-400 480-655.07 735.07-400l-62.4 62.41L480-530.26Z');  // Arrow pointing up
+    } else {
+        paymentFormContent.classList.add("slide-out");
+        iconPath.setAttribute('d', 'M480-328.93 224.93-584l62.4-62.41L480-453.74l192.67-192.67 62.4 62.41L480-328.93Z');  // Arrow pointing down
+
+        setTimeout(() => {
+            paymentFormContent.style.display = "none";
+            paymentFormContent.classList.remove("slide-out");
+        }, 300);  // Adjust to match the duration of the animation
+    }
+}
+
+
+function recordPayment() {
+    const payer = document.getElementById('paymentPayer').value;
+    const payee = document.getElementById('paymentPayee').value;
+    const amount = parseFloat(document.getElementById('paymentAmount').value);
+
+    if (!payer || !payee || isNaN(amount) || payer === payee) {
+        alert('Please fill in all fields correctly (Payer and Payee must be different).');
+        return;
+    }
+
+    // Record payment
+    const payment = { payer, payee, amount };
+    payments.push(payment);
+    
+    // Display the payment in the list
+    displayPayments();
+    // Update balances immediately after recording the payment
+    updateBalances(payer, payee, amount);
+    resetPaymentForm();
+}
+
+
+// Function to display the list of recorded payments
+function displayPayments() {
+    const paymentsList = document.getElementById('paymentsList');
+    paymentsList.innerHTML = ''; // Clear the list before displaying updated payments
+
+    // Loop through the payments array and display each payment
+    payments.forEach((payment, index) => {
+        const paymentText = `${payment.payer} paid ₹${payment.amount} to ${payment.payee}.`;
+        
+        // Create a new div for each payment
+        const paymentRow = document.createElement('div');
+        paymentRow.classList.add('payment-row');
+        paymentRow.innerHTML = `${paymentText} <a href="#" onclick="removePayment(${index})">Remove</a>`;
+        
+        // Append the payment row to the list
+        paymentsList.appendChild(paymentRow);
+    });
+
+    togglePaymentsVisibility();
+ 
+}
+
+// Function to remove a payment from the list
+function removePayment(index) {
+    // Remove the payment from the payments array
+    payments.splice(index, 1);
+    
+    // Re-display the updated list
+    displayPayments();
+}
+
+// Function to toggle the visibility of the Recorded Payments section
+function togglePaymentsVisibility() {
+    const paymentsSection = document.getElementById('paymentsList');
+    const recordedPaymentsHeader = document.getElementById('recordedPaymentsHeader');
+    
+    if (payments.length > 0) {
+        // Show the section if there is at least one payment
+        paymentsSection.style.display = 'block';
+        recordedPaymentsHeader.style.display = 'block';
+    } else {
+        // Hide the section if there are no payments
+        paymentsSection.style.display = 'none';
+        recordedPaymentsHeader.style.display = 'none';
+    }
+}
+
+function resetPaymentForm() {
+    document.getElementById('paymentPayer').value = '';
+    document.getElementById('paymentPayee').value = '';
+    document.getElementById('paymentAmount').value = '';
+}
+
+
 
 function manageSettlement(balances) {
     let creditors = [];
@@ -220,3 +334,4 @@ window.addExpense = addExpense;
 window.calculateBalances = calculateBalances;
 window.manageSettlement = manageSettlement;
 window.updateTotalExpense = updateTotalExpense;
+window.recordPayment = recordPayment; 
