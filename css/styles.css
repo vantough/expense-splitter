@@ -1,212 +1,104 @@
-/* General Layout */
-body {
+
+   body {
     margin: 10px;
     transition: background-color 0.6s, color 0.6s;
 }
+
 .container {
     max-width: 1200px;
 }
+
+#paymentForm {
+    display: block; /* Initially show the form */
+}
+
+h3 {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+/* =========================================
+   Table Styling
+   ========================================= */
+
 .table td, .table th {
     vertical-align: middle;
 }
-.remaining {
-    text-align: right;
-    font-weight: bold;
-}
 
-/* Responsive Adjustments */
-@media (max-width: 576px) {
-    .form-row .form-group {
-        margin-bottom: 5px;
-    }
-    #calculateButton {
-        font-size: 14px; /* Optional: Adjust font size for mobile */
-        padding: 10px 15px; /* Adjust padding to fit the smaller text */
-    }
-
-    #calculateButton::after {
-        content: "Calculate"; /* Replace the text with "Calculate" */
-    }
-
-    #calculateButton span {
-        position: absolute; /* Move the original text off-screen */
-        left: -9999px; /* Move the text off-screen */
-    }
-
-    #calculateButton::after {
-        position: relative; /* Make sure the new text stays within the button */
-        visibility: visible; /* Make the new text visible */
-    }
-
-    /* Transition specific properties on mobile */
-    #calculateButton {
-        transition: all 0.8s ease; /* Smooth transition for width, padding, and font-size */
-    }
-}
-
-#calculateButton {
-    font-size: 16px; /* You can adjust this based on your design */
-    position: relative; /* Ensure text can be moved with absolute positioning */
-    width: auto; /* Allow width to adjust dynamically */
-    padding: 10px 20px; /* Default padding */
-    transition: all 0.8s ease;
-}
-
-
-/* Dark mode toggle styling for mobile */
-@media (max-width: 768px) { /* Applies to screens 768px and below */
-    body {
-        padding-bottom: 80px; /* to avoid overlap of toggle*/
-    }
-    .toggle-icon {
-        position: fixed;
-        bottom: 25px;
-        left: 25px;
-        width: 48px;
-        height: 48px;
-        z-index: 1000;
-        background-color: rgba(200, 200, 200, 0.95); /* Light gray with 95% opacity */
-        color: #333; /* Dark icon color for better contrast */
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for depth */
-        cursor: pointer;
-        transition: transform 0.6s ease, background-color 0.6s ease; /* Smooth transition */
-    }
-    
-    .toggle-icon:hover {
-        transform: scale(1.1); /* Slight zoom effect on hover */
-    }
-    
-    .toggle-icon svg {
-        width: 24px;
-        height: 24px;
-        fill: #333333; /* Dark gray color for the moon icon */
-    }
-}
-
-/* Improved Button Styling */
-button {
-    transition: background-color 0.6s ease, box-shadow 0.6s ease, transform 0.2s ease;
-/*     padding: 10px 20px; */
-    border-radius: 4px;
-    font-weight: bold;
-}
-button:hover {
-    background-color: #0056b3; /* Adjusted for a slightly darker shade on hover */
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-}
-button:active {
-    transform: scale(0.98);
-}
-
-/* Table Styling */
 .table tr:nth-child(odd) {
-    background-color: #f9f9f9; /* Alternating row color for better readability */
+    background-color: #f9f9f9; /* Alternating row color */
 }
+
 .table th {
     position: sticky;
     top: 0;
-    background-color: #ffffff; /* Sticky header background */
+    background-color: #ffffff;
     z-index: 1;
     padding: 10px;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Add slight shadow for separation */
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
-
 
 /* Sticky Action Column */
 .sticky-action {
     position: sticky;
     left: 0;
-    background-color: #f8f9fa; /* Adjust this color to match your header row background */
+    background-color: #f8f9fa;
     z-index: 2;
-    border-right: 1px solid #dee2e6; /* Optional: Adds a border for separation */
+    border-right: 1px solid #dee2e6;
 }
 
-/* Dark Mode Adjustments */
-.dark-mode {
-    background-color: #121212;
-    color: #ffffff;
-}
-.dark-mode .table tr:nth-child(odd) {
-    background-color: #000000;
-}
-.dark-mode .table {
-    background-color: #1e1e1e;
-    color: #ffffff;
-}
-.dark-mode .sticky-action {
-    position: sticky;
-    left: 0;
-    background-color: #1e1e1e; /* Adjust this color to match your header row background */
-    z-index: 2;
-    border-right: 1px solid #dee2e6; /* Optional: Adds a border for separation */
-}
-.dark-mode .input-group-text {
-    color: #ffffff;
-    background-color: #1e1e1e;
-}
-.dark-mode .chip {
-    background-color: #555555;
-    color: #ffffff;
-}
-.dark-mode .download-icon {
-    fill: #ffffff;
-}
-.dark-mode .balance-zero {
-    color: #ffffff;
-}
-.dark-mode .balance-positive {
-    color: #85e085;
-}
-.dark-mode .balance-negative {
-    color: #ff6666;
-}
-.dark-mode hr {
-    background-color: #ffffff;  /* Optional: set a background color */
-    opacity: 0.5; /* Optional: make it slightly more transparent for dark mode */
+/* =========================================
+   Buttons and Inputs
+   ========================================= */
+
+button {
+    transition: background-color 0.6s ease, box-shadow 0.6s ease, transform 0.2s ease;
+    border-radius: 4px;
+    font-weight: bold;
 }
 
-/* Icon Buttons */
-.icon-btn {
-    border: none;
-    background: transparent;
-    padding: 0;
+button:hover {
+    background-color: #0056b3; 
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Toggle Icon */
-.toggle-icon {
-    position: fixed;
-    bottom: 40px;
-    left: 40px;
-    cursor: pointer;
-    width: 30px;
-    height: 30px;
-    transition: transform 0.6s;
-/*     background-color: transparent;
-    border-radius: 0; */
+button:active {
+    transform: scale(0.98);
 }
 
-/* Align export icon next to the header */
-.settlement-header {
-    display: flex;
-    align-items: center;
-    gap: 10px; 
+/* Calculate Button */
+#calculateButton {
+    font-size: 16px;
+    position: relative;
+    width: auto;
+    padding: 10px 20px;
+    transition: all 0.8s ease;
 }
 
-.download-icon {
-    cursor: pointer;
-    vertical-align: middle;
-    width: 30px;
-    height: 30px;
-    fill: #000000;
-    transition: fill 0.6s;
+/* Inputs and Selects */
+.form-group {
+    width: 100%;
 }
 
 
-/* Input Group Styling */
+.form-group select {
+    padding-left: 10px;
+    padding-right: 1px;
+    width: 100%; 
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    color: #555555;
+    background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none"%3E%3Cpath d="M5 7l5 5 5-5H5z" fill="%23666"/%3E%3C/svg%3E');
+    background-repeat: no-repeat;
+    background-position: right 10px center; 
+    background-size: 20px 20px;
+    z-index: 10;
+
+}
+
+/* Input Groups */
 .input-group-text {
     font-size: 1.2em;
     color: #000;
@@ -219,7 +111,6 @@ button:active {
     transition: fill 0.6s;
 }
 
-/* Amount Icon Styling */
 .input-group-prepend .amount-icon {
     font-size: 1.2em;
     background-color: #f0f0f0;
@@ -230,11 +121,6 @@ button:active {
     align-items: center;
     justify-content: center;
     padding: 0;
-}
-.remaining-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
 }
 
 .input-group-prepend .name-label {
@@ -254,7 +140,10 @@ button:active {
     text-overflow: ellipsis;
 }
 
-/* Chip Component */
+/* =========================================
+   Chips
+   ========================================= */
+
 .chip-container {
     display: flex;
     flex-wrap: wrap;
@@ -263,6 +152,7 @@ button:active {
     padding: 8px;
     background-color: #ffffff;
 }
+
 .chip {
     display: flex;
     align-items: center;
@@ -275,6 +165,7 @@ button:active {
     animation: fadeIn 0.3s ease;
     transition: background-color 0.3s, color 0.3s;
 }
+
 .chip .close-btn {
     background: none;
     align-items: center;
@@ -285,6 +176,7 @@ button:active {
     line-height: 0;
     color: inherit;
 }
+
 .chip-input {
     border: none;
     outline: none;
@@ -294,101 +186,10 @@ button:active {
     background-color: #ffffff;
 }
 
-/* Expense Calculate and Total Summary */
-.actions-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 5px;
-}
-.total-expense-summary {
-    text-align: right;
-    font-size: 1em;
-    margin-left: auto;
-}
-.total-expense-label {
-    font-weight: bold;
-    margin-right: 5px;
-}
-#totalExpense {
-    font-weight: normal;
-}
+/* =========================================
+   Payments and Actions
+   ========================================= */
 
-/* Balance Indicators */
-.balance-positive {
-    color: #28a745;
-    font-weight: bold;
-}
-.balance-negative {
-    color: #dc3545;
-    font-weight: bold;
-}
-.balance-zero {
-    color: #000000;
-    font-weight: bold;
-}
-
-/* Animations */
-@keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.9); }
-    to { opacity: 1; transform: scale(1); }
-}
-@keyframes fadeOut {
-    from { opacity: 1; transform: scale(1); }
-    to { opacity: 0; transform: scale(0.9); }
-}
-
-/* General Styles */
-#paymentForm {
-    display: block; /* Initially show the form */
-}
-
-.form-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: end;
-    margin-bottom: 0px;
-}
-
-/* Button alignment */
-.form-group .btn {
-    width: 100%;
-    max-width: 200px;
-    margin-top: 5px;
-    margin-left: auto;
-}
-
-/* Adjust the appearance of select dropdowns */
-.form-group select {
-    padding-right: 1px; /* Add extra space for the dropdown arrow */
-    padding-left: 10px;
-    width: 100%; /* Ensure the select box spans full width of the form group */
-    appearance: none; /* Remove default styling */
-    -webkit-appearance: none; /* Safari */
-    -moz-appearance: none; /* Firefox */
-    background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none"%3E%3Cpath d="M5 7l5 5 5-5H5z" fill="%23666"/%3E%3C/svg%3E'); /* Custom arrow */
-    background-repeat: no-repeat;
-    background-position: right 10px center; /* Position the arrow to the right */
-    background-size: 20px 20px; /* Resize the arrow */
-}
-
-/* Adjust input fields to match the select field */
-.form-group select {
-    font-size: 14px;
-    color: #555555;
-}
-
-.form-group {
-    width: 100%;
-}    
-/* For responsive designs on mobile devices */
-@media (max-width: 576px) {
-    .form-row {
-        flex-direction: column; /* Stack form elements vertically */
-    }
-}
-
-/* Styles for the payments list */
 #paymentsList {
     font-size: 14px;
 }
@@ -406,18 +207,110 @@ button:active {
     text-decoration: underline;
 }
 
-/* CSS for the sliding animation */
-#paymentFormContent {
-    display: none;  /* Initially hidden */
-    transition: all 0.6s ease-in-out; /* Smooth animation for sliding */
+.actions-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 5px;
 }
 
-.slide-in {
-    animation: slideIn 0.6s ease forwards; /* Slide-in effect */
+.total-expense-summary {
+    text-align: right;
+    font-size: 1em;
+    margin-left: auto;
 }
 
-.slide-out {
-    animation: slideOut 0.6s ease forwards; /* Slide-out effect */
+.total-expense-label {
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+#totalExpense {
+    font-weight: normal;
+}
+
+/* =========================================
+   Balance Indicators
+   ========================================= */
+
+.balance-positive {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.balance-negative {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+.balance-zero {
+    color: #000000;
+    font-weight: bold;
+}
+
+.remaining {
+    text-align: right;
+    font-weight: bold;
+}
+
+.remaining-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* =========================================
+   Icons and Toggles
+   ========================================= */
+
+.icon-btn {
+    border: none;
+    background: transparent;
+    padding: 0;
+}
+
+.settlement-header {
+    display: flex;
+    align-items: center;
+    gap: 10px; 
+}
+
+.download-icon {
+    cursor: pointer;
+    vertical-align: middle;
+    width: 30px;
+    height: 30px;
+    fill: #000000;
+    transition: fill 0.6s;
+}
+
+.recordpayment-icon path {
+    fill: #000000; /* Light mode icon */
+}
+
+/* Toggle Icon */
+.toggle-icon {
+    position: fixed;
+    bottom: 40px;
+    left: 40px;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    transition: transform 0.6s;
+}
+
+/* =========================================
+   Animations
+   ========================================= */
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; transform: scale(1); }
+    to { opacity: 0; transform: scale(0.9); }
 }
 
 @keyframes slideIn {
@@ -442,79 +335,165 @@ button:active {
     }
 }
 
-/* Dark Mode Styles */
+/* Slide Effects for Payment Form */
+#paymentFormContent {
+    display: none;  /* Initially hidden */
+    transition: all 0.6s ease-in-out;
+}
+
+.slide-in {
+    animation: slideIn 0.6s ease forwards;
+}
+
+.slide-out {
+    animation: slideOut 0.6s ease forwards;
+}
+
+/* =========================================
+   Dark Mode Styles
+   ========================================= */
+
+.dark-mode {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+.dark-mode .table tr:nth-child(odd) {
+    background-color: #000000;
+}
+
+.dark-mode .table {
+    background-color: #1e1e1e;
+    color: #ffffff;
+}
+
+.dark-mode .sticky-action {
+    background-color: #1e1e1e;
+    border-right: 1px solid #dee2e6;
+}
+
+.dark-mode .input-group-text {
+    color: #ffffff;
+    background-color: #1e1e1e;
+}
+
+.dark-mode .chip {
+    background-color: #555555;
+    color: #ffffff;
+}
+
+.dark-mode .download-icon {
+    fill: #ffffff;
+}
+
+.dark-mode .balance-zero {
+    color: #ffffff;
+}
+
+.dark-mode .balance-positive {
+    color: #85e085;
+}
+
+.dark-mode .balance-negative {
+    color: #ff6666;
+}
+
+.dark-mode hr {
+    background-color: #ffffff;
+    opacity: 0.5;
+}
+
 .dark-mode .recordpayment-icon path {
-    fill: #ffffff;  /* White color for icon in dark mode */
+    fill: #ffffff;
 }
 
-/* Light Mode Styles */
-.recordpayment-icon path {
-    fill: #000000;  /* Black color for icon in light mode */
-}
+/* =========================================
+   Form Layout
+   ========================================= */
 
-/* Add some spacing between the header and form */
-h3 {
-    cursor: pointer;
+.form-row {
     display: flex;
-    align-items: center;
-}
-
-/* Icon size */
-.recordpayment-icon {
-    margin-left: 10px;
-    cursor: pointer;
-}
-
-/* .toast-container {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1000;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    pointer-events: none;
-}
-
-.toast {
-    display: flex;
-    align-items: center;
     justify-content: space-between;
-    padding: 10px 20px;
-    border-radius: 4px;
-    color: #fff;
-    font-weight: bold;
-    min-width: 300px;
-    max-width: 80%;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-    pointer-events: all;
-    animation: fadeInOut 4s ease forwards;
+    align-items: end;
+    margin-bottom: 0px;
 }
 
-.toast-success {
-    background-color: #28a745;
+.form-group .btn {
+    width: 100%;
+    max-width: 200px;
+    margin-top: 5px;
+    margin-left: auto;
 }
 
-.toast-error {
-    background-color: #dc3545;
+/* =========================================
+   Responsive Adjustments
+   ========================================= */
+
+/* Extra small devices (max-width: 576px) */
+@media (max-width: 576px) {
+    .form-row {
+        flex-direction: column;
+    }
+
+    .form-row .form-group {
+        margin-bottom: 5px;
+    }
+
+    #calculateButton {
+        font-size: 14px;
+        padding: 10px 15px;
+        transition: all 0.8s ease;
+    }
+
+    #calculateButton span {
+        position: absolute;
+        left: -9999px; /* Hide original text off-screen */
+    }
+
+    #calculateButton::after {
+        content: "Calculate";
+        position: relative;
+        visibility: visible;
+    }
 }
 
-@keyframes fadeInOut {
-    0% {
-        opacity: 0;
-        transform: translateY(20px);
+/* Small to Medium devices (max-width: 768px) */
+@media (max-width: 768px) {
+    body {
+        padding-bottom: 80px; /* Avoid overlap of toggle */
     }
-    10% {
-        opacity: 1;
-        transform: translateY(0);
+
+    .toggle-icon {
+        position: fixed;
+        bottom: 25px;
+        left: 25px;
+        width: 48px;
+        height: 48px;
+        z-index: 1000;
+        background-color: rgba(200, 200, 200, 0.95);
+        color: #333;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+        transition: transform 0.6s ease, background-color 0.6s ease;
     }
-    90% {
-        opacity: 1;
-        transform: translateY(0);
+
+    .toggle-icon:hover {
+        transform: scale(1.1);
     }
-    100% {
-        opacity: 0;
-        transform: translateY(20px);
+
+    .toggle-icon svg {
+        width: 24px;
+        height: 24px;
+        fill: #333333;
     }
-} */
+}
+
+.error-field {
+    border: 1px solid red !important;
+    box-shadow: 0 0 4px rgba(255, 0, 0, 0.4);
+}
+
