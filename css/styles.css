@@ -1,6 +1,6 @@
 /* General Layout */
 body {
-    margin: 20px;
+    margin: 10px;
     transition: background-color 0.6s, color 0.6s;
 }
 .container {
@@ -17,8 +17,39 @@ body {
 /* Responsive Adjustments */
 @media (max-width: 576px) {
     .form-row .form-group {
-        margin-bottom: 15px;
+        margin-bottom: 5px;
     }
+    #calculateButton {
+        font-size: 14px; /* Optional: Adjust font size for mobile */
+        padding: 10px 15px; /* Adjust padding to fit the smaller text */
+    }
+
+    #calculateButton::after {
+        content: "Calculate"; /* Replace the text with "Calculate" */
+    }
+
+    #calculateButton span {
+        position: absolute; /* Move the original text off-screen */
+        left: -9999px; /* Move the text off-screen */
+    }
+
+    #calculateButton::after {
+        position: relative; /* Make sure the new text stays within the button */
+        visibility: visible; /* Make the new text visible */
+    }
+
+    /* Transition specific properties on mobile */
+    #calculateButton {
+        transition: all 0.8s ease; /* Smooth transition for width, padding, and font-size */
+    }
+}
+
+#calculateButton {
+    font-size: 16px; /* You can adjust this based on your design */
+    position: relative; /* Ensure text can be moved with absolute positioning */
+    width: auto; /* Allow width to adjust dynamically */
+    padding: 10px 20px; /* Default padding */
+    transition: all 0.8s ease;
 }
 
 
@@ -42,7 +73,7 @@ body {
         justify-content: center;
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for depth */
         cursor: pointer;
-        transition: transform 0.3s ease, background-color 0.3s ease; /* Smooth transition */
+        transition: transform 0.6s ease, background-color 0.6s ease; /* Smooth transition */
     }
     
     .toggle-icon:hover {
@@ -58,7 +89,7 @@ body {
 
 /* Improved Button Styling */
 button {
-    transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+    transition: background-color 0.6s ease, box-shadow 0.6s ease, transform 0.2s ease;
 /*     padding: 10px 20px; */
     border-radius: 4px;
     font-weight: bold;
@@ -99,9 +130,19 @@ button:active {
     background-color: #121212;
     color: #ffffff;
 }
+.dark-mode .table tr:nth-child(odd) {
+    background-color: #000000;
+}
 .dark-mode .table {
     background-color: #1e1e1e;
     color: #ffffff;
+}
+.dark-mode .sticky-action {
+    position: sticky;
+    left: 0;
+    background-color: #1e1e1e; /* Adjust this color to match your header row background */
+    z-index: 2;
+    border-right: 1px solid #dee2e6; /* Optional: Adds a border for separation */
 }
 .dark-mode .input-group-text {
     color: #ffffff;
@@ -122,6 +163,10 @@ button:active {
 }
 .dark-mode .balance-negative {
     color: #ff6666;
+}
+.dark-mode hr {
+    background-color: #ffffff;  /* Optional: set a background color */
+    opacity: 0.5; /* Optional: make it slightly more transparent for dark mode */
 }
 
 /* Icon Buttons */
@@ -186,8 +231,12 @@ button:active {
     justify-content: center;
     padding: 0;
 }
+.remaining-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
 
-/* Name Labels in Split Details */
 .input-group-prepend .name-label {
     font-size: 0.9em;
     background-color: #e0e0e0;
@@ -228,6 +277,7 @@ button:active {
 }
 .chip .close-btn {
     background: none;
+    align-items: center;
     border: none;
     cursor: pointer;
     margin-left: 4px;
@@ -244,12 +294,12 @@ button:active {
     background-color: #ffffff;
 }
 
-/* Expense Actions and Total Summary */
+/* Expense Calculate and Total Summary */
 .actions-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 15px;
+    margin-top: 5px;
 }
 .total-expense-summary {
     text-align: right;
@@ -287,3 +337,184 @@ button:active {
     from { opacity: 1; transform: scale(1); }
     to { opacity: 0; transform: scale(0.9); }
 }
+
+/* General Styles */
+#paymentForm {
+    display: block; /* Initially show the form */
+}
+
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    margin-bottom: 0px;
+}
+
+/* Button alignment */
+.form-group .btn {
+    width: 100%;
+    max-width: 200px;
+    margin-top: 5px;
+    margin-left: auto;
+}
+
+/* Adjust the appearance of select dropdowns */
+.form-group select {
+    padding-right: 1px; /* Add extra space for the dropdown arrow */
+    padding-left: 10px;
+    width: 100%; /* Ensure the select box spans full width of the form group */
+    appearance: none; /* Remove default styling */
+    -webkit-appearance: none; /* Safari */
+    -moz-appearance: none; /* Firefox */
+    background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none"%3E%3Cpath d="M5 7l5 5 5-5H5z" fill="%23666"/%3E%3C/svg%3E'); /* Custom arrow */
+    background-repeat: no-repeat;
+    background-position: right 10px center; /* Position the arrow to the right */
+    background-size: 20px 20px; /* Resize the arrow */
+}
+
+/* Adjust input fields to match the select field */
+.form-group select {
+    font-size: 14px;
+    color: #555555;
+}
+
+.form-group {
+    width: 100%;
+}    
+/* For responsive designs on mobile devices */
+@media (max-width: 576px) {
+    .form-row {
+        flex-direction: column; /* Stack form elements vertically */
+    }
+}
+
+/* Styles for the payments list */
+#paymentsList {
+    font-size: 14px;
+}
+
+.payment-row {
+    margin-bottom: 10px;
+}
+
+.payment-row a {
+    color: red;
+    text-decoration: none;
+}
+
+.payment-row a:hover {
+    text-decoration: underline;
+}
+
+/* CSS for the sliding animation */
+#paymentFormContent {
+    display: none;  /* Initially hidden */
+    transition: all 0.6s ease-in-out; /* Smooth animation for sliding */
+}
+
+.slide-in {
+    animation: slideIn 0.6s ease forwards; /* Slide-in effect */
+}
+
+.slide-out {
+    animation: slideOut 0.6s ease forwards; /* Slide-out effect */
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+}
+
+/* Dark Mode Styles */
+.dark-mode .recordpayment-icon path {
+    fill: #ffffff;  /* White color for icon in dark mode */
+}
+
+/* Light Mode Styles */
+.recordpayment-icon path {
+    fill: #000000;  /* Black color for icon in light mode */
+}
+
+/* Add some spacing between the header and form */
+h3 {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+/* Icon size */
+.recordpayment-icon {
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+/* .toast-container {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+}
+
+.toast {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    border-radius: 4px;
+    color: #fff;
+    font-weight: bold;
+    min-width: 300px;
+    max-width: 80%;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    pointer-events: all;
+    animation: fadeInOut 4s ease forwards;
+}
+
+.toast-success {
+    background-color: #28a745;
+}
+
+.toast-error {
+    background-color: #dc3545;
+}
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    10% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    90% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+} */
