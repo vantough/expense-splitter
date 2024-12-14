@@ -24,6 +24,14 @@ function exportToCSV() {
         csvContent += '\n';
     });
 
+        // Add recorded payments
+    if (payments.length > 0) {
+        csvContent += '\nRecorded Payments\n';
+        payments.forEach(payment => {
+            csvContent += `${payment.payer} paid ₹${payment.amount} to ${payment.payee}\n`;
+        });
+    }
+
     // Append settlement details
     csvContent += '\nSettlement Details\n';
     const settlementDetailsDiv = document.getElementById('settlementDetails');
