@@ -99,6 +99,7 @@ button:active {
 }
 
 /* Input Groups */
+
 .input-group-text {
     font-size: 1.2em;
     color: #000;
@@ -129,7 +130,6 @@ button:active {
     color: #333333;
     border-radius: 4px 0 0 4px;
     min-width: 100px;
-    max-width: 250px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -139,6 +139,7 @@ button:active {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
 
 /* =========================================
    Chips
