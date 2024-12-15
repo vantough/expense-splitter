@@ -444,7 +444,6 @@ function clearBalancesAndSettlement() {
     document.getElementById("settlementDetails").innerHTML = "";
 }
 
-
 function updateRemainingAmount() {
     const amount = parseFloat(document.getElementById("amount").value) || 0;
     const inputs = document.querySelectorAll(".split-value");
