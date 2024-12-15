@@ -166,8 +166,8 @@ function showSplitDetails() {
             chips.forEach(chip => {
                 const name = chip.textContent.replace("×", "").trim();
                 html += `
-                    <div class="input-group mb-2" id="not-equal-fields">
-                        <div class="input-group-prepend">
+                    <div class="input-group mb-2">
+                            <div class="input-group-prepend">
                             <div class="input-group-text name-label">${name}</div>
                         </div>
                         <input type="number" class="form-control split-value" data-name="${name}" placeholder="Amount for ${name}" oninput="updateRemainingAmount()">
@@ -176,20 +176,19 @@ function showSplitDetails() {
             });
             html += `
                 <div class="remaining-container">
-                <div class="form-check">
+                    <div class="form-check">
                         <input type="checkbox" class="form-check-input" id="splitRemaining">
                         <label class="form-check-label" for="splitRemaining">Split remaining balance equally among the rest</label>
-                </div>
-                <div id="remainingAmount" class="remaining">Remaining: ₹0.00</div>
+                    </div>
+                    <div id="remainingAmount" class="remaining">Remaining: ₹0.00</div>
                 </div>
             `;
-
         } else if (splitType === "percentages") {
             html += '<div class="form-group"><label>Enter percentages for each person:</label>';
             chips.forEach(chip => {
                 const name = chip.textContent.replace("×", "").trim();
                 html += `
-                    <div class="input-group mb-2" id="not-equal-fields">
+                    <div class="input-group mb-2">
                         <div class="input-group-prepend">
                             <div class="input-group-text name-label">${name}</div>
                         </div>
@@ -203,7 +202,7 @@ function showSplitDetails() {
             chips.forEach(chip => {
                 const name = chip.textContent.replace("×", "").trim();
                 html += `
-                    <div class="input-group" id="not-equal-fields">
+                    <div class="input-group mb-2">
                         <div class="input-group-prepend">
                             <div class="input-group-text name-label">${name}</div>
                         </div>
@@ -218,6 +217,7 @@ function showSplitDetails() {
         splitDetailsDiv.style.display = "none";
     }
 }
+
 
 /* Update the remaining amount in unequal split */
 function updateRemainingAmount() {
