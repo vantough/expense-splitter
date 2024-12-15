@@ -444,68 +444,6 @@ function clearBalancesAndSettlement() {
     document.getElementById("settlementDetails").innerHTML = "";
 }
 
-function showSplitDetails() {
-    const splitType = document.getElementById("splitType").value;
-    const splitDetailsDiv = document.getElementById("splitDetails");
-    splitDetailsDiv.innerHTML = "";
-
-    if (splitType !== "equal") {
-        const chipContainer = document.getElementById("chipContainer");
-        const chips = chipContainer.querySelectorAll(".chip");
-        let html = "";
-
-        if (splitType === "unequal") {
-            html += '<div class="form-group"><label>Enter amounts for each person:</label>';
-            chips.forEach(chip => {
-                const name = chip.textContent.replace("×", "").trim();
-                html += `
-                    <div class="form-group" id="not-equal-fields">
-                        <label class="name-label">${name}</label>
-                        <input type="number" class="form-control split-value" data-name="${name}" placeholder="Amount for ${name}" oninput="updateRemainingAmount()">
-                    </div>
-                `;
-            });
-            html += `
-                <div class="remaining-container form-group">
-                    <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="splitRemaining">
-                            <label class="form-check-label" for="splitRemaining">Split remaining balance equally among the rest</label>
-                    </div>
-                    <div id="remainingAmount" class="remaining">Remaining: ₹0.00</div>
-                </div>
-            `;
-
-        } else if (splitType === "percentages") {
-            html += '<div class="form-group"><label>Enter percentages for each person:</label>';
-            chips.forEach(chip => {
-                const name = chip.textContent.replace("×", "").trim();
-                html += `
-                    <div class="form-group" id="not-equal-fields">
-                        <label class="name-label">${name}</label>
-                        <input type="number" class="form-control split-value" data-name="${name}" placeholder="Percentage for ${name}" oninput="updateRemainingPercentage()">
-                    </div>
-                `;
-            });
-            html += `<div id="remainingPercentage" class="remaining form-group">Remaining: 100%</div>`;
-        } else if (splitType === "shares") {
-            html += '<div class="form-group"><label>Enter shares for each person:</label>';
-            chips.forEach(chip => {
-                const name = chip.textContent.replace("×", "").trim();
-                html += `
-                    <div class="form-group" id="not-equal-fields">
-                        <label class="name-label">${name}</label>
-                        <input type="number" class="form-control split-value" data-name="${name}" placeholder="Shares for ${name}">
-                    </div>
-                `;
-            });
-        }
-        splitDetailsDiv.innerHTML = html;
-        splitDetailsDiv.style.display = "block";
-        attachSplitFieldFocusListeners();
-    } else {
-        splitDetailsDiv.style.display = "none";
-    }
-}
 
 function updateRemainingAmount() {
     const amount = parseFloat(document.getElementById("amount").value) || 0;
