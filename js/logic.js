@@ -6,6 +6,29 @@ document.addEventListener("DOMContentLoaded", () => {
     attachFocusListeners();
 });
 
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyBhv7HdhcJPBScPTkfx-2rHdPrdZU3f8pQ",
+  authDomain: "expensive-split.firebaseapp.com",
+  databaseURL: "https://expensive-split-default-rtdb.firebaseio.com",
+  projectId: "expensive-split",
+  storageBucket: "expensive-split.firebasestorage.app",
+  messagingSenderId: "968675158955",
+  appId: "1:968675158955:web:2d82f009834978fbdfc0ee",
+  measurementId: "G-MNC7MDZFZT"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+
 function attachFocusListeners() {
     const descriptionInput = document.getElementById('description');
     const payerSelect = document.getElementById('payer');
