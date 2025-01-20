@@ -41,15 +41,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
             updatePayerOptions(); // Refresh the "payer" dropdown when a chip is added
             updatePayerAndPayeeOptions(); // Refresh the "payer" and "payee" dropdowns when a chip is added
-
         }
+        else {
+            showToastMessage("Duplicate or invalid name.", "warning");
+        }
+    }
+
+    function showToastMessage(message, type = "error") {
+        const toast = document.createElement("div");
+        toast.className = `toast-message ${type}`;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.classList.add("visible"), 100);
+        setTimeout(() => {
+            toast.classList.remove("visible");
+            setTimeout(() => toast.remove(), 500);
+        }, 3000);
     }
 
     function removeChip(name, chipElement) {
         const index = names.indexOf(name);
         if (index > -1) {
             names.splice(index, 1);
-            chipElement.style.animation = "fadeOut 0.3s ease";
+            chipElement.style.animation = "fadeOut 0.6s ease";
             chipElement.addEventListener("animationend", () => {
                 chipElement.remove();
                 updatePayerOptions(); // Refresh the "payer" dropdown when a chip is removed
@@ -85,7 +99,6 @@ function updatePayerOptions() {
         option.value = name;
         option.text = name;
         payerSelect.add(option);
-        
     });
 }
 
@@ -115,40 +128,6 @@ function updatePayerAndPayeeOptions() {
         payeeSelect.add(payeeOption);
     });
 }
-
-
-function updateBalances(payer, payee, amount) {
-    let balances = {};
-
-    // Update balances based on the payer and payee
-    expenses.forEach(expense => {
-        const splitDetails = expense.splitDetails;
-
-        // If payer is making a payment, adjust their balance
-        if (splitDetails[payer]) {
-            balances[payer] = (balances[payer] || 0) - amount;
-        }
-
-        // If payee is receiving the payment, adjust their balance
-        if (splitDetails[payee]) {
-            balances[payee] = (balances[payee] || 0) + amount;
-        }
-    });
-
-    // After payment, update the balance for each user (either reduce or increase)
-    const tableBody = document.getElementById('balancesTable').getElementsByTagName('tbody')[0];
-    tableBody.innerHTML = '';
-
-    // Recalculate balances and display them
-    for (const [name, balance] of Object.entries(balances)) {
-        const row = tableBody.insertRow();
-        row.insertCell(0).innerText = name;
-        const balanceCell = row.insertCell(1);
-        balanceCell.innerText = `₹${balance.toFixed(2)}`;
-        balanceCell.classList.add(balance > 0 ? 'balance-positive' : (balance < 0 ? 'balance-negative' : 'balance-zero'));
-    }
-}
-
 
 /* Show split details input fields based on the selected split type */
 function showSplitDetails() {
@@ -216,115 +195,6 @@ function showSplitDetails() {
     } else {
         splitDetailsDiv.style.display = "none";
     }
-}
-
-
-/* Update the remaining amount in unequal split */
-function updateRemainingAmount() {
-    const amount = parseFloat(document.getElementById("amount").value) || 0;
-    const inputs = document.querySelectorAll(".split-value");
-    let sum = 0;
-    inputs.forEach(input => {
-        const value = parseFloat(input.value);
-        if (!isNaN(value)) {
-            sum += value;
-        }
-    });
-    const remaining = amount - sum;
-    document.getElementById("remainingAmount").innerText = `Remaining: ₹${remaining.toFixed(2)}`;
-}
-
-/* Update the remaining percentage in percentage-based split */
-function updateRemainingPercentage() {
-    const inputs = document.querySelectorAll(".split-value");
-    let sum = 0;
-    inputs.forEach(input => {
-        const value = parseFloat(input.value);
-        if (!isNaN(value)) {
-            sum += value;
-        }
-    });
-    const remaining = 100 - sum;
-    document.getElementById("remainingPercentage").innerText = `Remaining: ${remaining.toFixed(2)}%`;
-}
-
-/* Add the expense details to the table */
-function addExpenseToTable(description, payer, amount, splitDetails) {
-    const tableBody = document.getElementById("expensesTable").getElementsByTagName("tbody")[0];
-    const row = tableBody.insertRow();
-    const rowIndex = expenses.length - 1; // Index of the current expense
-
-    const actionCell = row.insertCell(0);
-    actionCell.className = "sticky-action";
-
-    // Edit and Delete buttons
-    const editButton = document.createElement("button");
-    editButton.className = "icon-btn";
-    editButton.innerHTML = '<img src="assets/icons/edit.png" alt="Edit" width="20">';
-    editButton.onclick = function () {
-        editExpense(rowIndex);
-    };
-
-    const deleteButton = document.createElement("button");
-    deleteButton.className = "icon-btn";
-    deleteButton.innerHTML = '<img src="assets/icons/delete.png" alt="Delete" width="20">';
-    deleteButton.onclick = function () {
-        deleteExpense(rowIndex, row);
-    };
-
-    actionCell.appendChild(editButton);
-    actionCell.appendChild(deleteButton);
-
-    row.insertCell(1).innerText = description;
-    row.insertCell(2).innerText = payer;
-    row.insertCell(3).innerText = amount.toFixed(2);
-    row.insertCell(4).innerText = JSON.stringify(splitDetails);
-
-    clearExpenseForm();
-}
-
-/* Edit an existing expense */
-function editExpense(index) {
-    const expense = expenses[index];
-    document.getElementById("description").value = expense.description;
-    document.getElementById("payer").value = expense.payer;
-    document.getElementById("amount").value = expense.amount;
-    document.getElementById("splitType").value = "equal";
-    showSplitDetails();
-
-    const chips = Array.from(document.getElementById("chipContainer").querySelectorAll(".chip")).map(chip =>
-        chip.textContent.replace("×", "").trim()
-    );
-
-    const splitDetailsDiv = document.getElementById("splitDetails");
-    const splitDetails = expense.splitDetails;
-    chips.forEach(name => {
-        const inputField = splitDetailsDiv.querySelector(`[data-name="${name}"]`);
-        if (inputField) {
-            inputField.value = splitDetails[name] || 0;
-        }
-    });
-
-    expenses.splice(index, 1);
-    document.getElementById("expensesTable").deleteRow(index + 1);
-    clearBalancesAndSettlement();
-}
-
-/* Delete an expense */
-function deleteExpense(index, row) {
-    expenses.splice(index, 1);
-    row.remove();
-    clearBalancesAndSettlement();
-}
-
-/* Clear form fields after adding or editing an expense */
-function clearExpenseForm() {
-    document.getElementById("description").value = "";
-    document.getElementById("payer").value = "";
-    document.getElementById("amount").value = "";
-    document.getElementById("splitType").value = "equal";
-    document.getElementById("splitDetails").style.display = "none";
-    document.getElementById("splitDetails").innerHTML = "";
 }
 
 /* Clear balances and settlement information */

@@ -2,32 +2,21 @@ let expenses = [];
 let payments = [];  
 let hasCalculated = false; // Track if "calculate" has been clicked at least once.
 
+function showToastMessage(message, type = "error") {
+    const toast = document.createElement("div");
+    toast.className = `toast-message ${type}`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.classList.add("visible"), 100);
+    setTimeout(() => {
+        toast.classList.remove("visible");
+        setTimeout(() => toast.remove(), 500);
+    }, 3000);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     attachFocusListeners();
 });
-
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyBhv7HdhcJPBScPTkfx-2rHdPrdZU3f8pQ",
-  authDomain: "expensive-split.firebaseapp.com",
-  databaseURL: "https://expensive-split-default-rtdb.firebaseio.com",
-  projectId: "expensive-split",
-  storageBucket: "expensive-split.firebasestorage.app",
-  messagingSenderId: "968675158955",
-  appId: "1:968675158955:web:2d82f009834978fbdfc0ee",
-  measurementId: "G-MNC7MDZFZT"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 
 function attachFocusListeners() {
     const descriptionInput = document.getElementById('description');
@@ -36,7 +25,6 @@ function attachFocusListeners() {
     const splitTypeSelect = document.getElementById('splitType');
     const chipInput = document.getElementById('chipInput');
 
-    // Payment form fields
     const paymentPayerSelect = document.getElementById('paymentPayer');
     const paymentPayeeSelect = document.getElementById('paymentPayee');
     const paymentAmountInput = document.getElementById('paymentAmount');
@@ -87,14 +75,16 @@ function addExpense() {
 
     let isValid = true;
 
-    // Validate fields
     if (!description) { showError(descriptionInput); isValid = false; }
     if (!payer) { showError(payerSelect); isValid = false; }
     if (isNaN(amount) || amount <= 0) { showError(amountInput); isValid = false; }
     if (!splitType) { showError(splitTypeSelect); isValid = false; }
     if (names.length === 0) { showError(chipInput); isValid = false; }
 
-    if (!isValid) return;
+    if (!isValid) {
+        showToastMessage("Please fix the highlighted errors.", "error");
+        return;
+    }
 
     let splitDetails = {};
 
@@ -132,7 +122,10 @@ function addExpense() {
         const remaining = amount - sum;
         const splitRemaining = document.getElementById('splitRemaining').checked;
 
-        if (remaining < 0) return;
+        if (remaining < 0) {
+            showToastMessage("Split amounts exceed total amount.", "error");
+            return;
+        }
 
         if (splitRemaining && nullNames.length > 0) {
             const perPerson = remaining / nullNames.length;
@@ -143,7 +136,10 @@ function addExpense() {
             nullNames.forEach(name => {
                 splitValues[name] = 0;
             });
-            if (remaining !== 0) return;
+            if (remaining !== 0) {
+                showToastMessage("Split amounts don't match total.", "warning");
+                return;
+            }
         }
 
         splitDetails = splitValues;
@@ -166,45 +162,62 @@ function addExpense() {
         });
 
         if (invalidPercent) return;
-        if (Math.abs(totalPercentage - 100) > 0.01) return;
+        if (Math.abs(totalPercentage - 100) > 0.01) {
+            showToastMessage("Percentages must sum to 100%.", "error");
+            return;
+        }
 
         for (const [name, percentage] of Object.entries(splitValues)) {
             splitDetails[name] = (percentage / 100) * amount;
         }
-    } else if (splitType === 'shares') {
+    }
+    else if (splitType === 'shares') {
         const inputs = document.querySelectorAll('.split-value');
         let totalShares = 0;
-        let splitValues = {};
+        let shareValues = {};
         let invalidShares = false;
-
+    
+        // Calculate total shares and validate input
         inputs.forEach(input => {
             const name = input.getAttribute('data-name');
             const value = input.value === '' ? 0 : parseFloat(input.value);
+    
             if (isNaN(value)) {
                 showError(input);
                 invalidShares = true;
             }
-            const shareValue = isNaN(value) ? 0 : value;
-            splitValues[name] = shareValue;
-            totalShares += shareValue;
+    
+            shareValues[name] = value;
+            totalShares += value;
         });
-
+    
         if (invalidShares) return;
-        if (totalShares === 0) return;
-
-        for (const [name, share] of Object.entries(splitValues)) {
-            splitDetails[name] = (share / totalShares) * amount;
+    
+        if (totalShares === 0) {
+            showToastMessage("Total shares cannot be zero.", "error");
+            return;
+        }
+    
+        // Calculate the split based on shares
+        for (const [name, share] of Object.entries(shareValues)) {
+            splitDetails[name] = (amount / totalShares) * share;
         }
     }
+    
 
     expenses.push({ description, payer, amount, splitDetails });
+    showToastMessage("Expense added successfully.", "success");
     addExpenseToTable(description, payer, amount, splitDetails);
-    updateTotalExpense(); 
+    updateTotalExpense();
+
+    showToastMessage("Expense added successfully!", "success");
 
     const elementIds = ["expenseTable", "calculateButton", "total-expense-summary", "table-header"];
     elementIds.forEach(id => {
         document.getElementById(id).style.display = "block";
     });
+
+    clearExpenseForm();
 
     // If already calculated once before, auto-update balances
     if (hasCalculated) {
@@ -306,8 +319,14 @@ function recordPayment() {
     const amount = parseFloat(paymentAmountInput.value.trim());
 
     let isValid = true;
-    if (!payer) {showError(paymentPayerSelect); isValid = false;}
-    if (!payee) {showError(paymentPayeeSelect);isValid = false;}
+    if (!payer) {
+        showError(paymentPayerSelect);
+        isValid = false;
+    }
+    if (!payee) {
+        showError(paymentPayeeSelect);
+        isValid = false;
+    }
     if (isNaN(amount) || amount <= 0) {
         showError(paymentAmountInput);
         isValid = false;
@@ -322,47 +341,102 @@ function recordPayment() {
 
     const payment = { payer, payee, amount };
     payments.push(payment);
-    
+
     displayPayments();
     updateBalances(payer, payee, amount);
+
+    // Clear the form fields after recording payment
     resetPaymentForm();
 
-    // If calculation done before, update automatically
+    // If calculation has been done before, auto-update balances
     if (hasCalculated) {
         calculateBalances();
     }
+
+    showToastMessage("Payment recorded successfully!", "success");
 }
+
+function updateBalances(payer, payee, amount) {
+    let balances = {};
+
+    // Update balances based on the payer and payee
+    expenses.forEach(expense => {
+        const splitDetails = expense.splitDetails;
+
+        // If payer is making a payment, adjust their balance
+        if (splitDetails[payer]) {
+            balances[payer] = (balances[payer] || 0) - amount;
+        }
+
+        // If payee is receiving the payment, adjust their balance
+        if (splitDetails[payee]) {
+            balances[payee] = (balances[payee] || 0) + amount;
+        }
+    });
+
+    // After payment, update the balance for each user (either reduce or increase)
+    const tableBody = document.getElementById('balancesTable').getElementsByTagName('tbody')[0];
+    tableBody.innerHTML = '';
+
+    // Recalculate balances and display them
+    for (const [name, balance] of Object.entries(balances)) {
+        const row = tableBody.insertRow();
+        row.insertCell(0).innerText = name;
+        const balanceCell = row.insertCell(1);
+        balanceCell.innerText = `₹${balance.toFixed(2)}`;
+        balanceCell.classList.add(balance > 0 ? 'balance-positive' : (balance < 0 ? 'balance-negative' : 'balance-zero'));
+    }
+}
+
+
+function resetPaymentForm() {
+    const payerField = document.getElementById('paymentPayer');
+    const payeeField = document.getElementById('paymentPayee');
+    const amountField = document.getElementById('paymentAmount');
+
+    if (!payerField || !payeeField || !amountField) {
+        console.error("Payment form fields not found. Ensure correct IDs in HTML.");
+        return;
+    }
+
+    console.log("Resetting payment form fields...");
+
+    // Clear values
+    payerField.value = '';
+    payeeField.value = '';
+    amountField.value = '';
+
+    console.log("Form fields cleared: ", {
+        paymentPayer: payerField.value,
+        paymentPayee: payeeField.value,
+        paymentAmount: amountField.value,
+    });
+
+    // Remove error highlights
+    [payerField, payeeField, amountField].forEach((field) => removeError(field));
+}
+
 
 function displayPayments() {
     const paymentsList = document.getElementById('paymentsList');
-    paymentsList.innerHTML = ''; 
+    paymentsList.innerHTML = '';
     payments.forEach((payment, index) => {
         const paymentText = `${payment.payer} paid ₹${payment.amount} to ${payment.payee}.`;
-        
+
         const paymentRow = document.createElement('div');
         paymentRow.classList.add('payment-row');
         paymentRow.innerHTML = `${paymentText} <a href="#" onclick="removePayment(${index})">Remove</a>`;
-        
+
         paymentsList.appendChild(paymentRow);
     });
 
     togglePaymentsVisibility();
 }
 
-function removePayment(index) {
-    payments.splice(index, 1);
-    displayPayments();
-
-    // If calculation done before, update automatically
-    if (hasCalculated) {
-        calculateBalances();
-    }
-}
-
 function togglePaymentsVisibility() {
     const paymentsSection = document.getElementById('paymentsList');
     const recordedPaymentsHeader = document.getElementById('recordedPaymentsHeader');
-    
+
     if (payments.length > 0) {
         paymentsSection.style.display = 'block';
         recordedPaymentsHeader.style.display = 'block';
@@ -372,11 +446,15 @@ function togglePaymentsVisibility() {
     }
 }
 
-function resetPaymentForm() {
-    document.getElementById('paymentPayer').value = '';
-    document.getElementById('paymentPayee').value = '';
-    document.getElementById('paymentAmount').value = '';
+function removePayment(index) {
+    payments.splice(index, 1);
+    displayPayments();
+
+    if (hasCalculated) {
+        calculateBalances();
+    }
 }
+
 
 function manageSettlement(balances) {
     let creditors = [];
@@ -492,12 +570,22 @@ function updateRemainingPercentage() {
 
 function addExpenseToTable(description, payer, amount, splitDetails) {
     const tableBody = document.getElementById("expensesTable").getElementsByTagName("tbody")[0];
+    
+    // Check if tableBody is properly targeted
+    if (!tableBody) {
+        console.error("Table body not found");
+        return;
+    }
+
     const row = tableBody.insertRow();
-    const rowIndex = expenses.length - 1; 
+
+    // Index of the current expense (last one added)
+    const rowIndex = expenses.length - 1;
 
     const actionCell = row.insertCell(0);
     actionCell.className = "sticky-action";
 
+    // Edit and Delete buttons
     const editButton = document.createElement("button");
     editButton.className = "icon-btn";
     editButton.innerHTML = '<img src="assets/icons/edit.png" alt="Edit" width="20">';
@@ -515,12 +603,12 @@ function addExpenseToTable(description, payer, amount, splitDetails) {
     actionCell.appendChild(editButton);
     actionCell.appendChild(deleteButton);
 
-    row.insertCell(1).innerText = description;
-    row.insertCell(2).innerText = payer;
-    row.insertCell(3).innerText = amount.toFixed(2);
-    row.insertCell(4).innerText = JSON.stringify(splitDetails);
-
-    clearExpenseForm();
+    row.insertCell(1).innerText = description || "No description provided";
+    row.insertCell(2).innerText = payer || "No payer selected";
+    row.insertCell(3).innerText = amount ? `₹${amount.toFixed(2)}` : "₹0.00";
+    row.insertCell(4).innerText = splitDetails
+        ? JSON.stringify(splitDetails, null, 2)
+        : "No split details provided";
 }
 
 // Export functions if needed
