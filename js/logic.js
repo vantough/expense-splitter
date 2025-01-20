@@ -5,14 +5,43 @@ let hasCalculated = false; // Track if "calculate" has been clicked at least onc
 function showToastMessage(message, type = "error") {
     const toast = document.createElement("div");
     toast.className = `toast-message ${type}`;
-    toast.textContent = message;
+
+    // Create the icon element using Google Icons
+    const icon = document.createElement("span");
+    icon.classList.add("material-icons");
+
+    // Determine the icon and color based on the type
+    if (type === "success") {
+        icon.textContent = "check_circle";
+    } else if (type === "error") {
+        icon.textContent = "error";
+    } else if (type === "warning") {
+        icon.textContent = "info";
+    }
+
+    // Style the icon
+    icon.style.marginRight = "10px";
+    icon.style.verticalAlign = "middle";
+
+    // Create the message container
+    const messageContainer = document.createElement("span");
+    messageContainer.textContent = message;
+
+    // Append icon and message to toast
+    toast.appendChild(icon);
+    toast.appendChild(messageContainer);
+
+    // Add toast to the body
     document.body.appendChild(toast);
+
+    // Show the toast with animation
     setTimeout(() => toast.classList.add("visible"), 100);
     setTimeout(() => {
         toast.classList.remove("visible");
         setTimeout(() => toast.remove(), 500);
     }, 3000);
 }
+
 
 document.addEventListener("DOMContentLoaded", () => {
     attachFocusListeners();
