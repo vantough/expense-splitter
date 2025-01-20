@@ -1,5 +1,5 @@
 
-   body {
+body {
     margin: 10px;
     transition: background-color 0.6s, color 0.6s;
 }
@@ -53,7 +53,7 @@ h3 {
    ========================================= */
 
 button {
-    transition: background-color 0.6s ease, box-shadow 0.6s ease, transform 0.2s ease;
+    transition: background-color 0.6s ease, box-shadow 0.6s ease, transform 0.6s ease;
     border-radius: 4px;
     font-weight: bold;
 }
@@ -73,7 +73,7 @@ button:active {
     position: relative;
     width: auto;
     padding: 10px 20px;
-    transition: all 0.8s ease;
+    transition: all 0.6s ease;
 }
 
 /* Inputs and Selects */
@@ -163,8 +163,8 @@ button:active {
     padding: 4px 8px;
     margin: 4px;
     font-size: 0.9em;
-    animation: fadeIn 0.3s ease;
-    transition: background-color 0.3s, color 0.3s;
+    animation: fadeIn 0.6s ease;
+    transition: background-color 0.6s, color 0.6s;
 }
 
 .chip .close-btn {
@@ -443,7 +443,7 @@ button:active {
     #calculateButton {
         font-size: 14px;
         padding: 10px 15px;
-        transition: all 0.8s ease;
+        transition: all 0.6s ease;
     }
 
     #calculateButton span {
@@ -497,4 +497,32 @@ button:active {
     border: 1px solid red !important;
     box-shadow: 0 0 4px rgba(255, 0, 0, 0.4);
 }
+
+/* Toast Message Styling */
+.toast-message {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    padding: 15px 25px;
+    border-radius: 8px;
+    color: #fff;
+    background-color: #dc3545; /* Error by default */
+    font-size: 16px;
+    opacity: 0;
+    transition: all 0.6s ease-in-out;
+    text-align: center;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+.toast-message.visible {
+    opacity: 1;
+}
+.toast-message.warning {
+    background-color: #ffc107; /* Warning */
+}
+.toast-message.success {
+    background-color: #28a745; /* Success */
+}
+
 
