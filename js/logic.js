@@ -654,3 +654,4 @@ window.calculateBalances = calculateBalances;
 window.manageSettlement = manageSettlement;
 window.updateTotalExpense = updateTotalExpense;
 window.recordPayment = recordPayment;
+window.showToastMessage = showToastMessage;

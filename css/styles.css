@@ -387,6 +387,10 @@ button:active {
     fill: #ffffff;
 }
 
+.dark-mode .copy-icon {
+    fill: #ffffff;
+}
+
 .dark-mode .balance-zero {
     color: #ffffff;
 }
@@ -482,10 +486,6 @@ button:active {
         transition: transform 0.6s ease, background-color 0.6s ease;
     }
 
-    .toggle-icon:hover {
-        transform: scale(1.1);
-    }
-
     .toggle-icon svg {
         width: 24px;
         height: 24px;
@@ -508,35 +508,81 @@ button:active {
     padding: 15px 25px;
     border-radius: 8px;
     color: #fff;
+    background-color: #dc3545; /* Error by default */
     font-size: 16px;
     opacity: 0;
     transition: all 0.6s ease-in-out;
-    display: flex;
-    align-items: center;
+    text-align: center;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 }
-
 .toast-message.visible {
     opacity: 1;
 }
-
-.toast-message.success {
-    background-color: #28a745; /* Green for success */
-}
-
-.toast-message.error {
-    background-color: #dc3545; /* Red for error */
-}
-
 .toast-message.warning {
-    background-color: #ffc107; /* Amber for warning */
+    background-color: #ffc107; /* Warning */
+}
+.toast-message.success {
+    background-color: #28a745; /* Success */
 }
 
-/* Style the material-icons */
-.material-icons {
-    font-size: 20px;
-    line-height: 1;
+/* General Icon Hover Effect */
+svg {
+    transition: transform 0.2s ease, fill 0.2s ease;
+    cursor: pointer;
 }
 
+svg:hover {
+    transform: scale(1.05);
+    fill: #007bff; /* Highlight color (change as needed) */
+}
 
+/* Special Case: Dark Mode Icons */
+.dark-mode svg:hover {
+    fill: #ffcc00; /* Different highlight for dark mode */
+}
 
+.icon-container {
+    position: relative;
+    display: inline-block;
+}
+
+.icon-container:hover {
+    background-color: rgba(98, 98, 98, 0.1); /* Light highlight */
+    border-radius: 6px;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.tooltip {
+    visibility: hidden;
+    background-color: black;
+    color: white;
+    text-align: center;
+    padding: 6px 10px;
+    border-radius: 4px;
+    position: absolute;
+    z-index: 100;
+    font-size: 12px;
+    bottom: 120%; /* Position above the icon */
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.1s ease-in-out;
+}
+
+/* Triangular Tip */
+.tooltip::after {
+    content: "";
+    position: absolute;
+    top: 100%; /* Position at bottom of tooltip */
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: black transparent transparent transparent;
+}
+
+.icon-container:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+}
