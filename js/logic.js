@@ -490,10 +490,11 @@ function manageSettlement(balances) {
 
 function editExpense(index) {
     const expense = expenses[index];
+
     document.getElementById("description").value = expense.description;
     document.getElementById("payer").value = expense.payer;
     document.getElementById("amount").value = expense.amount;
-    document.getElementById("splitType").value = "equal";
+    document.getElementById("splitType").value = "equal"; 
     showSplitDetails();
 
     const chips = Array.from(document.getElementById("chipContainer").querySelectorAll(".chip")).map(chip =>
@@ -509,14 +510,50 @@ function editExpense(index) {
         }
     });
 
+    // Remove the expense from the array and update the table row indexes
     expenses.splice(index, 1);
-    document.getElementById("expensesTable").deleteRow(index + 1);
+    updateExpenseTable();
+
     clearBalancesAndSettlement();
-    
     updateTotalExpense();
+
     if (hasCalculated) {
         calculateBalances();
     }
+}
+
+function updateExpenseTable() {
+    const tableBody = document.getElementById("expensesTable").getElementsByTagName("tbody")[0];
+    tableBody.innerHTML = ""; // Clear current table
+
+    expenses.forEach((expense, index) => {
+        const row = tableBody.insertRow();
+
+        const actionCell = row.insertCell(0);
+        actionCell.className = "sticky-action";
+
+        const editButton = document.createElement("button");
+        editButton.className = "icon-btn";
+        editButton.innerHTML = '<img src="assets/icons/edit.png" alt="Edit" width="20">';
+        editButton.onclick = function () {
+            editExpense(index);
+        };
+
+        const deleteButton = document.createElement("button");
+        deleteButton.className = "icon-btn";
+        deleteButton.innerHTML = '<img src="assets/icons/delete.png" alt="Delete" width="20">';
+        deleteButton.onclick = function () {
+            deleteExpense(index, row);
+        };
+
+        actionCell.appendChild(editButton);
+        actionCell.appendChild(deleteButton);
+
+        row.insertCell(1).innerText = expense.description || "No description provided";
+        row.insertCell(2).innerText = expense.payer || "No payer selected";
+        row.insertCell(3).innerText = expense.amount ? `₹${expense.amount.toFixed(2)}` : "₹0.00";
+        row.insertCell(4).innerText = expense.splitDetails ? JSON.stringify(expense.splitDetails, null, 2) : "No split details provided";
+    });
 }
 
 function deleteExpense(index, row) {
