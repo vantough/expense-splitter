@@ -15,8 +15,39 @@ function showToastMessage(message, type = "error") {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+    const icons = document.querySelectorAll(".icon-container");
+
+    icons.forEach(icon => {
+        const tooltip = icon.querySelector(".tooltip");
+
+        if (!tooltip) return;
+
+        icon.addEventListener("mouseenter", () => {
+            if (!icon.classList.contains("tooltip-disabled")) {
+                tooltip.style.visibility = "visible";
+                tooltip.style.opacity = "1";
+            }
+        });
+
+        icon.addEventListener("mouseleave", () => {
+            tooltip.style.visibility = "hidden";
+            tooltip.style.opacity = "0";
+            icon.classList.remove("tooltip-disabled"); // Allow tooltip to show again
+        });
+
+        icon.addEventListener("click", () => {
+            tooltip.style.visibility = "hidden";
+            tooltip.style.opacity = "0";
+            icon.classList.add("tooltip-disabled"); // Prevent tooltip from showing again until hover exit
+        });
+    });
+});
+
+
+document.addEventListener("DOMContentLoaded", () => {
     attachFocusListeners();
 });
+
 
 function attachFocusListeners() {
     const descriptionInput = document.getElementById('description');

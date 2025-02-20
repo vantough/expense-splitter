@@ -562,12 +562,12 @@ svg:hover {
     position: absolute;
     z-index: 100;
     font-size: 12px;
-    bottom: 120%; /* Position above the icon */
+    bottom: 120%;
     left: 50%;
     transform: translateX(-50%);
     white-space: nowrap;
     opacity: 0;
-    transition: opacity 0.1s ease-in-out;
+    transition: opacity 0.1s ease-in-out, visibility 0.1s ease-in-out;
 }
 
 /* Triangular Tip */
@@ -585,4 +585,24 @@ svg:hover {
 .icon-container:hover .tooltip {
     visibility: visible;
     opacity: 1;
+}
+
+.dark-mode .tooltip {
+    background-color: #ffffff; 
+    color: #000000;  
+}
+
+.dark-mode .tooltip::after {
+    border-color: #ffffff transparent transparent transparent; 
+}
+
+
+.icon-animate {
+    animation: fadeInOut 1s ease-in-out;
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.2); }
+    100% { opacity: 1; transform: scale(1); }
 }
