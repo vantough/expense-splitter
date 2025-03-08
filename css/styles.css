@@ -350,10 +350,6 @@ button:active {
     animation: slideOut 0.6s ease forwards;
 }
 
-/* =========================================
-   Dark Mode Styles
-   ========================================= */
-
 .dark-mode {
     background-color: #121212;
     color: #ffffff;
@@ -410,6 +406,28 @@ button:active {
 
 .dark-mode .recordpayment-icon path {
     fill: #ffffff;
+}
+
+.dark-mode,
+.dark-mode .table,
+.dark-mode .sticky-action,
+.dark-mode .input-group-text,
+.dark-mode .chip,
+.dark-mode .download-icon,
+.dark-mode .copy-icon,
+.dark-mode .balance-zero,
+.dark-mode .balance-positive,
+.dark-mode .balance-negative,
+.dark-mode hr,
+.dark-mode .recordpayment-icon path {
+    transition: all 0.6s ease-in-out;
+}
+
+.dark-mode button,
+.dark-mode select,
+.dark-mode input,
+.dark-mode textarea {
+    transition: background-color 0.6s ease, color 0.6s ease, border 0.6s ease;
 }
 
 /* =========================================
@@ -541,6 +559,23 @@ svg:hover {
     fill: #ffcc00; /* Different highlight for dark mode */
 }
 
+.expense-header-title {
+    font-family: 'Poppins', sans-serif;
+    font-weight: bold;
+    margin-top: 50px; /* Adds spacing below the navbar */
+    background: linear-gradient(to right, #00c6ff, #0072ff, #a855f7, #ff2e63); /* Bright multi-color gradient */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: block;
+    text-align: center;
+}
+
+.expense-header-secondary {
+    font-family: 'Poppins', sans-serif;
+    font-weight: bold;
+    color: #333; /* Dark text color without gradient */
+}
+
 .icon-container {
     position: relative;
     display: inline-block;
@@ -605,4 +640,15 @@ svg:hover {
     0% { opacity: 1; transform: scale(1); }
     50% { opacity: 0.5; transform: scale(1.2); }
     100% { opacity: 1; transform: scale(1); }
+}
+
+
+.dark-mode .expense-header-title {
+    background: linear-gradient(to right, #6a11cb, #2575fc, #ff2e63);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.dark-mode .expense-header-secondary {
+    color: #60a5fa; /* Light yellow for better visibility */
 }
