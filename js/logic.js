@@ -686,3 +686,20 @@ window.manageSettlement = manageSettlement;
 window.updateTotalExpense = updateTotalExpense;
 window.recordPayment = recordPayment;
 window.showToastMessage = showToastMessage;
+
+// Update chip input placeholder based on chip presence
+function updateChipPlaceholder() {
+    const chipContainer = document.getElementById("chipContainer");
+    const chipInput = document.getElementById("chipInput");
+    setTimeout(() => {
+        const hasChips = chipContainer.querySelectorAll(".chip").length > 0;
+        chipInput.placeholder = hasChips ? "" : "Add names, comma separated";
+    }, 50);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const chipContainer = document.getElementById("chipContainer");
+    if (chipContainer) {
+        chipContainer.addEventListener("DOMSubtreeModified", updateChipPlaceholder);
+    }
+});

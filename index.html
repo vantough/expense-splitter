@@ -10,7 +10,7 @@
 </head>
 <body>
     <div class="container" id="app">
-        <h1 class="text-center">Expense Splitter</h1>
+        <h1 class="text-center expense-header expense-header-title">Expense Splitter</h1>
         
         <!-- Participants Input -->
         <div class="form-group">
@@ -22,7 +22,7 @@
         <hr>
         
         <!-- Expense Form -->
-        <h3>Add Expense</h3>
+        <h3 class="expense-header-secondary">Add Expense</h3>
         <div class="form-row">
             <div class="form-group col-md-3 col-sm-6">
                 <label for="description">Description:</label>
@@ -59,7 +59,7 @@
         <hr>
         <!-- Record Payment Section -->
         <div id="recordPaymentForm" >
-            <h3> <span onclick="togglePaymentForm()" style="cursor: pointer;"> Record Payment </span>
+        <h3 class="expense-header-secondary"> <span onclick="togglePaymentForm()" style="cursor: pointer;"> Record Payment </span>
                 <svg class="recordpayment-icon" id="togglePaymentForm" onclick="togglePaymentForm()" xmlns="http://www.w3.org/2000/svg" height="36px" viewBox="0 -960 960 960" width="36px" fill="#000000">
                     <path d="M480-328.93 224.93-584l62.4-62.41L480-453.74l192.67-192.67 62.4 62.41L480-328.93Z"/>
                 </svg>
@@ -92,7 +92,7 @@
         
         <hr>
         <div class="table-header" id="table-header" style="display: none;">
-        <h3>Expense Details</h3>
+        <h3 class="expense-header-secondary">Expense Details</h3>
         </div>
             <div class="table-responsive" id="expenseTable" style="display: none;">
                 <table class="table table-bordered" id="expensesTable">
@@ -108,7 +108,7 @@
                     <tbody></tbody>
                 </table>
             </div>
-            <h5 id="recordedPaymentsHeader" style="display: none;">Recorded Payments</h5>
+            <h5 class="expense-header-secondary" id="recordedPaymentsHeader" style="display: none;">Recorded Payments</h5>
             <div id="paymentsList" style="display: none;">
                 <!-- Payments will be listed here -->
             </div>
@@ -124,7 +124,7 @@
         
         <div id="balanceandsplit" style="display: none;">
         <hr>
-        <h3 >Balances</h3>
+        <h3 class="expense-header-secondary">Balances</h3>
         <div class="table-responsive">
             <table class="table table-bordered" id="balancesTable">
                 <thead class="thead-light">
@@ -137,7 +137,7 @@
             </table>
             <div id="settlementSection">
                     <hr>
-                    <h3 class="settlement-header">
+                    <h3 class="settlement-header expense-header-secondary">
                         Settlement Details
                         <div class="icon-container">
                         <svg class="download-icon" id="downloadCsv" xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#000000" onclick="exportToCSV()">
