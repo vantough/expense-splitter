@@ -5,10 +5,40 @@ let hasCalculated = false; // Track if "calculate" has been clicked at least onc
 function showToastMessage(message, type = "error") {
     const toast = document.createElement("div");
     toast.className = `toast-message ${type}`;
-    toast.textContent = message;
+
+    // Create a span for the message text
+    const textSpan = document.createElement("span");
+    textSpan.className = "toast-text";
+    textSpan.innerText = message;
+
+    // Create a dismiss button for manual dismissal
+    const dismissBtn = document.createElement("button");
+    dismissBtn.className = "toast-close";
+    dismissBtn.innerText = "×";
+    
+    // Declare timeout variables so they can be cleared if dismissed manually
+    let showTimeout, hideTimeout;
+
+    dismissBtn.addEventListener("click", () => {
+        clearTimeout(showTimeout);
+        clearTimeout(hideTimeout);
+        toast.classList.remove("visible");
+        setTimeout(() => toast.remove(), 500);
+    });
+
+    // Append text and dismiss button to the toast element
+    toast.appendChild(textSpan);
+    toast.appendChild(dismissBtn);
+
     document.body.appendChild(toast);
-    setTimeout(() => toast.classList.add("visible"), 100);
-    setTimeout(() => {
+
+    // Show the toast after a short delay
+    showTimeout = setTimeout(() => {
+        toast.classList.add("visible");
+    }, 100);
+
+    // Automatically hide the toast after 3 seconds
+    hideTimeout = setTimeout(() => {
         toast.classList.remove("visible");
         setTimeout(() => toast.remove(), 500);
     }, 3000);
@@ -241,7 +271,6 @@ function addExpense() {
     addExpenseToTable(description, payer, amount, splitDetails);
     updateTotalExpense();
 
-    showToastMessage("Expense added successfully!", "success");
 
     const elementIds = ["expenseTable", "calculateButton", "total-expense-summary", "table-header"];
     elementIds.forEach(id => {

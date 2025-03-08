@@ -652,3 +652,25 @@ svg:hover {
 .dark-mode .expense-header-secondary {
     color: #60a5fa; /* Light yellow for better visibility */
 }
+
+.toast-close {
+    background: transparent;
+    border: none;
+    font-size: 16px;
+    color: #fff;
+    cursor: pointer;
+    margin-left: 10px;
+    padding: 0 4px; /* Adjusted horizontal clickable area to 4px */
+}
+
+.toast-text {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.toast-message {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 25px;
+}
