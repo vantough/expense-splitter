@@ -644,7 +644,7 @@ svg:hover {
 
 
 .dark-mode .expense-header-title {
-    background: linear-gradient(to right, #6a11cb, #2575fc, #ff2e63);
+    background: linear-gradient(to left, #00c6ff, #0072ff, #a855f7, #ff2e63);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
