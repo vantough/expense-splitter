@@ -1,18 +1,21 @@
 // Import necessary packages
 const express = require('express');
 const cors = require('cors');
-app.use(cors());
 const axios = require('axios');
 require('dotenv').config(); // load environment variables from .env
 
-// Initialize the express app
+// Initialize the express app FIRST
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Middleware setup AFTER initializing the app
+app.use(cors());
 
 // Spotify API credentials from environment variables
 const clientId = process.env.SPOTIFY_CLIENT_ID;
 const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
 const playlistId = process.env.SPOTIFY_PLAYLIST_ID;
+
 
 // Function to retrieve Spotify access token
 async function getAccessToken() {
@@ -71,6 +74,4 @@ app.get('/api/random-track', async (req, res) => {
     }
   });
 
-  app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-  });
+  module.exports = app;
