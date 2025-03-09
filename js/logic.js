@@ -44,6 +44,27 @@ function showToastMessage(message, type = "error") {
     }, 3000);
 }
 
+const API_ENDPOINT = window.location.hostname.includes('localhost')
+    ? 'http://localhost:3000/api/random-track'
+    : '/api/random-track';
+
+window.addEventListener('DOMContentLoaded', () => {
+    fetch(API_ENDPOINT)
+      .then(response => response.json())
+      .then(data => {
+        document.querySelector('#spotify-card img').src = data.albumCover;
+        document.querySelector('.track-name').textContent = data.name;
+        document.querySelector('.track-artist').textContent = data.artist;
+        document.querySelector('#spotify-link').href = data.spotifyUrl;
+
+        document.getElementById('spotify-card').style.display = 'flex';
+      })
+      .catch(err => {
+        console.error('Failed to load track', err);
+        document.getElementById('spotify-card').style.display = 'none';
+      });
+});
+
 document.addEventListener("DOMContentLoaded", () => {
     const icons = document.querySelectorAll(".icon-container");
 
