@@ -615,14 +615,14 @@ function updateExpenseTable() {
 
         const editButton = document.createElement("button");
         editButton.className = "icon-btn";
-        editButton.innerHTML = '<img src="assets/icons/edit.png" alt="Edit" width="20">';
+        editButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#EAC452"><path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"/></svg>';
         editButton.onclick = function () {
             editExpense(index);
         };
 
         const deleteButton = document.createElement("button");
         deleteButton.className = "icon-btn";
-        deleteButton.innerHTML = '<img src="assets/icons/delete.png" alt="Delete" width="20">';
+        deleteButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#BB271A"><path d="M312-144q-29.7 0-50.85-21.15Q240-186.3 240-216v-480h-48v-72h192v-48h192v48h192v72h-48v479.57Q720-186 698.85-165T648-144H312Zm336-552H312v480h336v-480ZM384-288h72v-336h-72v336Zm120 0h72v-336h-72v336ZM312-696v480-480Z"/></svg>';
         deleteButton.onclick = function () {
             deleteExpense(index, row);
         };
@@ -706,14 +706,14 @@ function addExpenseToTable(description, payer, amount, splitDetails) {
     // Edit and Delete buttons
     const editButton = document.createElement("button");
     editButton.className = "icon-btn";
-    editButton.innerHTML = '<img src="assets/icons/edit.png" alt="Edit" width="20">';
+    editButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#EAC452"><path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"/></svg>';
     editButton.onclick = function () {
         editExpense(rowIndex);
     };
 
     const deleteButton = document.createElement("button");
     deleteButton.className = "icon-btn";
-    deleteButton.innerHTML = '<img src="assets/icons/delete.png" alt="Delete" width="20">';
+    deleteButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#BB271A"><path d="M312-144q-29.7 0-50.85-21.15Q240-186.3 240-216v-480h-48v-72h192v-48h192v48h192v72h-48v479.57Q720-186 698.85-165T648-144H312Zm336-552H312v480h336v-480ZM384-288h72v-336h-72v336Zm120 0h72v-336h-72v336ZM312-696v480-480Z"/></svg>';
     deleteButton.onclick = function () {
         deleteExpense(rowIndex, row);
     };
