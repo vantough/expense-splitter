@@ -12,58 +12,71 @@
     <div class="container" id="app">
         <h1 class="text-center expense-header expense-header-title">Expense Splitter</h1>
         
-        <!-- Participants Input -->
-        <div class="form-group">
-            <label for="names">Names:</label>
-            <div class="chip-container" id="chipContainer">
-                <input type="text" class="chip-input" id="chipInput" placeholder="Add names, comma separated" title="Enter participant names separated by commas.">
+        <div class="panel-card">
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <label for="names" class="mb-2 mb-md-0">Names:</label>
+                <span class="status-tag">Participants: <span id="participantCountTag">0</span></span>
+            </div>
+            <!-- Participants Input -->
+            <div class="form-group mt-2 mb-0">
+                <div class="chip-container" id="chipContainer">
+                    <input type="text" class="chip-input" id="chipInput" placeholder="Add names, comma separated" title="Enter participant names separated by commas.">
+                </div>
             </div>
         </div>
         <hr>
         
-        <!-- Expense Form -->
-        <h3 class="expense-header-secondary">Add Expense</h3>
-        <div class="form-row">
-            <div class="form-group col-md-3 col-sm-6">
-                <label for="description">Description:</label>
-                <input type="text" class="form-control" id="description" placeholder="e.g., Dinner" title="Enter a short description for the expense.">
+        <div class="panel-card">
+            <!-- Expense Form -->
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <h3 class="expense-header-secondary mb-2 mb-md-0">Add Expense</h3>
+                <span class="status-tag">Expenses: <span id="expenseCountTag">0</span></span>
             </div>
-            <div class="form-group col-md-3 col-sm-6">
-                <label for="payer">Payer:</label>
-                <select class="form-control" id="payer" title="Select the person who paid for this expense.">
-                    <option value="">Select Payer</option>
-                </select>
-            </div>
-            <div class="form-group col-md-2 col-sm-6">
-                <label for="amount">Amount:</label>
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text amount-icon">₹</span>
+            <div class="form-row">
+                <div class="form-group col-md-3 col-sm-6">
+                    <label for="description">Description:</label>
+                    <input type="text" class="form-control" id="description" placeholder="e.g., Dinner" title="Enter a short description for the expense.">
+                </div>
+                <div class="form-group col-md-3 col-sm-6">
+                    <label for="payer">Payer:</label>
+                    <select class="form-control" id="payer" title="Select the person who paid for this expense.">
+                        <option value="">Select Payer</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-2 col-sm-6">
+                    <label for="amount">Amount:</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text amount-icon">₹</span>
+                        </div>
+                        <input type="number" class="form-control" id="amount" placeholder="e.g., 60" title="Enter the total expense amount in ₹." oninput="updateRemainingAmount(); updateRemainingPercentage();">
                     </div>
-                    <input type="number" class="form-control" id="amount" placeholder="e.g., 60" title="Enter the total expense amount in ₹." oninput="updateRemainingAmount(); updateRemainingPercentage();">
+                </div>
+                <div class="form-group col-md-4 col-sm-6">
+                    <label for="splitType">Split Type:</label>
+                    <select class="form-control" id="splitType" onchange="showSplitDetails()">
+                        <option value="equal">Equally</option>
+                        <option value="unequal">Unequally</option>
+                        <option value="shares">By Shares</option>
+                        <option value="percentages">By Percentages</option>
+                    </select>
                 </div>
             </div>
-            <div class="form-group col-md-4 col-sm-6">
-                <label for="splitType">Split Type:</label>
-                <select class="form-control" id="splitType" onchange="showSplitDetails()">
-                    <option value="equal">Equally</option>
-                    <option value="unequal">Unequally</option>
-                    <option value="shares">By Shares</option>
-                    <option value="percentages">By Percentages</option>
-                </select>
-            </div>
+            <div id="splitDetails" style="display: none;"></div>
+            <button class="btn btn-primary" onclick="addExpense()" title="Add this expense.">Add Expense</button>
         </div>
-        <div id="splitDetails" style="display: none;"></div>
-        <button class="btn btn-primary" onclick="addExpense()" title="Add this expense.">Add Expense</button>
 
         <hr>
         <!-- Record Payment Section -->
-        <div id="recordPaymentForm" >
-        <h3 class="expense-header-secondary"> <span onclick="togglePaymentForm()" style="cursor: pointer;"> Record Payment </span>
+        <div id="recordPaymentForm" class="panel-card" >
+        <div class="d-flex justify-content-between align-items-center flex-wrap">
+            <h3 class="expense-header-secondary mb-2 mb-md-0"> <span onclick="togglePaymentForm()" style="cursor: pointer;"> Record Payment </span>
                 <svg class="recordpayment-icon" id="togglePaymentForm" onclick="togglePaymentForm()" xmlns="http://www.w3.org/2000/svg" height="36px" viewBox="0 -960 960 960" width="36px" fill="#000000">
                     <path d="M480-328.93 224.93-584l62.4-62.41L480-453.74l192.67-192.67 62.4 62.41L480-328.93Z"/>
                 </svg>
             </h3>
+            <span class="status-tag">Payments: <span id="paymentCountTag">0</span></span>
+        </div>
             <div id="paymentFormContent" class="form-row">
                     <div class="form-group col-md-3 col-sm-6">
                         <label for="paymentPayer">Payer:</label>
@@ -91,9 +104,10 @@
 
         
         <hr>
-        <div class="table-header" id="table-header" style="display: none;">
-        <h3 class="expense-header-secondary">Expense Details</h3>
-        </div>
+        <div class="panel-card">
+            <div class="table-header" id="table-header" style="display: none;">
+            <h3 class="expense-header-secondary">Expense Details</h3>
+            </div>
             <div class="table-responsive" id="expenseTable" style="display: none;">
                 <table class="table table-bordered" id="expensesTable">
                     <thead class="thead-light">
@@ -121,12 +135,14 @@
                     <span id="totalExpense">₹0.00</span>
                 </div>
             </div>
+        </div>
         
         <div id="balanceandsplit" style="display: none;">
         <hr>
-        <h3 class="expense-header-secondary">Balances</h3>
-        <div class="table-responsive">
-            <table class="table table-bordered" id="balancesTable">
+        <div class="panel-card">
+            <h3 class="expense-header-secondary">Balances</h3>
+            <div class="table-responsive">
+                <table class="table table-bordered" id="balancesTable">
                 <thead class="thead-light">
                     <tr>
                         <th>Name</th>
@@ -134,8 +150,8 @@
                     </tr>
                 </thead>
                 <tbody></tbody>
-            </table>
-            <div id="settlementSection">
+                </table>
+                <div id="settlementSection">
                     <hr>
                     <h3 class="settlement-header expense-header-secondary">
                         Settlement Details
@@ -154,6 +170,7 @@
                         </div>
                     </h3>
                     <div id="settlementDetails"></div>
+                </div>
             </div>
         </div>
         </div>    

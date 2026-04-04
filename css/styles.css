@@ -787,3 +787,28 @@ svg:hover {
         font-size: 0.75em;
     }
 }
+
+/* =========================================
+   Dashboard Panels & Tags (Additive)
+   ========================================= */
+.panel-card {
+    background-color: #ffffff;
+    border: 1px solid #e7e7e7;
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.status-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #20507a;
+    background-color: #eef6ff;
+    border: 1px solid #cfe6ff;
+}
