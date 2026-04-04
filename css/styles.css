@@ -1,12 +1,74 @@
 
 body {
+    font-family: 'Inter', sans-serif;
     margin: 10px;
     padding-bottom: 80px; /* Always present to avoid overlap */
     transition: background-color 0.6s, color 0.6s;
 }
 
+button,
+input,
+select,
+textarea {
+    font-family: 'Inter', sans-serif;
+}
+
 .container {
     max-width: 1200px;
+}
+
+.sticky-top-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 18px;
+    background: rgba(255, 255, 255, 0.96);
+    border-bottom: 1px solid #dbe0e6;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.1);
+    transform: translateY(-110%);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.sticky-top-nav.visible {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.sticky-top-nav-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.sticky-top-nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nav-icon-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid #dbe0e6;
+    background-color: #f8fafc;
+    color: #334155;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+body.sticky-nav-active #app {
+    padding-top: 44px;
 }
 
 #paymentForm {
@@ -196,6 +258,64 @@ button:active {
     font-size: 14px;
 }
 
+.empty-state-block {
+    display: none;
+    margin-top: 12px;
+    border: 1px dashed #d1d5db;
+    border-radius: 12px;
+    padding: 18px 14px;
+    text-align: center;
+    background: linear-gradient(135deg, #f8fafc, #eff6ff);
+}
+
+.empty-state-compact {
+    margin-top: 10px;
+}
+
+.empty-state-inline {
+    display: block;
+    margin: 12px 0 10px;
+    padding: 12px 14px;
+    text-align: left;
+}
+
+.empty-state-icon {
+    width: 58px;
+    height: 58px;
+    margin: 0 auto 10px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.empty-state-icon-expense {
+    color: #1d4ed8;
+    background-color: #dbeafe;
+}
+
+.empty-state-icon-payment {
+    color: #0f766e;
+    background-color: #ccfbf1;
+}
+
+.empty-state-icon-settlement {
+    color: #7c3aed;
+    background-color: #ede9fe;
+}
+
+.empty-state-title {
+    margin-bottom: 4px;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.empty-state-subtitle {
+    margin-bottom: 0;
+    color: #4b5563;
+    font-size: 0.92rem;
+}
+
 .payment-row {
     margin-bottom: 10px;
 }
@@ -303,6 +423,9 @@ button:active {
     cursor: pointer;
     width: 30px;
     height: 30px;
+    border-radius: 999px;
+    background-color: rgba(255, 255, 255, 0.82);
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.28);
     transition: transform 0.6s;
     z-index: 1050
 }
@@ -381,6 +504,50 @@ button:active {
     color: #ffffff;
 }
 
+.dark-mode .sticky-top-nav {
+    background: rgba(17, 24, 39, 0.96);
+    border-bottom-color: #334155;
+    box-shadow: 0 4px 14px rgba(2, 6, 23, 0.45);
+}
+
+.dark-mode .sticky-top-nav-title {
+    color: #e2e8f0;
+}
+
+.dark-mode .nav-icon-btn {
+    border-color: #475569;
+    background-color: #1e293b;
+    color: #cbd5e1;
+}
+
+.dark-mode .empty-state-block {
+    border-color: #334155;
+    background: linear-gradient(135deg, #111827, #1e293b);
+}
+
+.dark-mode .empty-state-title {
+    color: #e2e8f0;
+}
+
+.dark-mode .empty-state-subtitle {
+    color: #94a3b8;
+}
+
+.dark-mode .empty-state-icon-expense {
+    background-color: #1e3a8a;
+    color: #bfdbfe;
+}
+
+.dark-mode .empty-state-icon-payment {
+    background-color: #134e4a;
+    color: #99f6e4;
+}
+
+.dark-mode .empty-state-icon-settlement {
+    background-color: #4c1d95;
+    color: #ddd6fe;
+}
+
 .dark-mode .status-tag {
     color: #bfdbfe;
     background-color: #10263d;
@@ -429,6 +596,11 @@ button:active {
 
 .dark-mode .recordpayment-icon path {
     fill: #ffffff;
+}
+
+.dark-mode .toggle-icon {
+    background-color: rgba(15, 23, 42, 0.78);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.55);
 }
 
 .dark-mode,
@@ -583,7 +755,7 @@ svg:hover {
 }
 
 .expense-header-title {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Inter', sans-serif;
     font-weight: bold;
     margin-top: 50px; /* Adds spacing below the navbar */
     background: linear-gradient(to right, #00c6ff, #0072ff, #a855f7, #ff2e63); /* Bright multi-color gradient */
@@ -594,7 +766,7 @@ svg:hover {
 }
 
 .expense-header-secondary {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Inter', sans-serif;
     font-weight: bold;
     color: #333; /* Dark text color without gradient */
 }
