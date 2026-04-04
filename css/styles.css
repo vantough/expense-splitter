@@ -3,6 +3,7 @@ body {
     margin: 10px;
     padding-bottom: 80px; /* Always present to avoid overlap */
     transition: background-color 0.6s, color 0.6s;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 .container {
@@ -301,10 +302,16 @@ button:active {
     bottom: 40px;
     left: 40px;
     cursor: pointer;
-    width: 30px;
-    height: 30px;
-    transition: transform 0.6s;
-    z-index: 1050
+    width: 48px;
+    height: 48px;
+    transition: transform 0.6s ease, box-shadow 0.6s ease, background-color 0.6s ease;
+    z-index: 1050;
+    border-radius: 50%;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.22);
+    backdrop-filter: blur(4px);
 }
 
 /* =========================================
@@ -510,27 +517,8 @@ button:active {
     }
 
     .toggle-icon {
-        position: fixed;
         bottom: 25px;
         left: 25px;
-        width: 48px;
-        height: 48px;
-        z-index: 1000;
-        background-color: rgba(200, 200, 200, 0.95);
-        color: #333;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-        cursor: pointer;
-        transition: transform 0.6s ease, background-color 0.6s ease;
-    }
-
-    .toggle-icon svg {
-        width: 24px;
-        height: 24px;
-        fill: #333333;
     }
 }
 
@@ -583,7 +571,7 @@ svg:hover {
 }
 
 .expense-header-title {
-    font-family: 'Poppins', sans-serif;
+    font-family: inherit;
     font-weight: bold;
     margin-top: 50px; /* Adds spacing below the navbar */
     background: linear-gradient(to right, #00c6ff, #0072ff, #a855f7, #ff2e63); /* Bright multi-color gradient */
@@ -594,7 +582,7 @@ svg:hover {
 }
 
 .expense-header-secondary {
-    font-family: 'Poppins', sans-serif;
+    font-family: inherit;
     font-weight: bold;
     color: #333; /* Dark text color without gradient */
 }
@@ -834,4 +822,43 @@ svg:hover {
     background-color: #eef6ff;
     border: 1px solid #cfe6ff;
     font-family: inherit;
+}
+
+
+.summary-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.summary-item {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 10px 12px;
+    background-color: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+}
+
+.summary-label {
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+
+.dark-mode .summary-item {
+    background-color: #252525;
+    border-color: #3a3a3a;
+    color: #f3f4f6;
+}
+
+.dark-mode .summary-label {
+    color: #a1a1aa;
+}
+
+.dark-mode .toggle-icon {
+    background-color: rgba(20, 20, 20, 0.9);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.55);
 }

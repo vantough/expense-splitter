@@ -13,6 +13,22 @@ function refreshDashboardMeta() {
     if (paymentTag) paymentTag.innerText = payments.length;
 }
 
+function updateSummaryStrip() {
+    const summaryStrip = document.getElementById("summaryStrip");
+    if (!summaryStrip) return;
+
+    const totalExpenseDisplay = document.getElementById("totalExpense");
+    const summaryTotalExpense = document.getElementById("summaryTotalExpense");
+    const summaryExpenseCount = document.getElementById("summaryExpenseCount");
+    const summaryPaymentCount = document.getElementById("summaryPaymentCount");
+
+    if (summaryTotalExpense) {
+        summaryTotalExpense.innerText = totalExpenseDisplay ? totalExpenseDisplay.innerText : "₹0.00";
+    }
+    if (summaryExpenseCount) summaryExpenseCount.innerText = expenses.length;
+    if (summaryPaymentCount) summaryPaymentCount.innerText = payments.length;
+}
+
 function showToastMessage(message, type = "error") {
     const toast = document.createElement("div");
     toast.className = `toast-message ${type}`;
@@ -303,6 +319,7 @@ function addExpense() {
     addExpenseToTable(description, payer, amount, splitDetails);
     updateTotalExpense();
     refreshDashboardMeta();
+    updateSummaryStrip();
 
 
     const elementIds = ["expenseTable", "calculateButton", "total-expense-summary", "table-header"];
@@ -321,6 +338,7 @@ function addExpense() {
 function updateTotalExpense() {
     const totalExpense = expenses.reduce((total, expense) => total + expense.amount, 0);
     document.getElementById('totalExpense').innerText = `₹${totalExpense.toFixed(2)}`;
+    updateSummaryStrip();
 }
 
 function calculateBalances() {
@@ -437,6 +455,7 @@ function recordPayment() {
 
     displayPayments();
     refreshDashboardMeta();
+    updateSummaryStrip();
     updateBalances(payer, payee, amount);
 
     // Clear the form fields after recording payment
@@ -544,6 +563,7 @@ function removePayment(index) {
     payments.splice(index, 1);
     displayPayments();
     refreshDashboardMeta();
+    updateSummaryStrip();
 
     if (hasCalculated) {
         calculateBalances();
@@ -612,6 +632,7 @@ function editExpense(index) {
 
     clearBalancesAndSettlement();
     updateTotalExpense();
+    updateSummaryStrip();
 
     if (hasCalculated) {
         calculateBalances();
@@ -658,6 +679,7 @@ function deleteExpense(index, row) {
     clearBalancesAndSettlement();
     updateTotalExpense();
     refreshDashboardMeta();
+    updateSummaryStrip();
 
     if (hasCalculated) {
         calculateBalances();
@@ -680,6 +702,9 @@ function clearBalancesAndSettlement() {
 }
 
 function updateRemainingAmount() {
+    const remainingAmountEl = document.getElementById("remainingAmount");
+    if (!remainingAmountEl) return;
+
     const amount = parseFloat(document.getElementById("amount").value) || 0;
     const inputs = document.querySelectorAll(".split-value");
     let sum = 0;
@@ -688,10 +713,13 @@ function updateRemainingAmount() {
         if (!isNaN(value)) sum += value;
     });
     const remaining = amount - sum;
-    document.getElementById("remainingAmount").innerText = `Remaining: ₹${remaining.toFixed(2)}`;
+    remainingAmountEl.innerText = `Remaining: ₹${remaining.toFixed(2)}`;
 }
 
 function updateRemainingPercentage() {
+    const remainingPercentageEl = document.getElementById("remainingPercentage");
+    if (!remainingPercentageEl) return;
+
     const inputs = document.querySelectorAll(".split-value");
     let sum = 0;
     inputs.forEach(input => {
@@ -699,7 +727,7 @@ function updateRemainingPercentage() {
         if (!isNaN(value)) sum += value;
     });
     const remaining = 100 - sum;
-    document.getElementById("remainingPercentage").innerText = `Remaining: ${remaining.toFixed(2)}%`;
+    remainingPercentageEl.innerText = `Remaining: ${remaining.toFixed(2)}%`;
 }
 
 function addExpenseToTable(description, payer, amount, splitDetails) {
@@ -750,6 +778,7 @@ window.updateTotalExpense = updateTotalExpense;
 window.recordPayment = recordPayment;
 window.showToastMessage = showToastMessage;
 window.refreshDashboardMeta = refreshDashboardMeta;
+window.updateSummaryStrip = updateSummaryStrip;
 
 // Update chip input placeholder based on chip presence
 function updateChipPlaceholder() {
@@ -771,4 +800,6 @@ document.addEventListener("DOMContentLoaded", () => {
         chipObserver.observe(chipContainer, { childList: true, subtree: true });
     }
     refreshDashboardMeta();
+    updateTotalExpense();
+    updateSummaryStrip();
 });
