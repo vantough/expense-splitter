@@ -371,6 +371,22 @@ button:active {
     color: #ffffff;
 }
 
+.dark-mode .panel-card {
+    background-color: #1e1e1e;
+    border-color: #333333;
+    color: #ffffff;
+}
+
+.dark-mode .payment-row {
+    color: #ffffff;
+}
+
+.dark-mode .status-tag {
+    color: #bfdbfe;
+    background-color: #10263d;
+    border-color: #1d3f61;
+}
+
 .dark-mode .sticky-action {
     background-color: #1e1e1e;
     border-right: 1px solid #dee2e6;
