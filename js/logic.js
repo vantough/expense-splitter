@@ -530,13 +530,16 @@ function displayPayments() {
 function togglePaymentsVisibility() {
     const paymentsSection = document.getElementById('paymentsList');
     const recordedPaymentsHeader = document.getElementById('recordedPaymentsHeader');
+    const paymentsEmptyState = document.getElementById('paymentsEmptyState');
 
     if (payments.length > 0) {
         paymentsSection.style.display = 'block';
         recordedPaymentsHeader.style.display = 'block';
+        if (paymentsEmptyState) paymentsEmptyState.style.display = 'none';
     } else {
         paymentsSection.style.display = 'none';
         recordedPaymentsHeader.style.display = 'none';
+        if (paymentsEmptyState) paymentsEmptyState.style.display = 'block';
     }
 }
 
@@ -566,6 +569,7 @@ function manageSettlement(balances) {
     debtors.sort((a, b) => b.balance - a.balance);
 
     let settlementDetails = '';
+    const settlementEpsilon = 0.01;
     while (creditors.length > 0 && debtors.length > 0) {
         let creditor = creditors[0];
         let debtor = debtors[0];
@@ -576,11 +580,13 @@ function manageSettlement(balances) {
         creditor.balance -= amount;
         debtor.balance -= amount;
 
-        if (creditor.balance === 0) creditors.shift();
-        if (debtor.balance === 0) debtors.shift();
+        if (creditor.balance <= settlementEpsilon) creditors.shift();
+        if (debtor.balance <= settlementEpsilon) debtors.shift();
     }
 
-    document.getElementById('settlementDetails').innerHTML = settlementDetails || '<p>No settlements needed.</p>';
+    const settlementDetailsNode = document.getElementById('settlementDetails');
+    settlementDetailsNode.innerHTML = settlementDetails;
+    toggleSettlementEmptyState(settlementDetails.trim().length === 0);
 }
 
 function editExpense(index) {
@@ -650,11 +656,14 @@ function updateExpenseTable() {
         row.insertCell(3).innerText = expense.amount ? `₹${expense.amount.toFixed(2)}` : "₹0.00";
         row.insertCell(4).innerText = expense.splitDetails ? JSON.stringify(expense.splitDetails, null, 2) : "No split details provided";
     });
+
+    toggleExpenseTableState();
 }
 
 function deleteExpense(index, row) {
     expenses.splice(index, 1);
     row.remove();
+    toggleExpenseTableState();
     clearBalancesAndSettlement();
     updateTotalExpense();
     refreshDashboardMeta();
@@ -677,6 +686,29 @@ function clearBalancesAndSettlement() {
     const balancesTableBody = document.getElementById("balancesTable").getElementsByTagName("tbody")[0];
     balancesTableBody.innerHTML = "";
     document.getElementById("settlementDetails").innerHTML = "";
+    toggleSettlementEmptyState(true);
+}
+
+function toggleExpenseTableState() {
+    const expenseTable = document.getElementById("expenseTable");
+    const expenseTableEmptyState = document.getElementById("expenseTableEmptyState");
+    const tableHeader = document.getElementById("table-header");
+    const calculateButton = document.getElementById("calculateButton");
+    const totalExpenseSummary = document.getElementById("total-expense-summary");
+
+    const hasExpenses = expenses.length > 0;
+    expenseTable.style.display = hasExpenses ? "block" : "none";
+    if (tableHeader) tableHeader.style.display = hasExpenses ? "block" : "none";
+    if (calculateButton) calculateButton.style.display = hasExpenses ? "block" : "none";
+    if (totalExpenseSummary) totalExpenseSummary.style.display = hasExpenses ? "block" : "none";
+    if (expenseTableEmptyState) expenseTableEmptyState.style.display = hasExpenses ? "none" : "block";
+}
+
+function toggleSettlementEmptyState(isEmpty) {
+    const settlementEmptyState = document.getElementById("settlementEmptyState");
+    const settlementDetails = document.getElementById("settlementDetails");
+    if (settlementEmptyState) settlementEmptyState.style.display = isEmpty ? "block" : "none";
+    if (settlementDetails) settlementDetails.style.display = isEmpty ? "none" : "block";
 }
 
 function updateRemainingAmount() {
@@ -750,6 +782,12 @@ window.updateTotalExpense = updateTotalExpense;
 window.recordPayment = recordPayment;
 window.showToastMessage = showToastMessage;
 window.refreshDashboardMeta = refreshDashboardMeta;
+
+document.addEventListener("DOMContentLoaded", () => {
+    toggleExpenseTableState();
+    togglePaymentsVisibility();
+    toggleSettlementEmptyState(true);
+});
 
 // Update chip input placeholder based on chip presence
 function updateChipPlaceholder() {

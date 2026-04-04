@@ -131,9 +131,27 @@
                     <tbody></tbody>
                 </table>
             </div>
+            <div id="expenseTableEmptyState" class="empty-state-block">
+                <div class="empty-state-icon empty-state-icon-expense">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="42" viewBox="0 -960 960 960" width="42" fill="currentColor">
+                        <path d="M220-160q-24.75 0-42.37-17.63Q160-195.25 160-220v-520q0-24.75 17.63-42.37Q195.25-800 220-800h520q24.75 0 42.37 17.63Q800-764.75 800-740v240h-80v-240H220v520h240v80H220Zm440 0q-24.75 0-42.37-17.63Q600-195.25 600-220v-120H480v-80h120v-120h80v120h120v80H680v120h-20Zm-360-380v-80h340v80H300Zm0 160v-80h220v80H300Z"/>
+                    </svg>
+                </div>
+                <p class="empty-state-title">No expenses added yet</p>
+                <p class="empty-state-subtitle">Create your first expense to populate the table.</p>
+            </div>
             <h5 class="expense-header-secondary" id="recordedPaymentsHeader" style="display: none;">Recorded Payments</h5>
             <div id="paymentsList" style="display: none;">
                 <!-- Payments will be listed here -->
+            </div>
+            <div id="paymentsEmptyState" class="empty-state-block">
+                <div class="empty-state-icon empty-state-icon-payment">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="42" viewBox="0 -960 960 960" width="42" fill="currentColor">
+                        <path d="M280-200q-33 0-56.5-23.5T200-280v-400q0-33 23.5-56.5T280-760h400q33 0 56.5 23.5T760-680v400q0 33-23.5 56.5T680-200H280Zm0-240h400v-80H280v80Zm0 160h400v-80H280v80Zm120-200q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35Z"/>
+                    </svg>
+                </div>
+                <p class="empty-state-title">No payments recorded</p>
+                <p class="empty-state-subtitle">Recorded transactions will appear here.</p>
             </div>
         </div>
         
@@ -170,6 +188,15 @@
                         </div>
                     </h3>
                     <div id="settlementDetails"></div>
+                    <div id="settlementEmptyState" class="empty-state-block empty-state-compact">
+                        <div class="empty-state-icon empty-state-icon-settlement">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="40" viewBox="0 -960 960 960" width="40" fill="currentColor">
+                                <path d="M440-200v-121q-54-12-87-54.5T320-480h80q0 33 23.5 56.5T480-400q33 0 56.5-23.5T560-480q0-33-23.5-56.5T480-560q-66 0-113-47t-47-113q0-55 33-97.5t87-54.5v-88h80v88q54 12 87 54.5t33 97.5h-80q0-33-23.5-56.5T480-800q-33 0-56.5 23.5T400-720q0 33 23.5 56.5T480-640q66 0 113 47t47 113q0 55-33 97.5T520-328v128h-80Z"/>
+                            </svg>
+                        </div>
+                        <p class="empty-state-title">No settlements needed</p>
+                        <p class="empty-state-subtitle">Once balances are uneven, settlement details appear here.</p>
+                    </div>
                 </div>
             </div>
         </div>
