@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- Added for mobile responsiveness -->
     <title>Enhanced Expense Splitter</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="icon" href="https://cdn.jsdelivr.net/gh/vantough/expense-splitter/icon.png" type="image/png">
@@ -61,6 +64,10 @@
             <div class="d-flex justify-content-between align-items-center flex-wrap">
                 <h3 class="expense-header-secondary mb-2 mb-md-0">Add Expense</h3>
                 <span class="status-tag">Expenses: <span id="expenseCountTag">0</span></span>
+            </div>
+            <div id="addExpenseEmptyState" class="empty-state-block empty-state-inline">
+                <p class="empty-state-title mb-1">Start adding names to add expense</p>
+                <p class="empty-state-subtitle">Add at least one participant in the names field to unlock expense entries.</p>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-3 col-sm-6">

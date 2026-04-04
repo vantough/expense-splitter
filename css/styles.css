@@ -1,8 +1,16 @@
 
 body {
+    font-family: 'Inter', sans-serif;
     margin: 10px;
     padding-bottom: 80px; /* Always present to avoid overlap */
     transition: background-color 0.6s, color 0.6s;
+}
+
+button,
+input,
+select,
+textarea {
+    font-family: 'Inter', sans-serif;
 }
 
 .container {
@@ -264,6 +272,13 @@ button:active {
     margin-top: 10px;
 }
 
+.empty-state-inline {
+    display: block;
+    margin: 12px 0 10px;
+    padding: 12px 14px;
+    text-align: left;
+}
+
 .empty-state-icon {
     width: 58px;
     height: 58px;
@@ -408,6 +423,9 @@ button:active {
     cursor: pointer;
     width: 30px;
     height: 30px;
+    border-radius: 999px;
+    background-color: rgba(255, 255, 255, 0.82);
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.28);
     transition: transform 0.6s;
     z-index: 1050
 }
@@ -580,6 +598,11 @@ button:active {
     fill: #ffffff;
 }
 
+.dark-mode .toggle-icon {
+    background-color: rgba(15, 23, 42, 0.78);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.55);
+}
+
 .dark-mode,
 .dark-mode .table,
 .dark-mode .sticky-action,
@@ -732,7 +755,7 @@ svg:hover {
 }
 
 .expense-header-title {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Inter', sans-serif;
     font-weight: bold;
     margin-top: 50px; /* Adds spacing below the navbar */
     background: linear-gradient(to right, #00c6ff, #0072ff, #a855f7, #ff2e63); /* Bright multi-color gradient */
@@ -743,7 +766,7 @@ svg:hover {
 }
 
 .expense-header-secondary {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Inter', sans-serif;
     font-weight: bold;
     color: #333; /* Dark text color without gradient */
 }

@@ -11,6 +11,8 @@ function refreshDashboardMeta() {
     if (participantTag) participantTag.innerText = participantCount;
     if (expenseTag) expenseTag.innerText = expenses.length;
     if (paymentTag) paymentTag.innerText = payments.length;
+
+    toggleAddExpenseEmptyState();
 }
 
 function showToastMessage(message, type = "error") {
@@ -524,17 +526,16 @@ function displayPayments() {
 function togglePaymentsVisibility() {
     const paymentsSection = document.getElementById('paymentsList');
     const recordedPaymentsHeader = document.getElementById('recordedPaymentsHeader');
-    const paymentsEmptyState = document.getElementById('paymentsEmptyState');
 
     if (payments.length > 0) {
         paymentsSection.style.display = 'block';
         recordedPaymentsHeader.style.display = 'block';
-        if (paymentsEmptyState) paymentsEmptyState.style.display = 'none';
     } else {
         paymentsSection.style.display = 'none';
         recordedPaymentsHeader.style.display = 'none';
-        if (paymentsEmptyState) paymentsEmptyState.style.display = 'block';
     }
+
+    toggleExpenseDetailsEmptyStates();
 }
 
 function removePayment(index) {
@@ -685,7 +686,6 @@ function clearBalancesAndSettlement() {
 
 function toggleExpenseTableState() {
     const expenseTable = document.getElementById("expenseTable");
-    const expenseTableEmptyState = document.getElementById("expenseTableEmptyState");
     const tableHeader = document.getElementById("table-header");
     const calculateButton = document.getElementById("calculateButton");
     const totalExpenseSummary = document.getElementById("total-expense-summary");
@@ -695,7 +695,8 @@ function toggleExpenseTableState() {
     if (tableHeader) tableHeader.style.display = hasExpenses ? "block" : "none";
     if (calculateButton) calculateButton.style.display = hasExpenses ? "block" : "none";
     if (totalExpenseSummary) totalExpenseSummary.style.display = hasExpenses ? "block" : "none";
-    if (expenseTableEmptyState) expenseTableEmptyState.style.display = hasExpenses ? "none" : "block";
+
+    toggleExpenseDetailsEmptyStates();
 }
 
 function toggleSettlementEmptyState(isEmpty) {
@@ -715,6 +716,27 @@ function handleStickyTopNav() {
 
     stickyNav.classList.toggle("visible", shouldShow);
     document.body.classList.toggle("sticky-nav-active", shouldShow);
+}
+
+function toggleExpenseDetailsEmptyStates() {
+    const expenseTableEmptyState = document.getElementById("expenseTableEmptyState");
+    const paymentsEmptyState = document.getElementById("paymentsEmptyState");
+    const hasAnyExpenseDetailsData = expenses.length > 0 || payments.length > 0;
+
+    if (expenseTableEmptyState) {
+        expenseTableEmptyState.style.display = hasAnyExpenseDetailsData ? "none" : "block";
+    }
+    if (paymentsEmptyState) {
+        paymentsEmptyState.style.display = hasAnyExpenseDetailsData ? "none" : "block";
+    }
+}
+
+function toggleAddExpenseEmptyState() {
+    const addExpenseEmptyState = document.getElementById("addExpenseEmptyState");
+    if (!addExpenseEmptyState) return;
+
+    const participantCount = document.querySelectorAll("#chipContainer .chip").length;
+    addExpenseEmptyState.style.display = participantCount > 0 ? "none" : "block";
 }
 
 function updateRemainingAmount() {
@@ -740,46 +762,6 @@ function updateRemainingPercentage() {
     document.getElementById("remainingPercentage").innerText = `Remaining: ${remaining.toFixed(2)}%`;
 }
 
-function addExpenseToTable(description, payer, amount, splitDetails) {
-    const tableBody = document.getElementById("expensesTable").getElementsByTagName("tbody")[0];
-    
-    // Check if tableBody is properly targeted
-    if (!tableBody) {
-        console.error("Table body not found");
-        return;
-    }
-
-    const row = tableBody.insertRow();
-
-    const actionCell = row.insertCell(0);
-    actionCell.className = "sticky-action";
-
-    // Edit and Delete buttons
-    const editButton = document.createElement("button");
-    editButton.className = "icon-btn";
-    editButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#EAC452"><path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"/></svg>';
-    editButton.onclick = function () {
-        editExpense(row.sectionRowIndex);
-    };
-
-    const deleteButton = document.createElement("button");
-    deleteButton.className = "icon-btn";
-    deleteButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#BB271A"><path d="M312-144q-29.7 0-50.85-21.15Q240-186.3 240-216v-480h-48v-72h192v-48h192v48h192v72h-48v479.57Q720-186 698.85-165T648-144H312Zm336-552H312v480h336v-480ZM384-288h72v-336h-72v336Zm120 0h72v-336h-72v336ZM312-696v480-480Z"/></svg>';
-    deleteButton.onclick = function () {
-        deleteExpense(row.sectionRowIndex, row);
-    };
-
-    actionCell.appendChild(editButton);
-    actionCell.appendChild(deleteButton);
-
-    row.insertCell(1).innerText = description || "No description provided";
-    row.insertCell(2).innerText = payer || "No payer selected";
-    row.insertCell(3).innerText = amount ? `₹${amount.toFixed(2)}` : "₹0.00";
-    row.insertCell(4).innerText = splitDetails
-        ? JSON.stringify(splitDetails, null, 2)
-        : "No split details provided";
-}
-
 // Export functions if needed
 window.addExpense = addExpense;
 window.calculateBalances = calculateBalances;
@@ -793,6 +775,7 @@ document.addEventListener("DOMContentLoaded", () => {
     toggleExpenseTableState();
     togglePaymentsVisibility();
     toggleSettlementEmptyState(true);
+    toggleAddExpenseEmptyState();
     handleStickyTopNav();
     window.addEventListener("scroll", handleStickyTopNav, { passive: true });
 });

@@ -6,3 +6,4 @@
 - Keep primary action buttons (like calculate/submit) above long lists/tables or sticky within the viewport so they remain discoverable without extra scrolling.
 - Any UI style change must include dark-mode contrast verification (panel backgrounds, body text, links, tags, and table content) before merging.
 - When adding empty-state UIs, wire visibility updates into all data mutation paths (`add`, `remove`, and initial load) so placeholders never show alongside populated data.
+- If multiple empty states belong to the same visual section, define and use one shared toggle rule so they disappear together when any qualifying data exists.
