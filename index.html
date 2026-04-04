@@ -108,6 +108,15 @@
             <div class="table-header" id="table-header" style="display: none;">
             <h3 class="expense-header-secondary">Expense Details</h3>
             </div>
+            <div class="actions-container">
+                <button class="btn btn-success" id="calculateButton" style="display: none;" onclick="calculateBalances()">
+                    <span>Calculate Balances & Split Details</span>
+                </button>
+                <div class="total-expense-summary" id="total-expense-summary" style="display: none;">
+                    <span class="total-expense-label">Total Expense:</span>
+                    <span id="totalExpense">₹0.00</span>
+                </div>
+            </div>
             <div class="table-responsive" id="expenseTable" style="display: none;">
                 <table class="table table-bordered" id="expensesTable">
                     <thead class="thead-light">
@@ -125,15 +134,6 @@
             <h5 class="expense-header-secondary" id="recordedPaymentsHeader" style="display: none;">Recorded Payments</h5>
             <div id="paymentsList" style="display: none;">
                 <!-- Payments will be listed here -->
-            </div>
-            <div class="actions-container">
-                <button class="btn btn-success" id="calculateButton" style="display: none;" onclick="calculateBalances()">
-                    <span>Calculate Balances & Split Details</span>
-                </button>
-                <div class="total-expense-summary" id="total-expense-summary" style="display: none;">
-                    <span class="total-expense-label">Total Expense:</span>
-                    <span id="totalExpense">₹0.00</span>
-                </div>
             </div>
         </div>
         

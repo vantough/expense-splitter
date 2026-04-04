@@ -214,6 +214,11 @@ button:active {
     justify-content: space-between;
     align-items: center;
     margin-top: 5px;
+    position: sticky;
+    top: 8px;
+    z-index: 3;
+    background-color: inherit;
+    padding: 6px 0;
 }
 
 .total-expense-summary {
@@ -798,6 +803,7 @@ svg:hover {
     padding: 16px;
     margin-bottom: 8px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    font-family: inherit;
 }
 
 .status-tag {
@@ -811,4 +817,5 @@ svg:hover {
     color: #20507a;
     background-color: #eef6ff;
     border: 1px solid #cfe6ff;
+    font-family: inherit;
 }
