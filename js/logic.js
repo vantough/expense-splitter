@@ -749,6 +749,7 @@ window.manageSettlement = manageSettlement;
 window.updateTotalExpense = updateTotalExpense;
 window.recordPayment = recordPayment;
 window.showToastMessage = showToastMessage;
+window.refreshDashboardMeta = refreshDashboardMeta;
 
 // Update chip input placeholder based on chip presence
 function updateChipPlaceholder() {
@@ -763,10 +764,11 @@ function updateChipPlaceholder() {
 document.addEventListener("DOMContentLoaded", () => {
     const chipContainer = document.getElementById("chipContainer");
     if (chipContainer) {
-        chipContainer.addEventListener("DOMSubtreeModified", () => {
+        const chipObserver = new MutationObserver(() => {
             updateChipPlaceholder();
             refreshDashboardMeta();
         });
+        chipObserver.observe(chipContainer, { childList: true, subtree: true });
     }
     refreshDashboardMeta();
 });
