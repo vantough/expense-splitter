@@ -2,6 +2,17 @@ let expenses = [];
 let payments = [];  
 let hasCalculated = false; // Track if "calculate" has been clicked at least once.
 
+function refreshDashboardMeta() {
+    const participantCount = document.querySelectorAll("#chipContainer .chip").length;
+    const participantTag = document.getElementById("participantCountTag");
+    const expenseTag = document.getElementById("expenseCountTag");
+    const paymentTag = document.getElementById("paymentCountTag");
+
+    if (participantTag) participantTag.innerText = participantCount;
+    if (expenseTag) expenseTag.innerText = expenses.length;
+    if (paymentTag) paymentTag.innerText = payments.length;
+}
+
 function showToastMessage(message, type = "error") {
     const toast = document.createElement("div");
     toast.className = `toast-message ${type}`;
@@ -291,6 +302,7 @@ function addExpense() {
     showToastMessage("Expense added successfully.", "success");
     addExpenseToTable(description, payer, amount, splitDetails);
     updateTotalExpense();
+    refreshDashboardMeta();
 
 
     const elementIds = ["expenseTable", "calculateButton", "total-expense-summary", "table-header"];
@@ -424,6 +436,7 @@ function recordPayment() {
     payments.push(payment);
 
     displayPayments();
+    refreshDashboardMeta();
     updateBalances(payer, payee, amount);
 
     // Clear the form fields after recording payment
@@ -530,6 +543,7 @@ function togglePaymentsVisibility() {
 function removePayment(index) {
     payments.splice(index, 1);
     displayPayments();
+    refreshDashboardMeta();
 
     if (hasCalculated) {
         calculateBalances();
@@ -594,6 +608,7 @@ function editExpense(index) {
     // Remove the expense from the array and update the table row indexes
     expenses.splice(index, 1);
     updateExpenseTable();
+    refreshDashboardMeta();
 
     clearBalancesAndSettlement();
     updateTotalExpense();
@@ -642,6 +657,7 @@ function deleteExpense(index, row) {
     row.remove();
     clearBalancesAndSettlement();
     updateTotalExpense();
+    refreshDashboardMeta();
 
     if (hasCalculated) {
         calculateBalances();
@@ -697,9 +713,6 @@ function addExpenseToTable(description, payer, amount, splitDetails) {
 
     const row = tableBody.insertRow();
 
-    // Index of the current expense (last one added)
-    const rowIndex = expenses.length - 1;
-
     const actionCell = row.insertCell(0);
     actionCell.className = "sticky-action";
 
@@ -708,14 +721,14 @@ function addExpenseToTable(description, payer, amount, splitDetails) {
     editButton.className = "icon-btn";
     editButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#EAC452"><path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"/></svg>';
     editButton.onclick = function () {
-        editExpense(rowIndex);
+        editExpense(row.sectionRowIndex);
     };
 
     const deleteButton = document.createElement("button");
     deleteButton.className = "icon-btn";
     deleteButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#BB271A"><path d="M312-144q-29.7 0-50.85-21.15Q240-186.3 240-216v-480h-48v-72h192v-48h192v48h192v72h-48v479.57Q720-186 698.85-165T648-144H312Zm336-552H312v480h336v-480ZM384-288h72v-336h-72v336Zm120 0h72v-336h-72v336ZM312-696v480-480Z"/></svg>';
     deleteButton.onclick = function () {
-        deleteExpense(rowIndex, row);
+        deleteExpense(row.sectionRowIndex, row);
     };
 
     actionCell.appendChild(editButton);
@@ -736,6 +749,7 @@ window.manageSettlement = manageSettlement;
 window.updateTotalExpense = updateTotalExpense;
 window.recordPayment = recordPayment;
 window.showToastMessage = showToastMessage;
+window.refreshDashboardMeta = refreshDashboardMeta;
 
 // Update chip input placeholder based on chip presence
 function updateChipPlaceholder() {
@@ -750,6 +764,11 @@ function updateChipPlaceholder() {
 document.addEventListener("DOMContentLoaded", () => {
     const chipContainer = document.getElementById("chipContainer");
     if (chipContainer) {
-        chipContainer.addEventListener("DOMSubtreeModified", updateChipPlaceholder);
+        const chipObserver = new MutationObserver(() => {
+            updateChipPlaceholder();
+            refreshDashboardMeta();
+        });
+        chipObserver.observe(chipContainer, { childList: true, subtree: true });
     }
+    refreshDashboardMeta();
 });

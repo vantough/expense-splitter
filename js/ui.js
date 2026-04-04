@@ -2,6 +2,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const chipInput = document.getElementById("chipInput");
     const chipContainer = document.getElementById("chipContainer");
     const names = [];
+
+    function refreshDashboardCountTags() {
+        if (typeof window.refreshDashboardMeta === "function") {
+            window.refreshDashboardMeta();
+        }
+    }
     
     // Use both `input` and `keydown` events to handle chip creation on both mobile and desktop
     chipInput.addEventListener("input", function () {
@@ -41,6 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             updatePayerOptions(); // Refresh the "payer" dropdown when a chip is added
             updatePayerAndPayeeOptions(); // Refresh the "payer" and "payee" dropdowns when a chip is added
+            refreshDashboardCountTags();
         }
         else {
             showToastMessage("Duplicate or invalid name.", "warning");
@@ -68,6 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 chipElement.remove();
                 updatePayerOptions(); // Refresh the "payer" dropdown when a chip is removed
                 updatePayerAndPayeeOptions(); // Refresh the "payer" and "payee" dropdowns when a chip is added
+                refreshDashboardCountTags();
             });
         }
     }
@@ -75,7 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function removeLastChip() {
         const lastChip = chipContainer.querySelector(".chip:last-child");
         if (lastChip) {
-            const name = lastChip.innerText.trim();
+            const name = lastChip.textContent.replace("×", "").trim();
             removeChip(name, lastChip);
         }
     }

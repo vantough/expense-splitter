@@ -214,6 +214,11 @@ button:active {
     justify-content: space-between;
     align-items: center;
     margin-top: 5px;
+    position: sticky;
+    top: 8px;
+    z-index: 3;
+    background-color: inherit;
+    padding: 6px 0;
 }
 
 .total-expense-summary {
@@ -364,6 +369,22 @@ button:active {
 .dark-mode .table {
     background-color: #1e1e1e;
     color: #ffffff;
+}
+
+.dark-mode .panel-card {
+    background-color: #1e1e1e;
+    border-color: #333333;
+    color: #ffffff;
+}
+
+.dark-mode .payment-row {
+    color: #ffffff;
+}
+
+.dark-mode .status-tag {
+    color: #bfdbfe;
+    background-color: #10263d;
+    border-color: #1d3f61;
 }
 
 .dark-mode .sticky-action {
@@ -786,4 +807,31 @@ svg:hover {
     #spotify-card a#spotify-link {
         font-size: 0.75em;
     }
+}
+
+/* =========================================
+   Dashboard Panels & Tags (Additive)
+   ========================================= */
+.panel-card {
+    background-color: #ffffff;
+    border: 1px solid #e7e7e7;
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    font-family: inherit;
+}
+
+.status-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #20507a;
+    background-color: #eef6ff;
+    border: 1px solid #cfe6ff;
+    font-family: inherit;
 }
