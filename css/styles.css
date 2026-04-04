@@ -9,6 +9,60 @@ body {
     max-width: 1200px;
 }
 
+.sticky-top-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 18px;
+    background: rgba(255, 255, 255, 0.96);
+    border-bottom: 1px solid #dbe0e6;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.1);
+    transform: translateY(-110%);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.sticky-top-nav.visible {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.sticky-top-nav-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.sticky-top-nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nav-icon-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid #dbe0e6;
+    background-color: #f8fafc;
+    color: #334155;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+body.sticky-nav-active #app {
+    padding-top: 44px;
+}
+
 #paymentForm {
     display: block; /* Initially show the form */
 }
@@ -430,6 +484,22 @@ button:active {
 
 .dark-mode .payment-row {
     color: #ffffff;
+}
+
+.dark-mode .sticky-top-nav {
+    background: rgba(17, 24, 39, 0.96);
+    border-bottom-color: #334155;
+    box-shadow: 0 4px 14px rgba(2, 6, 23, 0.45);
+}
+
+.dark-mode .sticky-top-nav-title {
+    color: #e2e8f0;
+}
+
+.dark-mode .nav-icon-btn {
+    border-color: #475569;
+    background-color: #1e293b;
+    color: #cbd5e1;
 }
 
 .dark-mode .empty-state-block {

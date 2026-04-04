@@ -300,15 +300,9 @@ function addExpense() {
 
     expenses.push({ description, payer, amount, splitDetails });
     showToastMessage("Expense added successfully.", "success");
-    addExpenseToTable(description, payer, amount, splitDetails);
+    updateExpenseTable();
     updateTotalExpense();
     refreshDashboardMeta();
-
-
-    const elementIds = ["expenseTable", "calculateButton", "total-expense-summary", "table-header"];
-    elementIds.forEach(id => {
-        document.getElementById(id).style.display = "block";
-    });
 
     clearExpenseForm();
 
@@ -711,6 +705,18 @@ function toggleSettlementEmptyState(isEmpty) {
     if (settlementDetails) settlementDetails.style.display = isEmpty ? "none" : "block";
 }
 
+function handleStickyTopNav() {
+    const stickyNav = document.getElementById("stickyTopNav");
+    const appContainer = document.getElementById("app");
+    if (!stickyNav || !appContainer) return;
+
+    const threshold = Math.max(80, appContainer.offsetTop + 20);
+    const shouldShow = window.scrollY > threshold;
+
+    stickyNav.classList.toggle("visible", shouldShow);
+    document.body.classList.toggle("sticky-nav-active", shouldShow);
+}
+
 function updateRemainingAmount() {
     const amount = parseFloat(document.getElementById("amount").value) || 0;
     const inputs = document.querySelectorAll(".split-value");
@@ -787,6 +793,8 @@ document.addEventListener("DOMContentLoaded", () => {
     toggleExpenseTableState();
     togglePaymentsVisibility();
     toggleSettlementEmptyState(true);
+    handleStickyTopNav();
+    window.addEventListener("scroll", handleStickyTopNav, { passive: true });
 });
 
 // Update chip input placeholder based on chip presence
