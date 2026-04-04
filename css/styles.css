@@ -232,13 +232,24 @@ button:active {
 
 .chip .close-btn {
     background: none;
+    display: inline-flex;
     align-items: center;
+    justify-content: center;
     border: none;
     cursor: pointer;
-    margin-left: 4px;
+    margin-left: 6px;
+    width: 22px;
+    height: 22px;
     font-size: 1.2em;
-    line-height: 0;
+    line-height: 1;
     color: inherit;
+    border-radius: 999px;
+}
+
+.chip .close-btn:hover,
+.chip .close-btn:focus-visible {
+    background-color: rgba(0, 0, 0, 0.12);
+    outline: none;
 }
 
 .chip-input {
@@ -403,7 +414,6 @@ button:active {
 }
 
 .download-icon {
-    cursor: pointer;
     vertical-align: middle;
     width: 30px;
     height: 30px;
@@ -420,14 +430,37 @@ button:active {
     position: fixed;
     bottom: 40px;
     left: 40px;
-    cursor: pointer;
     width: 30px;
     height: 30px;
+    transition: transform 0.6s;
+    z-index: 1050
+}
+
+.icon-action-btn {
+    border: none;
+    background: transparent;
+    padding: 6px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 0;
+}
+
+.icon-action-btn:hover,
+.icon-action-btn:focus-visible {
+    background-color: rgba(98, 98, 98, 0.1);
+    outline: none;
+}
+
+.dark-mode-toggle-btn {
+    position: fixed;
+    bottom: 34px;
+    left: 34px;
     border-radius: 999px;
     background-color: rgba(255, 255, 255, 0.82);
     box-shadow: 0 10px 24px rgba(15, 23, 42, 0.28);
-    transition: transform 0.6s;
-    z-index: 1050
+    z-index: 1050;
 }
 
 /* =========================================
@@ -598,7 +631,7 @@ button:active {
     fill: #ffffff;
 }
 
-.dark-mode .toggle-icon {
+.dark-mode .dark-mode-toggle-btn {
     background-color: rgba(15, 23, 42, 0.78);
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.55);
 }
@@ -681,7 +714,7 @@ button:active {
         /* padding-bottom removed */
     }
 
-    .toggle-icon {
+    .dark-mode-toggle-btn {
         position: fixed;
         bottom: 25px;
         left: 25px;
@@ -695,11 +728,10 @@ button:active {
         align-items: center;
         justify-content: center;
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-        cursor: pointer;
         transition: transform 0.6s ease, background-color 0.6s ease;
     }
 
-    .toggle-icon svg {
+    .dark-mode-toggle-btn .toggle-icon {
         width: 24px;
         height: 24px;
         fill: #333333;
@@ -776,12 +808,6 @@ svg:hover {
     display: inline-block;
 }
 
-.icon-container:hover {
-    background-color: rgba(98, 98, 98, 0.1); /* Light highlight */
-    border-radius: 6px;
-    transition: background-color 0.2s ease-in-out;
-}
-
 .tooltip {
     visibility: hidden;
     background-color: black;
@@ -812,7 +838,8 @@ svg:hover {
     border-color: black transparent transparent transparent;
 }
 
-.icon-container:hover .tooltip {
+.icon-container:hover .tooltip,
+.icon-container:focus-within .tooltip {
     visibility: visible;
     opacity: 1;
 }

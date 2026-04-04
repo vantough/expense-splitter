@@ -39,8 +39,16 @@ document.addEventListener("DOMContentLoaded", () => {
             // Create a close button for each chip
             const closeButton = document.createElement("button");
             closeButton.classList.add("close-btn");
+            closeButton.type = "button";
+            closeButton.setAttribute("aria-label", `Remove ${name}`);
             closeButton.innerHTML = "&times;";
             closeButton.onclick = () => removeChip(name, chip);
+            closeButton.addEventListener("keydown", (event) => {
+                if (event.key === "Backspace" || event.key === "Delete" || event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    removeChip(name, chip);
+                }
+            });
 
             chip.appendChild(closeButton);
             chipContainer.insertBefore(chip, chipInput);

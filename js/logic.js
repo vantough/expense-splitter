@@ -86,22 +86,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (!tooltip) return;
 
-        icon.addEventListener("mouseenter", () => {
+        const showTooltip = () => {
             if (!icon.classList.contains("tooltip-disabled")) {
                 tooltip.style.visibility = "visible";
                 tooltip.style.opacity = "1";
             }
-        });
+        };
 
-        icon.addEventListener("mouseleave", () => {
+        const hideTooltip = () => {
             tooltip.style.visibility = "hidden";
             tooltip.style.opacity = "0";
+        };
+
+        icon.addEventListener("mouseenter", showTooltip);
+        icon.addEventListener("focusin", showTooltip);
+
+        icon.addEventListener("mouseleave", () => {
+            hideTooltip();
             icon.classList.remove("tooltip-disabled"); // Allow tooltip to show again
         });
 
+        icon.addEventListener("focusout", hideTooltip);
+
         icon.addEventListener("click", () => {
-            tooltip.style.visibility = "hidden";
-            tooltip.style.opacity = "0";
+            hideTooltip();
             icon.classList.add("tooltip-disabled"); // Prevent tooltip from showing again until hover exit
         });
     });
