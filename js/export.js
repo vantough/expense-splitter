@@ -14,15 +14,26 @@ function exportToCSV() {
     csvContent += '\n';
 
     // Add each expense row
+    const totalSplitByParticipant = names.reduce((accumulator, name) => {
+        accumulator[name] = 0;
+        return accumulator;
+    }, {});
+
     expenses.forEach(expense => {
         const { description, payer, amount, splitDetails } = expense;
         csvContent += `${description},${payer},${amount}`;
 
         names.forEach(name => {
-            csvContent += `,${splitDetails[name] || 0}`;
+            const share = splitDetails[name] || 0;
+            totalSplitByParticipant[name] += share;
+            csvContent += `,${share}`;
         });
         csvContent += '\n';
     });
+
+    if (names.length > 0) {
+        csvContent += `Total split,,,${names.map(name => totalSplitByParticipant[name].toFixed(2)).join(',')}\n`;
+    }
 
         // Add recorded payments
     if (payments.length > 0) {
@@ -80,7 +91,7 @@ function copySettlementDetailsAsText() {
 
         rows.forEach(row => {
             const columns = row.querySelectorAll("td");
-            if (columns.length >= 4) {
+            if (columns.length >= 5) {
                 const description = columns[1].innerText.trim();
                 const payer = columns[2].innerText.trim();
                 const amount = columns[3].innerText.trim();
@@ -156,4 +167,3 @@ function fallbackCopyText(text) {
 // Expose the function to be accessible globally
 window.exportToCSV = exportToCSV;
 window.copySettlementDetailsAsText = copySettlementDetailsAsText;
-

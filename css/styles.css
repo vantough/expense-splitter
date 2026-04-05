@@ -397,6 +397,19 @@ button:active {
     font-weight: bold;
 }
 
+.metric-tag {
+    display: inline-flex;
+    margin-left: 6px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #20507a;
+    background-color: #eef6ff;
+    border: 1px solid #cfe6ff;
+    vertical-align: middle;
+}
+
 .remaining {
     text-align: right;
     font-weight: bold;
@@ -631,6 +644,12 @@ button:active {
     color: #ff6666;
 }
 
+.dark-mode .metric-tag {
+    color: #9fd2ff;
+    background-color: #13263d;
+    border-color: #284e76;
+}
+
 .dark-mode hr {
     background-color: #ffffff;
     opacity: 0.5;
@@ -655,6 +674,7 @@ button:active {
 .dark-mode .balance-zero,
 .dark-mode .balance-positive,
 .dark-mode .balance-negative,
+.dark-mode .metric-tag,
 .dark-mode hr,
 .dark-mode .recordpayment-icon path {
     transition: all 0.6s ease-in-out;

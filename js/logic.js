@@ -392,7 +392,16 @@ function calculateBalances() {
     );
 
     let balances = {};
-    names.forEach(name => balances[name] = 0);
+    let participantSummary = {};
+    names.forEach(name => {
+        balances[name] = 0;
+        participantSummary[name] = {
+            individualSplit: 0,
+            transactionCount: 0,
+            paidAmount: 0,
+            paymentCount: 0
+        };
+    });
 
     // Calculate the net balance
     expenses.forEach(expense => {
@@ -400,7 +409,24 @@ function calculateBalances() {
         const amount = expense.amount;
         const splitDetails = expense.splitDetails;
 
+        if (participantSummary[payer]) {
+            participantSummary[payer].paidAmount += amount;
+            participantSummary[payer].paymentCount += 1;
+        }
+
         for (const [name, share] of Object.entries(splitDetails)) {
+            if (!participantSummary[name]) {
+                participantSummary[name] = {
+                    individualSplit: 0,
+                    transactionCount: 0,
+                    paidAmount: 0,
+                    paymentCount: 0
+                };
+            }
+
+            participantSummary[name].individualSplit += share;
+            participantSummary[name].transactionCount += 1;
+
             if (name === payer) {
                 balances[name] += amount - share;
             } else {
@@ -422,7 +448,17 @@ function calculateBalances() {
         const row = tableBody.insertRow();
         row.insertCell(0).innerText = name;
 
-        const balanceCell = row.insertCell(1);
+        const splitCell = row.insertCell(1);
+        const splitValue = participantSummary[name]?.individualSplit || 0;
+        const transactionCount = participantSummary[name]?.transactionCount || 0;
+        splitCell.innerHTML = `₹${splitValue.toFixed(2)} <span class="metric-tag">${transactionCount} ${transactionCount === 1 ? 'txn' : 'txns'}</span>`;
+
+        const paidCell = row.insertCell(2);
+        const paidAmount = participantSummary[name]?.paidAmount || 0;
+        const paymentCount = participantSummary[name]?.paymentCount || 0;
+        paidCell.innerHTML = `₹${paidAmount.toFixed(2)} <span class="metric-tag">${paymentCount} ${paymentCount === 1 ? 'payment' : 'payments'}</span>`;
+
+        const balanceCell = row.insertCell(3);
         balanceCell.innerText = `₹${balance.toFixed(2)}`;
         
         // Color coding
@@ -540,7 +576,9 @@ function updateBalances(payer, payee, amount) {
     for (const [name, balance] of Object.entries(balances)) {
         const row = tableBody.insertRow();
         row.insertCell(0).innerText = name;
-        const balanceCell = row.insertCell(1);
+        row.insertCell(1).innerHTML = `₹0.00 <span class="metric-tag">0 txns</span>`;
+        row.insertCell(2).innerHTML = `₹0.00 <span class="metric-tag">0 payments</span>`;
+        const balanceCell = row.insertCell(3);
         balanceCell.innerText = `₹${balance.toFixed(2)}`;
         balanceCell.classList.add(balance > 0 ? 'balance-positive' : (balance < 0 ? 'balance-negative' : 'balance-zero'));
     }
