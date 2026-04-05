@@ -135,15 +135,6 @@ button:active {
     transform: scale(0.98);
 }
 
-/* Calculate Button */
-#calculateButton {
-    font-size: 16px;
-    position: relative;
-    width: auto;
-    padding: 10px 20px;
-    transition: all 0.6s ease;
-}
-
 /* Inputs and Selects */
 .form-group {
     width: 100%;
@@ -717,23 +708,6 @@ button:active {
 
     .form-row .form-group {
         margin-bottom: 5px;
-    }
-
-    #calculateButton {
-        font-size: 14px;
-        padding: 10px 15px;
-        transition: all 0.6s ease;
-    }
-
-    #calculateButton span {
-        position: absolute;
-        left: -9999px; /* Hide original text off-screen */
-    }
-
-    #calculateButton::after {
-        content: "Calculate";
-        position: relative;
-        visibility: visible;
     }
 
     #balanceandsplit .table-responsive {

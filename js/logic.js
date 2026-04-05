@@ -1,6 +1,5 @@
 let expenses = [];
 let payments = [];  
-let hasCalculated = false; // Track if "calculate" has been clicked at least once.
 const APP_STATE_KEY = "expenseSplitterStateV1";
 
 function getParticipantNames() {
@@ -18,8 +17,7 @@ function persistAppState() {
         const state = {
             names: getParticipantNames(),
             expenses,
-            payments,
-            hasCalculated
+            payments
         };
         localStorage.setItem(APP_STATE_KEY, JSON.stringify(state));
     } catch (error) {
@@ -41,19 +39,11 @@ function restoreAppState() {
 
         expenses = Array.isArray(parsedState.expenses) ? parsedState.expenses : [];
         payments = Array.isArray(parsedState.payments) ? parsedState.payments : [];
-        hasCalculated = Boolean(parsedState.hasCalculated);
-
         updateExpenseTable();
         updateTotalExpense();
         displayPayments();
         refreshDashboardMeta();
-
-        if (hasCalculated && (expenses.length > 0 || payments.length > 0)) {
-            calculateBalances();
-        } else {
-            clearBalancesAndSettlement();
-            document.getElementById("balanceandsplit").style.display = "none";
-        }
+        recalculateAndRenderBalances();
     } catch (error) {
         console.error("Unable to restore app state.", error);
     }
@@ -374,10 +364,7 @@ function addExpense() {
     clearExpenseForm();
     persistAppState();
 
-    // If already calculated once before, auto-update balances
-    if (hasCalculated) {
-        calculateBalances();
-    }
+    recalculateAndRenderBalances();
 }
 
 function updateTotalExpense() {
@@ -484,8 +471,6 @@ function calculateBalances() {
     // Show the balances & split details section
     document.getElementById("balanceandsplit").style.display = "block";
 
-    // Mark that calculation is done at least once
-    hasCalculated = true;
     persistAppState();
 }
 
@@ -544,54 +529,14 @@ function recordPayment() {
 
     displayPayments();
     refreshDashboardMeta();
-    updateBalances(payer, payee, amount);
+    recalculateAndRenderBalances();
 
     // Clear the form fields after recording payment
     resetPaymentForm();
 
-    // If calculation has been done before, auto-update balances
-    if (hasCalculated) {
-        calculateBalances();
-    }
-
     showToastMessage("Payment recorded successfully!", "success");
     persistAppState();
 }
-
-function updateBalances(payer, payee, amount) {
-    let balances = {};
-
-    // Update balances based on the payer and payee
-    expenses.forEach(expense => {
-        const splitDetails = expense.splitDetails;
-
-        // If payer is making a payment, adjust their balance
-        if (splitDetails[payer]) {
-            balances[payer] = (balances[payer] || 0) - amount;
-        }
-
-        // If payee is receiving the payment, adjust their balance
-        if (splitDetails[payee]) {
-            balances[payee] = (balances[payee] || 0) + amount;
-        }
-    });
-
-    // After payment, update the balance for each user (either reduce or increase)
-    const tableBody = document.getElementById('balancesTable').getElementsByTagName('tbody')[0];
-    tableBody.innerHTML = '';
-
-    // Recalculate balances and display them
-    for (const [name, balance] of Object.entries(balances)) {
-        const row = tableBody.insertRow();
-        row.insertCell(0).innerText = name;
-        row.insertCell(1).innerHTML = `₹0.00 <span class="metric-tag">0 txns</span>`;
-        row.insertCell(2).innerHTML = `₹0.00 <span class="metric-tag">0 payments</span>`;
-        const balanceCell = row.insertCell(3);
-        balanceCell.innerText = `₹${balance.toFixed(2)}`;
-        balanceCell.classList.add(balance > 0 ? 'balance-positive' : (balance < 0 ? 'balance-negative' : 'balance-zero'));
-    }
-}
-
 
 function resetPaymentForm() {
     const payerField = document.getElementById('paymentPayer');
@@ -656,10 +601,7 @@ function removePayment(index) {
     payments.splice(index, 1);
     displayPayments();
     refreshDashboardMeta();
-
-    if (hasCalculated) {
-        calculateBalances();
-    }
+    recalculateAndRenderBalances();
 
     persistAppState();
 }
@@ -729,10 +671,7 @@ function editExpense(index) {
 
     clearBalancesAndSettlement();
     updateTotalExpense();
-
-    if (hasCalculated) {
-        calculateBalances();
-    }
+    recalculateAndRenderBalances();
 
     persistAppState();
 }
@@ -780,10 +719,7 @@ function deleteExpense(index, row) {
     clearBalancesAndSettlement();
     updateTotalExpense();
     refreshDashboardMeta();
-
-    if (hasCalculated) {
-        calculateBalances();
-    }
+    recalculateAndRenderBalances();
 
     persistAppState();
 }
@@ -807,13 +743,11 @@ function clearBalancesAndSettlement() {
 function toggleExpenseTableState() {
     const expenseTable = document.getElementById("expenseTable");
     const tableHeader = document.getElementById("table-header");
-    const calculateButton = document.getElementById("calculateButton");
     const totalExpenseSummary = document.getElementById("total-expense-summary");
 
     const hasExpenses = expenses.length > 0;
     expenseTable.style.display = hasExpenses ? "block" : "none";
     if (tableHeader) tableHeader.style.display = hasExpenses ? "block" : "none";
-    if (calculateButton) calculateButton.style.display = hasExpenses ? "block" : "none";
     if (totalExpenseSummary) totalExpenseSummary.style.display = hasExpenses ? "block" : "none";
 
     toggleExpenseDetailsEmptyStates();
@@ -880,6 +814,17 @@ function updateRemainingPercentage() {
     });
     const remaining = 100 - sum;
     document.getElementById("remainingPercentage").innerText = `Remaining: ${remaining.toFixed(2)}%`;
+}
+
+function recalculateAndRenderBalances() {
+    const hasBalanceData = expenses.length > 0 || payments.length > 0;
+    if (!hasBalanceData) {
+        clearBalancesAndSettlement();
+        document.getElementById("balanceandsplit").style.display = "none";
+        return;
+    }
+
+    calculateBalances();
 }
 
 // Export functions if needed

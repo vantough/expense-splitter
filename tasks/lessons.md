@@ -10,3 +10,4 @@
 - After refactoring interactive controls into wrappers, verify nested positioning/hover rules (`position: fixed`, global `button:hover`, global `svg:hover`) to prevent floating/jumping icons; keep fixed positioning on one layer only.
 - When adding new columns to dense tables, immediately validate on a real mobile viewport and enforce horizontal scrolling plus minimum table width to prevent clipped columns.
 - If balances include post-expense settlement payments, keep all displayed reconciliation metrics (net balance, paid totals, and payment-count badges) sourced from the same combined data model.
+- For derived summaries like balances, avoid manual trigger buttons; recompute automatically on every create/update/delete mutation and on state restore.
