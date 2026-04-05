@@ -437,6 +437,14 @@ function calculateBalances() {
 
     // Include payments
     payments.forEach(payment => {
+        if (balances[payment.payer] === undefined) balances[payment.payer] = 0;
+        if (balances[payment.payee] === undefined) balances[payment.payee] = 0;
+
+        if (participantSummary[payment.payer]) {
+            participantSummary[payment.payer].paidAmount += payment.amount;
+            participantSummary[payment.payer].paymentCount += 1;
+        }
+
         balances[payment.payer] += payment.amount;
         balances[payment.payee] -= payment.amount;
     });

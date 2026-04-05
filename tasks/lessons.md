@@ -9,3 +9,4 @@
 - If multiple empty states belong to the same visual section, define and use one shared toggle rule so they disappear together when any qualifying data exists.
 - After refactoring interactive controls into wrappers, verify nested positioning/hover rules (`position: fixed`, global `button:hover`, global `svg:hover`) to prevent floating/jumping icons; keep fixed positioning on one layer only.
 - When adding new columns to dense tables, immediately validate on a real mobile viewport and enforce horizontal scrolling plus minimum table width to prevent clipped columns.
+- If balances include post-expense settlement payments, keep all displayed reconciliation metrics (net balance, paid totals, and payment-count badges) sourced from the same combined data model.
