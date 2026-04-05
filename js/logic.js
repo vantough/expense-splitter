@@ -1,6 +1,63 @@
 let expenses = [];
 let payments = [];  
 let hasCalculated = false; // Track if "calculate" has been clicked at least once.
+const APP_STATE_KEY = "expenseSplitterStateV1";
+
+function getParticipantNames() {
+    if (typeof window.getChipNames === "function") {
+        return window.getChipNames();
+    }
+
+    return Array.from(document.querySelectorAll("#chipContainer .chip"))
+        .map(chip => chip.textContent.replace("×", "").trim())
+        .filter(Boolean);
+}
+
+function persistAppState() {
+    try {
+        const state = {
+            names: getParticipantNames(),
+            expenses,
+            payments,
+            hasCalculated
+        };
+        localStorage.setItem(APP_STATE_KEY, JSON.stringify(state));
+    } catch (error) {
+        console.error("Unable to persist app state.", error);
+    }
+}
+
+function restoreAppState() {
+    try {
+        const rawState = localStorage.getItem(APP_STATE_KEY);
+        if (!rawState) return;
+
+        const parsedState = JSON.parse(rawState);
+        const names = Array.isArray(parsedState.names) ? parsedState.names : [];
+
+        if (typeof window.setChipNames === "function") {
+            window.setChipNames(names);
+        }
+
+        expenses = Array.isArray(parsedState.expenses) ? parsedState.expenses : [];
+        payments = Array.isArray(parsedState.payments) ? parsedState.payments : [];
+        hasCalculated = Boolean(parsedState.hasCalculated);
+
+        updateExpenseTable();
+        updateTotalExpense();
+        displayPayments();
+        refreshDashboardMeta();
+
+        if (hasCalculated && (expenses.length > 0 || payments.length > 0)) {
+            calculateBalances();
+        } else {
+            clearBalancesAndSettlement();
+            document.getElementById("balanceandsplit").style.display = "none";
+        }
+    } catch (error) {
+        console.error("Unable to restore app state.", error);
+    }
+}
 
 function refreshDashboardMeta() {
     const participantCount = document.querySelectorAll("#chipContainer .chip").length;
@@ -86,22 +143,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (!tooltip) return;
 
-        icon.addEventListener("mouseenter", () => {
+        const showTooltip = () => {
             if (!icon.classList.contains("tooltip-disabled")) {
                 tooltip.style.visibility = "visible";
                 tooltip.style.opacity = "1";
             }
-        });
+        };
 
-        icon.addEventListener("mouseleave", () => {
+        const hideTooltip = () => {
             tooltip.style.visibility = "hidden";
             tooltip.style.opacity = "0";
+        };
+
+        icon.addEventListener("mouseenter", showTooltip);
+        icon.addEventListener("focusin", showTooltip);
+
+        icon.addEventListener("mouseleave", () => {
+            hideTooltip();
             icon.classList.remove("tooltip-disabled"); // Allow tooltip to show again
         });
 
+        icon.addEventListener("focusout", hideTooltip);
+
         icon.addEventListener("click", () => {
-            tooltip.style.visibility = "hidden";
-            tooltip.style.opacity = "0";
+            hideTooltip();
             icon.classList.add("tooltip-disabled"); // Prevent tooltip from showing again until hover exit
         });
     });
@@ -307,6 +372,7 @@ function addExpense() {
     refreshDashboardMeta();
 
     clearExpenseForm();
+    persistAppState();
 
     // If already calculated once before, auto-update balances
     if (hasCalculated) {
@@ -376,6 +442,7 @@ function calculateBalances() {
 
     // Mark that calculation is done at least once
     hasCalculated = true;
+    persistAppState();
 }
 
 function togglePaymentForm() {
@@ -444,6 +511,7 @@ function recordPayment() {
     }
 
     showToastMessage("Payment recorded successfully!", "success");
+    persistAppState();
 }
 
 function updateBalances(payer, payee, amount) {
@@ -546,6 +614,8 @@ function removePayment(index) {
     if (hasCalculated) {
         calculateBalances();
     }
+
+    persistAppState();
 }
 
 
@@ -617,6 +687,8 @@ function editExpense(index) {
     if (hasCalculated) {
         calculateBalances();
     }
+
+    persistAppState();
 }
 
 function updateExpenseTable() {
@@ -666,6 +738,8 @@ function deleteExpense(index, row) {
     if (hasCalculated) {
         calculateBalances();
     }
+
+    persistAppState();
 }
 
 function clearExpenseForm() {
@@ -770,6 +844,7 @@ window.updateTotalExpense = updateTotalExpense;
 window.recordPayment = recordPayment;
 window.showToastMessage = showToastMessage;
 window.refreshDashboardMeta = refreshDashboardMeta;
+window.persistAppState = persistAppState;
 
 document.addEventListener("DOMContentLoaded", () => {
     toggleExpenseTableState();
@@ -778,6 +853,7 @@ document.addEventListener("DOMContentLoaded", () => {
     toggleAddExpenseEmptyState();
     handleStickyTopNav();
     window.addEventListener("scroll", handleStickyTopNav, { passive: true });
+    restoreAppState();
 });
 
 // Update chip input placeholder based on chip presence
