@@ -3,6 +3,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const chipContainer = document.getElementById("chipContainer");
     const names = [];
 
+    function persistAppState() {
+        if (typeof window.persistAppState === "function") {
+            window.persistAppState();
+        }
+    }
+
     function refreshDashboardCountTags() {
         if (typeof window.refreshDashboardMeta === "function") {
             window.refreshDashboardMeta();
@@ -27,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    function addChip(name) {
+    function addChip(name, { showWarning = true, persist = true } = {}) {
         if (name && !names.includes(name)) {
             names.push(name);
 
@@ -56,8 +62,9 @@ document.addEventListener("DOMContentLoaded", () => {
             updatePayerOptions(); // Refresh the "payer" dropdown when a chip is added
             updatePayerAndPayeeOptions(); // Refresh the "payer" and "payee" dropdowns when a chip is added
             refreshDashboardCountTags();
+            if (persist) persistAppState();
         }
-        else {
+        else if (showWarning) {
             showToastMessage("Duplicate or invalid name.", "warning");
         }
     }
@@ -84,6 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 updatePayerOptions(); // Refresh the "payer" dropdown when a chip is removed
                 updatePayerAndPayeeOptions(); // Refresh the "payer" and "payee" dropdowns when a chip is added
                 refreshDashboardCountTags();
+                persistAppState();
             });
         }
     }
@@ -95,6 +103,17 @@ document.addEventListener("DOMContentLoaded", () => {
             removeChip(name, lastChip);
         }
     }
+
+    window.setChipNames = function setChipNames(chipNames = []) {
+        names.length = 0;
+        chipContainer.querySelectorAll(".chip").forEach(chip => chip.remove());
+        chipNames.forEach(name => addChip(name, { showWarning: false, persist: false }));
+        refreshDashboardCountTags();
+    };
+
+    window.getChipNames = function getChipNames() {
+        return [...names];
+    };
 });
 
 /* Update the "Payer" dropdown with the list of names in the chips */
