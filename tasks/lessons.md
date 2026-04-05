@@ -11,3 +11,4 @@
 - When adding new columns to dense tables, immediately validate on a real mobile viewport and enforce horizontal scrolling plus minimum table width to prevent clipped columns.
 - If balances include post-expense settlement payments, keep all displayed reconciliation metrics (net balance, paid totals, and payment-count badges) sourced from the same combined data model.
 - For derived summaries like balances, avoid manual trigger buttons; recompute automatically on every create/update/delete mutation and on state restore.
+- When users provide a UI reference image, scope visual changes to a dedicated component class (instead of global table rules) to avoid regressions in other sections.
